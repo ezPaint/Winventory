@@ -40,5 +40,5 @@ public interface SoftwareDao {
     
     //Hasn't been tested -- theoretical advanced search method
     //needs to be added to the .xml
-    public List<Software> searchAdvanced( @Param("columns") List<String> columns, @Param("searches") ArrayList<ArrayList<String>> searches ) throws DaoException; 
+    public List<Software> searchAdvanced( @Param("fields") List<String> fields, @Param("inputs") ArrayList<ArrayList<String>> inputs ) throws DaoException; 
 }

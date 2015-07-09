@@ -43,7 +43,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
-			<div class="col-md-8">
+			<div class="col-xs-8">
 				<jsp:include page="/WEB-INF/includes/error.jsp" />
 				<div class="main">
 					<div class="boom">
@@ -89,7 +89,7 @@
 							<div class="form-group" id="cost_container">
 								<div class="input-group" id="cost_div">
 									<span class="input-group-addon" id="basic-addon1">Cost</span> <input
-										name="cost" type="text" class="form-control" placeholder="70" pattern="^[0-9]*$">
+										name="cost" type="text" class="form-control" placeholder="70" pattern="^[0-9]+(\.[0-9][0-9])*$">
 									<span class="input-group-btn" aria-hidden="true">
 										<button class="btn btn-default" type="button"
 											onclick="addDiv('cost_container', 'cost', 'text'); return false;">

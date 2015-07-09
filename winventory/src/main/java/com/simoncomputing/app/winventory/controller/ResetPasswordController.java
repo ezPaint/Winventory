@@ -122,7 +122,7 @@ public class ResetPasswordController extends BaseController {
 				e.printStackTrace();
 			}
 			
-			request.getRequestDispatcher("/WEB-INF/flows/authentication/resetSucess.jsp").forward(request,
+			request.getRequestDispatcher("/WEB-INF/flows/authentication/login.jsp").forward(request,
 			        response);
 			   
 		}

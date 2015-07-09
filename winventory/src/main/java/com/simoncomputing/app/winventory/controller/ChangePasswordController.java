@@ -49,7 +49,9 @@ public class ChangePasswordController extends BaseController {
 			AccessToken accessToken = accessTokenBo.read(userId);
 			if (accessToken == null) {
 				//user does not have an associated access token
-				
+				request.getSession().setAttribute("changePasswordError", "The token is not valid. Please request a new token");
+				request.getRequestDispatcher("/WEB-INF/flows/authentication/resetPassword.jsp").forward(request,
+				        response);
 			}
 			else {
 				if (accessToken.getExpiration().before(new Date())) {
@@ -62,11 +64,16 @@ public class ChangePasswordController extends BaseController {
 					}
 					//token does not match
 					else {
-						
+						request.getSession().setAttribute("changePasswordError", "The token is not valid. Please request a new token");
+						request.getRequestDispatcher("/WEB-INF/flows/authentication/resetPassword.jsp").forward(request,
+						        response);
 					}
 				}
 				else {
 					//token already expired
+					request.getSession().setAttribute("changePasswordError", "The token has expired. Please request a new token");
+					request.getRequestDispatcher("/WEB-INF/flows/authentication/resetPassword.jsp").forward(request,
+					        response);
 				}
 				
 			}

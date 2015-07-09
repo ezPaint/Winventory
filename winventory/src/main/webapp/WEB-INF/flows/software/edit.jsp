@@ -231,27 +231,7 @@
             <h4>SimonComputing © 2015</h4>
             <br>
         </div>
-    </div>
-    
-    
-<script>    
-    // Really basic validation that dates are in the form YYYY-MM-DD
-    // Curren't doesn't check for incorrect dates (such as Feb 31st)...yet
-	function validateDates() {
-		var y = document.forms["myform"]["purchasedDate"].value;
-		var regex = /^(\d{4}-\d{2}-\d{2})$/;
-        if (!y.match(regex)) {
-            alert("Purchase Date must be in format YYYY-MM-DD");
-            return false;
-        }
-        var z = document.forms["myform"]["expirationDate"].value;
-        if (!z.match(regex)) {
-            alert("Expiration Date must be in format YYYY-MM-DD");
-            return false;
-        }
-        return true;
-	}
-</script>    
+    </div>    
 </body>
 
 </html>

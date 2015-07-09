@@ -16,7 +16,7 @@
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/bootstrap.css' />
 
-<script src='${contextPath}/resources/js/actions.js'
+<script src="${contextPath}/resources/js/actions.js"
 	type="text/javascript"></script>
 <script src='${contextPath}/resources/js/jquery-1.11.3.min.js'
 	type="text/javascript"></script>
@@ -42,6 +42,8 @@
 						<form class="form-horizontal" action="insert"
 							data-toggle="validator" role="form" method="post"
 							onsubmit="return validateDates()" name="myform">
+							
+							<!-- Name entry field -->
 							<div class="form-group">
 								<label for="name" class="col-sm-2 control-label">Name </label>
 								<div class="col-sm-9 search-field">
@@ -53,6 +55,8 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+							
+							<!-- Serial number entry field -->
 							<div class="form-group">
 								<label for="serialNo" class="col-sm-2 control-label">Serial
 									Number </label>
@@ -64,6 +68,8 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+							
+							<!-- License Key entry field -->
 							<div class="form-group">
 								<label for="cost" class="col-sm-2 control-label">License
 									Key </label>
@@ -76,6 +82,8 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+							
+							<!-- Version entry field -->
 							<div class="form-group">
 								<label for="version" class="col-sm-2 control-label">Version</label>
 								<div class="col-sm-9">
@@ -86,6 +94,8 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+							
+							<!-- Cost entry field -->
 							<div class="form-group">
 								<label for="cost" class="col-sm-2 control-label">Cost $</label>
 								<div class="col-sm-9">
@@ -96,6 +106,8 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+
+                            <!-- Date purchased entry field -->							
 							<div class="form-group">
 								<label for="purchasedDate" class="col-sm-2 control-label">Date
 									Purchased </label>
@@ -107,6 +119,8 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+							
+							<!-- Expiration date entry field -->
 							<div class="form-group">
 								<label for="expirationDate" class="col-sm-2 control-label">Expiration
 									Date </label>
@@ -118,6 +132,8 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+							
+							<!-- Description entry field -->
 							<div class="form-group">
 								<label for="description" class="col-sm-2 control-label">Description</label>
 								<div class="col-sm-9">
@@ -155,24 +171,6 @@
 		</div>
 	</div>
 	
-	<script>    
-    // Really basic validation that dates are in the form YYYY-MM-DD
-    // Curren't doesn't check for incorrect dates (such as Feb 31st)
-    function validateDates() {
-        var y = document.forms["myform"]["purchasedDate"].value;
-        var regex = /^(\d{4}-\d{2}-\d{2})$/;
-        if (!y.match(regex)) {
-            alert("Purchase Date must be in format YYYY-MM-DD");
-            return false;
-        }
-        var z = document.forms["myform"]["expirationDate"].value;
-        if (!z.match(regex)) {
-            alert("Expiration Date must be in format YYYY-MM-DD");
-            return false;
-        }
-        return true;
-    }
-</script> 
 	
 </body>
 

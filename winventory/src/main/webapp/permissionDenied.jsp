@@ -24,17 +24,8 @@
 </head>
 <body>
     
-        <div class="top-header">
-            <div class="media-right">
-                <br>
-                <img src="${contextPath}/resources/images/SC-Logo.png" height="50" width="50" alt="">
-            </div>
-            <div class="media-body">
-                <br>
-                <h4>The Winventory</h4>
-                <br>
-            </div>
-        </div>
+    <jsp:include page="/base.jsp" />
+   
         
     
     	<div class="container">
@@ -42,20 +33,14 @@
         <div class="row">
             <div class="col-sm-6 col-md-4 col-md-offset-4 text-center">
                 <div class="account-wall">
-                    <div>
-                        <h3 class="login-title">Welcome Back</h3>
+                    <div class="alert alert-danger" role="alert" style="margin-top: 25px; padding-bottom: 50px;" >
+  							<span class="sr-only">Permission Denied</span>
+  								<h2>Permission Denied</h2>
+  								<p style="margin-top: 30px;">Please login as user with the proper permissions in order to access that page.</p>
                     </div>
-                	<img class="profile-img" src="${contextPath}/resources/images/SC-Logo-Black-On-White.png"
-                    alt="">
-                    <c:if test="${not empty error}">
-                    	<div class="alert alert-danger" role="alert">
-  							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  							<span class="sr-only">Error:</span>
-  								<c:out value="${error}"/>
-						</div>
-                    </c:if>
+                	
                     <div class="">
-                        <form name="loginform" action="" method="POST" accept-charset="UTF-8" role="form" class="form-login">
+                        <form name="loginform" action="${contextPath}/login?next=${param.next}" method="POST" accept-charset="UTF-8" role="form" class="form-login">
                         	<div class="form-horizontal">
                                 <div class="" >
                                     <input  id="login-username"  name="username"  class="form-control" placeholder="Username or Email"

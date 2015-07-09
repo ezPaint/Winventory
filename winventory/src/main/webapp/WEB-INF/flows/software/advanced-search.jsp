@@ -65,8 +65,7 @@
                 <div class="boom">
                         <h2 class="center">Software Advanced Search</h2>
                     </div>
-                    <div class="padme">                     
-                        <!-- <form action="advancedresults" method="get"> -->
+                    <div class="padme">
                            <form action="advancedsearch" method="post">
                            
                            <!-- Name entry fields -->
@@ -180,8 +179,8 @@
 							<br>
 							
 							
-														<!-- Date Purchased Range entry field -->
-							<div id="idContainer6" class="myClass">
+							<!-- Date Purchased Range entry field -->
+						<!--  <div id="idContainer6" class="myClass">
 								<div class="input-group double-input">
 									<span class="input-group-addon" id="basic-addon1">Date
 										Purchased Range</span> 
@@ -198,6 +197,7 @@
 								</div>
 							</div>
 							<br>
+							-->
 
 							<!-- Expiration Date Range entry field -->
 							<!--  

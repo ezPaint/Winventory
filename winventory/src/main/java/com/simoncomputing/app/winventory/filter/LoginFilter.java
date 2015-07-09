@@ -71,6 +71,8 @@ public class LoginFilter implements Filter {
         // check that the user is either logged in or accessing publicly available locations
         if (
                 (session == null || userInfo == null || !userInfo.isActive()) 
+                && !(uri.startsWith(appName + "/changepassword"))
+                && !(uri.startsWith(appName + "/resetpassword"))
                 && !(uri.startsWith(appName + "/resources")) 
                 && !(uri.startsWith(appName +"/login"))  
                 && !(uri.startsWith(appName + "/logout"))) {

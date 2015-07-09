@@ -84,7 +84,7 @@
 							<div class="form-group">
 								<label for="cost" class="col-sm-2 control-label">Cost </label>
 								<div class="col-sm-9">
-									<input name="cost" type="text" id="cost" type="number" pattern="^[0-9]*$"
+									<input name="cost" type="text" id="cost" type="number" pattern="^[0-9]+(\.[0-9][0-9])*$"
 										class="form-control" value="<%=hardware.getCost()%>" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">

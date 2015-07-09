@@ -107,7 +107,7 @@ public class LoginController extends BaseController {
             	this.setUserInfo(request, userBean);
             	
                 // redirect as appropriate
-                if (request.getParameter("next") != null) {
+                if (request.getParameter("next") != null && !request.getParameter("next").equals("")) {
                     // if the user attempted to reach another page and was redirected to login,
                     // next is the location the user wanted to reach in the first place
                     response.sendRedirect( request.getParameter("next") ); 

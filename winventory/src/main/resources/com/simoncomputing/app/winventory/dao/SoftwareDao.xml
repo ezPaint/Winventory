@@ -97,7 +97,7 @@
 	</select>
 
 
-    <select id="advancedSearch" resultMap="SoftwareMapper">
+    <select id="searchAdvanced" parameterType="map" resultMap="SoftwareMapper">
  		SELECT *
 		FROM SOFTWARE
 		WHERE

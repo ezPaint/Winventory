@@ -66,12 +66,14 @@
                             style="display: none;">
                             <thead>
                                 <tr>
-                                    <th>Key</th>
                                     <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Cost</th>
-                                    <th>Expiration Date</th>
-                                    <th>Purchase Date</th>
+									<th>Serial Number</th>
+									<th>Description()</th>
+									<th>Version</th>
+									<th>License Key</th>
+									<th>Cost</th>
+									<th>Purchased Date</th>
+									<th>Expiration Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,7 +94,10 @@
                                     <td><a href="${contextPath}/software/view?key=<%=results.get(i).getKey()%>"> <%=results.get(i).getKey()%></a>
                                     </td>
                                     <td><%=results.get(i).getName()%></td>
+                                    <td><%=results.get(i).getSerialNo()%></td>
                                     <td><%=results.get(i).getDescription()%></td>
+                                    <td><%=results.get(i).getVersion()%></td>
+                                    <td><%=results.get(i).getLicenseKey()%></td>
                                     <td><%=results.get(i).getCost()%></td>
                                     <td><%=results.get(i).getExpirationDate()%></td>
                                     <td><%=results.get(i).getPurchasedDate()%></td>

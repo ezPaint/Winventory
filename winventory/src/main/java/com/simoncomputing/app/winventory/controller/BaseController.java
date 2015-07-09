@@ -114,7 +114,7 @@ public class BaseController extends HttpServlet {
         //If statement is true when the current user does NOT have permission
         if (!this.userHasPermission(request, permission)) {
             request.getSession().setAttribute("errMsg", permission);
-            response.sendRedirect(request.getContextPath() + "/permissionDenied");
+            response.sendRedirect(request.getContextPath() + "/permissionDenied?next=" + request.getRequestURI());
             return true;
         }
         return false;

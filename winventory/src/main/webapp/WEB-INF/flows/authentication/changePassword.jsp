@@ -20,6 +20,19 @@
     <script src='${contextPath}/resources/js/bootstrap.min.js' type="text/javascript"></script>
 </head>
 <body>
+        <div class="top-header">
+            <div class="media-right">
+                <br>
+                <img src="${contextPath}/resources/images/SC-Logo.png" height="50" width="50" alt="">
+            </div>
+            <div class="media-body">
+                <br>
+                <h4>The Winventory</h4>
+                <br>
+            </div>
+        </div>
+        
+
 	<div class="container">
         <div class="row">
             <div class="col-sm-6 col-md-4 col-md-offset-4 text-center">
@@ -39,5 +52,6 @@
 			</div>
 		</div>
 	</div>
+	<jsp:include page="/WEB-INF/includes/footer.jsp" />
 </body>
 </html>
