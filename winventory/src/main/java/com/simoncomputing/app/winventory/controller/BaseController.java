@@ -23,6 +23,7 @@ import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 public class BaseController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static Logger logger = Logger.getLogger(BaseController.class);
 
     public BaseController() {
         super();
@@ -113,6 +114,8 @@ public class BaseController extends HttpServlet {
             String permission) throws IOException {
         //If statement is true when the current user does NOT have permission
         if (!this.userHasPermission(request, permission)) {
+            UserInfoBean userInfo = this.getUserInfo(request);
+            logger.info("Permission Denied! User: " + userInfo.getUsername() + "  Requested resource: " + request.getRequestURI().toString());
             request.getSession().setAttribute("errMsg", permission);
             response.sendRedirect(request.getContextPath() + "/permissionDenied?next=" + request.getRequestURI());
             return true;

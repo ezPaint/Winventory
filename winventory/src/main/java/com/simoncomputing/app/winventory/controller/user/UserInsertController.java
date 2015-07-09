@@ -1,6 +1,7 @@
-package com.simoncomputing.app.winventory.controller;
+package com.simoncomputing.app.winventory.controller.user;
 
 import java.io.IOException;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.domain.Role;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
+import com.simoncomputing.app.winventory.controller.BaseController;
 
 /**
  * Servlet to handle the add user functionality, or insert user page.

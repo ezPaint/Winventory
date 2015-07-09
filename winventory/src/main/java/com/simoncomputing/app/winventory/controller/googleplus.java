@@ -17,7 +17,7 @@ import com.simoncomputing.app.winventory.authentication.Google2Api;
 /**
  * Servlet implementation class googleplus
  */
-@WebServlet("/googleLogin")
+@WebServlet("/login/googleLogin")
 public class googleplus extends BaseController {
 	private static final long serialVersionUID = 1L;
 	
@@ -46,7 +46,7 @@ public class googleplus extends BaseController {
     	      OAuthService service = (OAuthService) builder.provider(Google2Api.class) 
     	         .apiKey(CLIENT_ID) 
     	         .apiSecret(CLIENT_SECRET) 
-    	         .callback("http://localhost:8181/winventory/googleCallback") 
+    	         .callback("http://localhost:8181/winventory/login/googleCallback") 
     	         .scope("email")
     	         .debugStream(System.out)
     	         .build(); //Now build the call

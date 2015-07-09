@@ -1,4 +1,4 @@
-package com.simoncomputing.app.winventory.controller;
+package com.simoncomputing.app.winventory.controller.user;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
+import com.simoncomputing.app.winventory.controller.BaseController;
 
 /**
  * Servlet for the page that shows the list of all users

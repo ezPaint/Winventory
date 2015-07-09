@@ -83,7 +83,7 @@
 						<div class="col-xs-2"><h4>or</h4></div>
 						<div class="col-xs-5"> <hr> </div>
 					</div>
-					<form action="googleLogin" method="get">
+					<form action="login/googleLogin" method="get">
                     	<input class="btn btn-lg btn-block btn-google" type="submit" value="Login with Google+">
                     </form>
                 </div>

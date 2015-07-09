@@ -163,13 +163,7 @@
 		</div>
 	</div>
 
-	<div class="top-header">
-		<div class="center">
-			<br>
-			<h4>SimonComputing &copy; 2015</h4>
-			<br>
-		</div>
-	</div>
+	<jsp:include page="/WEB-INF/includes/footer.jsp" />
 	
 	
 </body>

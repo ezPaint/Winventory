@@ -45,9 +45,7 @@ public class LoginFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
         // log this in the debug log
-        if (logger.isDebugEnabled()) {
-            logger.debug("Login filter");
-        }
+        logger.debug("Login filter");
         
         // the request and response objects
         HttpServletRequest req = (HttpServletRequest) request;
@@ -80,10 +78,13 @@ public class LoginFilter implements Filter {
             //redirect the user if neither logged in nor visiting a public location
             res.sendRedirect(req.getContextPath() + "/login?next=" + uri);
             
+        } else if (uri.startsWith("/login")) {
+            res.sendRedirect(req.getContextPath() + "/logout");
         } else {
             // pass the request along the filter chain
             chain.doFilter(request, response);
         }
+        
     }
 
     /**

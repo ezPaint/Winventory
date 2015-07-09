@@ -27,7 +27,7 @@ import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 /**
  * Servlet implementation class UrlCallBackController
  */
-@WebServlet(urlPatterns = "/googleCallback")
+@WebServlet(urlPatterns = "/login/googleCallback")
 public class UrlCallBackController extends BaseController {
 	
 	private static final long serialVersionUID = 1L;
