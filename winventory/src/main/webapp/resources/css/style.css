@@ -75,6 +75,18 @@ body {
     background-color: #ebebeb;
 }
 
+.profile-img-big
+{
+    width:  144px;
+    height: 144px;
+    margin: 40px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    background-color: #ebebeb;
+}
+
 html {
   position: relative;
   min-height: 100%;

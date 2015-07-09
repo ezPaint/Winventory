@@ -45,121 +45,137 @@
 	<jsp:include page="/base.jsp" />
 	<div class="container-fluid">
 		<div class="row">
-			<jsp:include page="hwBase.jsp" />
+			<jsp:include page="userBase.jsp" />
 			<div class="col-md-8">
 				<jsp:include page="/WEB-INF/includes/error.jsp" />
 
 				<div class="main">
 					<div class="boom">
-						<h2 class="center">Hardware Info</h2>
+						<h2 class="center">User Info</h2>
 					</div>
 
 					<div class="padme">
+						<%@ page
+							import="com.simoncomputing.app.winventory.domain.User"%>
 						<%@ page import="java.util.ArrayList"%>
-						<%@ page
-							import="com.simoncomputing.app.winventory.domain.Hardware"%>
-
-						<%@ page import="com.simoncomputing.app.winventory.domain.User"%>
-						<%@ page
-							import="com.simoncomputing.app.winventory.domain.Location"%>
 
 						<%
-						    User owner = (User) request.getAttribute("owner");
+						    User user = (User) request.getAttribute("user");
 
-						    if (owner != null) {
-						%>
-						<h4 class="center">
-							Item owned by <a
-								href="${contextPath}/users/view?key=<%= owner.getKey() %>"><%=owner.getFirstName()%>
-								<%=owner.getLastName()%></a>
-						</h4>
-
-						<%
-						    }
-						%>
-
-						<%
-						    Location loc = (Location) request.getAttribute("location");
-
-						    if (loc != null) {
-						%>
-						<h4 class="center">
-							Item stored at <%= loc.getDescription() %>
-						</h4>
-						<%
-						    }
-						%>
-
-						<%
-						    Hardware hardware = (Hardware) request.getAttribute("hardware");
-
-						    if (hardware != null) {
+						    if (user != null) {
 						%>
 
 
 						<div class="media">
 							<div class="media-left">
-								<img class="media-object"
-									src="${contextPath}/resources/images/barcode.gif">
+								<img class="profile-img-big"
+									src="${contextPath}/resources/images/SC-Logo-Black-On-White.png">
 							</div>
 							<div class="media-body">
 								<ul class="list-group">
+								
 									<li class="list-group-item row">
 										<div class="col-md-3">
+										
 											<b>Key</b>
+											
 										</div>
 										<div class="col-md-9">
-											<p><%=hardware.getKey()%></p>
+											<p><%=user.getKey()%></p>
+										</div>
+									</li>
+									
+									<li class="list-group-item row">
+										<div class="col-md-3">
+										
+											<b>Username</b>
+											
+										</div>
+										<div class="col-md-9">
+											<p><%=user.getUsername()%></p>
+										</div>
+									</li>
+									
+									<li class="list-group-item row">
+										<div class="col-md-3">
+										
+											<b>First Name</b>
+										
+										</div>
+										<div class="col-md-9">
+											<p><%=user.getFirstName()%></p>
+										</div>
+									</li>
+									
+									<li class="list-group-item row">
+										<div class="col-md-3">
+										
+											<b>Last Name</b>
+										
+										</div>
+										<div class="col-md-9">
+											<p><%=user.getLastName()%></p>
+										</div>
+									</li>
+									
+									<li class="list-group-item row">
+										<div class="col-md-3">
+										
+											<b>Email</b>
+										
+										</div>
+										<div class="col-md-9">
+											<p><%=user.getEmail()%></p>
+										</div>
+									</li>
+									
+									<li class="list-group-item row">
+										<div class="col-md-3">
+											
+											<b>Cell Phone</b>
+										
+										</div>
+										<div class="col-md-9">
+											<p><%=user.getCellPhone()%></p>
+										</div>
+									</li>
+									
+									<li class="list-group-item row">
+										<div class="col-md-3">
+											<b>Work Phone</b>
+										</div>
+										<div class="col-md-9">
+											<p><%=user.getWorkPhone()%></p>
+										</div>
+									</li>
+									
+									<li class="list-group-item row">
+										<div class="col-md-3">
+											
+											<b>Active</b>
+										
+										</div>
+										<div class="col-md-9">
+											<p><%=user.getIsActive()%></p>
 										</div>
 									</li>
 									<li class="list-group-item row">
 										<div class="col-md-3">
-											<b>Type</b>
+											<b>Role Id</b>
 										</div>
 										<div class="col-md-9">
-											<p><%=hardware.getType()%></p>
-										</div>
-									</li>
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Description</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=hardware.getDescription()%></p>
-										</div>
-									</li>
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Cost</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=hardware.getCost()%></p>
-										</div>
-									</li>
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Date Purchased</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=hardware.getPurchaseDate()%></p>
+											<p><%=user.getRoleId()%></p>
 										</div>
 									</li>
 								</ul>
 							</div>
 						</div>
-						<form action="view" method="post">
-							<div>
-								<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
-								<a class="btn btn-default"
-									href="edit?key=<%=hardware.getKey()%>" role="button">Edit</a>
-								<%-- </c:if> --%>
-								<%-- <c:if test="${userInfo.hasPermission.deleteHardware}"> --%>
-								<input type="hidden" id="key" name="key"
-									value="<%=hardware.getKey()%>">
-								<button type="submit" class="btn btn-danger pull-right">Delete</button>
-								<%-- </c:if> --%>
-							</div>
-						</form>
+						<div>
+							<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
+							<a class="btn btn-default" href="edit?key=<%=user.getKey()%>"
+								role="button">Edit</a>
+							<%-- </c:if> --%>
+						</div>
 
 						<%
 						    }

@@ -40,7 +40,7 @@
 			<div class="col-md-8">
 				<div class="main">
 					<div class="boom">
-						<h2 class="center">Insert User</h2>
+						<h2 class="center">Add User</h2>
 					</div>
 					<div class="padme">
 						<br>
