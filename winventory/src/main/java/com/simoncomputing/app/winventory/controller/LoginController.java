@@ -70,16 +70,16 @@ public class LoginController extends BaseController {
             return;
         }
         
-        // if the user is inactive, reject
-        if (!user.getIsActive()) {
-            logger.info("Inactive user " + user.getUsername() + " attempted to login.");
-            request.setAttribute("error", incorrectMsg);
-            request.getRequestDispatcher(loginJsp).forward(request, response);
-            return;
-        }
-        
         // if the user exists and a password was typed in
         if (password != null && user != null) {
+            
+            // if the user is inactive, reject
+            if (!user.getIsActive()) {
+                logger.info("Inactive user " + user.getUsername() + " attempted to login.");
+                request.setAttribute("error", incorrectMsg);
+                request.getRequestDispatcher(loginJsp).forward(request, response);
+                return;
+            }
             
             try {
                 // try to encode the password using the password hasher

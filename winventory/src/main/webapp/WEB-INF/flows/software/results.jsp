@@ -75,7 +75,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-
+                                
+                                <!-- Import software objects from database -->
                                 <%@ page
                                     import="com.simoncomputing.app.winventory.domain.Software"%>
                                 <%@ page import="java.util.ArrayList"%>

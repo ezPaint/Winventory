@@ -41,9 +41,11 @@ public class UserInsertController extends BaseController {
     protected void doGet( HttpServletRequest request, HttpServletResponse response ) 
         throws ServletException, IOException {
         
-        if (!this.requirePermission(request, response, "createUser")) {
+        // if the user is rejected, the redirect is sent in the require permission method.
+        if (this.requirePermission(request, response, "createUser")) {
             return;
         }
+        
         
         // the preset role ids to display in dropdown
         ArrayList<Role> roles = new ArrayList<Role>();
@@ -65,7 +67,8 @@ public class UserInsertController extends BaseController {
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) 
         throws ServletException, IOException {
         
-        if (!this.requirePermission(request, response, "createUser")) {
+        // check for the create user permission
+        if (this.requirePermission(request, response, "createUser")) {
             return;
         }
         

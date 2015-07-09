@@ -37,6 +37,13 @@ public class UserResultsController extends BaseController {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    
+	    
+        // if the user is rejected, the redirect is sent in the require permission method.
+        if (this.requirePermission(request, response, "readUser")) {
+            return;
+        }
+        
+	    
 	    // list of users
 	    ArrayList<User> results = null;
 
@@ -57,10 +64,11 @@ public class UserResultsController extends BaseController {
 		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
+//	/**
+//	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+//	 */
+//	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//	    // require permission if/when this gets implemented
+//	}
 
 }

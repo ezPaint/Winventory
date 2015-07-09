@@ -70,12 +70,9 @@
                                     	<input name="rememberMe" type="checkbox" value="true"> Remember Me
                                 	</label>
                                 </div> -->
-                                 <div>
-                                	<label class="checkbox pull-left">
-                                    	<input name="rememberMe" type="checkbox" value="true"> Remember Me 
+                                 <div style="margin-top: 5px" class="">
                                     	
-                                    	 <a href="resetpassword">Forgot Password?</a> 
-                                	</label>
+                                    	 <a href="resetpassword" >Forgot Password?</a> 
                                 </div>
                             </div>
                         </form>

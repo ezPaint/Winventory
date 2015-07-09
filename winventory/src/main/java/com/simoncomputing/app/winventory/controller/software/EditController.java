@@ -27,6 +27,9 @@ public class EditController extends BaseController {
     private String key = "";
     private static Logger log = Logger.getLogger(EditController.class);
     
+    /**
+     * Retrieves the software object that the user wishes to edit.
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     
@@ -34,6 +37,7 @@ public class EditController extends BaseController {
         String key = request.getParameter("key");
         this.key = key;
         
+        //Retrieve software object from database
         Software software = null;
         if (key != null) {
             try {
@@ -48,6 +52,9 @@ public class EditController extends BaseController {
         forward(request, response, "/WEB-INF/flows/software/edit.jsp");
     }
     
+    /**
+     * Alters the software object based on user input and updates it in the database.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     
@@ -65,17 +72,12 @@ public class EditController extends BaseController {
             String licenseKey = (String) request.getParameter("licenseKey");
             String description = (String) request.getParameter("description");
             
-            // For non-string values, attempt to convert to desired type. If not possible, default
-            // values
-            // are assigned.
+            // For non-string values, attempt to convert to desired type.
             Double cost = null;
             try {
                 cost = (Double) Double.parseDouble((String) request.getParameter("cost"));
             }
-            // No exception should occur due to validation using javascript ('type mismatch' will
-            // occur)
             catch (Exception e) {
-                cost = software.getCost();
                 log.error(e.getMessage());
             }
             
@@ -83,10 +85,6 @@ public class EditController extends BaseController {
             try {
                 datePurchased = Date.valueOf((String) request.getParameter("purchasedDate"));
             } catch (Exception e) {
-                // //datePurchased = Date.valueOf("2000-01-01");
-                // request.setAttribute("pDateError", "Please enter in the format: YYYY-MM-DD.");
-                // forward(request, response, "/WEB-INF/flows/software/edit.jsp");
-                datePurchased = software.getPurchasedDate(); // leave unchanged
                 log.error(e.getMessage());
             }
             
@@ -94,10 +92,6 @@ public class EditController extends BaseController {
             try {
                 expirationDate = Date.valueOf((String) request.getParameter("expirationDate"));
             } catch (Exception e) {
-                // //expirationDate = Date.valueOf("2000-01-01");
-                // request.setAttribute("eDateError", "Please enter in the format: YYYY-MM-DD.");
-                // forward(request, response, "/WEB-INF/flows/software/edit.jsp");
-                expirationDate = software.getExpirationDate(); // leave unchanged
                 log.error(e.getMessage());
             }
             

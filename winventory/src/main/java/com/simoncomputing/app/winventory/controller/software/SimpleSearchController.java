@@ -48,7 +48,7 @@ public class SimpleSearchController extends BaseController {
 			request.setAttribute("softwares", softwares);
 			request.setAttribute("swResult", true);
 		}
-        forward(request, response, "/WEB-INF/flows/software/advanced-search.jsp");
+        forward(request, response, "/WEB-INF/flows/software/swResults.jsp");
     }
     
     /**

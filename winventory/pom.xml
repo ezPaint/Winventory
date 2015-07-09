@@ -15,12 +15,14 @@
 	</properties>
 	
 	<dependencies>
+		<!-- 
 		<dependency>
 			<groupId>batgen.lib</groupId>
 			<artifactId>batgen</artifactId>
 			<version>1.0.0-RC1</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> 
+		-->
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>

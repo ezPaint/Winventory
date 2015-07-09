@@ -24,11 +24,13 @@
 	type="text/javascript"></script>
 <script src='${contextPath}/resources/js/bootstrap.min.js'
 	type="text/javascript"></script>
+<script src='${contextPath}/resources/js/validator.js'
+	type="text/javascript"></script>
 <script>
 	function addDiv(container, name, type) {
 		var newDiv = document.createElement('div');
 		newDiv.innerHTML = "<br><div class=\"input-group extra-box\">"
-				+ "<input name=\"" + name + "\" type=\"" + type + "\" class=\"form-control\">"
+				+ "<input name=\"" + name + "\" type=\"" + type + "\" class=\"form-control\" pattern=\"^[a-zA-Z0-9\s]*$\">"
 				+ "</div>";
 		document.getElementById(container).appendChild(newDiv);
 	}
@@ -49,12 +51,12 @@
 					</div>
 					<div class="padme">
 						<br>
-						<form action="advanced-search" method="post">
-							<div id="type_container">
+						<form action="advanced-search" data-toggle="validator" role="form" method="post">						
+							<div class="form-group" id="type_container">
 								<div class="input-group" id="type_div">
 									<span class="input-group-addon" id="basic-addon1">Type</span> <input
 										name="type" type="text" class="form-control"
-										placeholder="Laptop"> <span class="input-group-btn"
+										placeholder="Laptop" pattern="^[a-zA-Z0-9\s]*$"> <span class="input-group-btn"
 										aria-hidden="true">
 										<button type="button" class="btn btn-default"
 											onClick="addDiv('type_container', 'type', 'text'); return false;">
@@ -62,13 +64,16 @@
 										</button> <br>
 									</span>
 								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+								</div>
 							</div>
 							<br>
-							<div id="description_container">
+							<div class="form-group" id="description_container">
 								<div class="input-group" id="description_div">
 									<span class="input-group-addon" id="basic-addon1">Description</span>
 									<input name="description" type="text" class="form-control"
-										placeholder="MacbookPro 13"> <span
+										placeholder="MacbookPro 13" pattern="^[a-zA-Z0-9\s]*$"> <span
 										class="input-group-btn" aria-hidden="true">
 										<button type="button" class="btn btn-default"
 											onclick="addDiv('description_container', 'description', 'text'); return false;">
@@ -76,12 +81,15 @@
 										</button> <br>
 									</span>
 								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+								</div>
 							</div>
 							<br>
-							<div id="cost_container">
+							<div class="form-group" id="cost_container">
 								<div class="input-group" id="cost_div">
 									<span class="input-group-addon" id="basic-addon1">Cost</span> <input
-										name="cost" type="text" class="form-control" placeholder="70">
+										name="cost" type="text" class="form-control" placeholder="70" pattern="^[0-9]*$">
 									<span class="input-group-btn" aria-hidden="true">
 										<button class="btn btn-default" type="button"
 											onclick="addDiv('cost_container', 'cost', 'text'); return false;">
@@ -89,9 +97,12 @@
 										</button> <br>
 									</span>
 								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+								</div>
 							</div>
 							<br>
-							<div id="date_container">
+							<div class="form-group" id="date_container">
 								<div class="input-group">
 									<span class="input-group-addon" id="basic-addon1">Date</span> <input
 										name="date" type="date" class="form-control"> <span
@@ -102,9 +113,12 @@
 										</button> <br>
 									</span>
 								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+								</div>
 							</div>
 							<br>
-							<div id="condition_container">
+							<div class="form-group" id="condition_container">
 								<div class="input-group" id="condition">
 									<span class="input-group-addon" id="basic-addon1">Condition</span>
 									<input name="condition" type="text" class="form-control"
@@ -116,19 +130,25 @@
 										</button> <br>
 									</span>
 								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+								</div>
 							</div>
 							<br>
-							<div id="serial_container">
+							<div class="form-group" id="serial_container">
 								<div class="input-group" id=serial>
 									<span class="input-group-addon" id="basic-addon1">Serial
 										No</span> <input name="serial" type="text" class="form-control"
-										placeholder="13456FFB"> <span class="input-group-btn"
+										placeholder="13456FFB" pattern="^[a-zA-Z0-9\s]*$"> <span class="input-group-btn"
 										aria-hidden="true">
 										<button class="btn btn-default" type="button"
 											onclick="addDiv('serial_container', 'serial', 'text'); return false;">
 											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 										</button> <br>
 									</span>
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<br>

@@ -13,7 +13,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 import org.apache.log4j.Logger;
 
 /**
- * Controller Servlet for the Software page
+ * Controller Servlet for the Software results (results.jsp) page.
  * 
  * @author Megan Rigsbee
  *
@@ -30,7 +30,7 @@ public class ResultsController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     
-        // Retrieve all software objects from the database table 'Software'
+        // Retrieve all software objects from the database
         ArrayList<Software> results = null;
         try {
             results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());

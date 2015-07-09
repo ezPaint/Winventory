@@ -85,6 +85,8 @@
                         <%@ page import="java.util.ArrayList"%>
 
                         <%
+                            //Retrieve software object to be edited   
+                         
                             Software software = (Software) request.getAttribute("software");
 
                             if (software != null) {
@@ -93,6 +95,8 @@
                         <form class="form-horizontal" action="edit"
                             data-toggle="validator" role="form" method="post"
                             onsubmit="return validateDates()" name="myform">
+                            
+                            <!-- Software object's name -->
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">Name </label>
                                 <div class="col-sm-9 search-field">
@@ -103,6 +107,8 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Software object's serial number -->
                             <div class="form-group">
                                 <label for="serialNo" class="col-sm-2 control-label">Serial Number
                                 </label>
@@ -114,6 +120,8 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Software object's license key -->
                             <div class="form-group">
                                 <label for="licenseKey" class="col-sm-2 control-label">License Key </label>
                                 <div class="col-sm-9">
@@ -124,6 +132,8 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Software object's version -->
                             <div class="form-group">
                                 <label for="version" class="col-sm-2 control-label">Version</label>
                                 <div class="col-sm-9">
@@ -134,6 +144,8 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Software object's cost -->
                             <div class="form-group">
                                 <label for="cost" class="col-sm-2 control-label">Cost</label>
                                 <div class="col-sm-9">
@@ -144,6 +156,8 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Software object's purchased date -->
                             <div class="form-group">
                                 <label for="purchasedDate" class="col-sm-2 control-label">Date Purchased</label>
                                 <div class="col-sm-9">
@@ -154,6 +168,8 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Software object's expiration date -->
                             <div class="form-group">
                                 <label for="expirationDate" class="col-sm-2 control-label">Expiration Date</label>
                                 <div class="col-sm-9">
@@ -164,6 +180,8 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Software object's description -->
                             <div class="form-group">
                                 <label for="description" class="col-sm-2 control-label">Description</label>
                                 <div class="col-sm-9">
@@ -174,6 +192,8 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
+                            
+                            <!-- Form submission -->
                             <div class="form-group">
                                 <div class="col-sm-10 col-sm-offset-2">
                                     <button type="submit" class="btn btn-default">Submit Changes</button>
@@ -216,7 +236,7 @@
     
 <script>    
     // Really basic validation that dates are in the form YYYY-MM-DD
-    // Curren't doesn't check for incorrect dates (such as Feb 31st)
+    // Curren't doesn't check for incorrect dates (such as Feb 31st)...yet
 	function validateDates() {
 		var y = document.forms["myform"]["purchasedDate"].value;
 		var regex = /^(\d{4}-\d{2}-\d{2})$/;

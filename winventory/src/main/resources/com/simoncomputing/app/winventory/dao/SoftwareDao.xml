@@ -3,136 +3,137 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simoncomputing.app.winventory.dao.SoftwareDao">
 
-    <resultMap id="SoftwareMapper" type="com.simoncomputing.app.winventory.domain.Software">
-        <result column ="KEY"                 property = "key" />
-        <result column ="NAME"                property = "name" />
-        <result column ="SERIAL_NO"           property = "serialNo" />
-        <result column ="VERSION"             property = "version" />
-        <result column ="LICENSE_KEY"         property = "licenseKey" />
-        <result column ="DESCRIPTION"         property = "description" />
-        <result column ="COST"                property = "cost" />
-        <result column ="PURCHASED_DATE"      property = "purchasedDate" />
-        <result column ="EXPIRATION_DATE"     property = "expirationDate" />
-    </resultMap>
+	<resultMap id="SoftwareMapper"
+		type="com.simoncomputing.app.winventory.domain.Software">
+		<result column="KEY" property="key" />
+		<result column="NAME" property="name" />
+		<result column="SERIAL_NO" property="serialNo" />
+		<result column="VERSION" property="version" />
+		<result column="LICENSE_KEY" property="licenseKey" />
+		<result column="DESCRIPTION" property="description" />
+		<result column="COST" property="cost" />
+		<result column="PURCHASED_DATE" property="purchasedDate" />
+		<result column="EXPIRATION_DATE" property="expirationDate" />
+	</resultMap>
 
-    <select id="read" parameterType="map" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-        where ${where}
-    </select>
+	<select id="read" parameterType="map" resultMap="SoftwareMapper">
+		select * from SOFTWARE
+		where ${where}
+	</select>
 
-    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.Software">
-        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
-            select SOFTWARE_SEQ.nextval from dual
-        </selectKey>
-        insert into SOFTWARE
-        (
-            KEY , NAME , SERIAL_NO , VERSION , LICENSE_KEY , 
-            DESCRIPTION , COST , PURCHASED_DATE , EXPIRATION_DATE
-        )
-        values
-        (
-            #{key} , #{name} , #{serialNo} , #{version} , #{licenseKey} , 
-            #{description} , #{cost} , #{purchasedDate} , #{expirationDate}
-        )
-    </insert>
+	<insert id="create" parameterType="com.simoncomputing.app.winventory.domain.Software">
+		<selectKey resultType="_long" keyProperty="key" order="BEFORE">
+			select SOFTWARE_SEQ.nextval from dual
+		</selectKey>
+		insert into SOFTWARE
+		(
+		KEY , NAME , SERIAL_NO , VERSION , LICENSE_KEY ,
+		DESCRIPTION , COST , PURCHASED_DATE , EXPIRATION_DATE
+		)
+		values
+		(
+		#{key} , #{name} , #{serialNo} , #{version} , #{licenseKey} ,
+		#{description} , #{cost} , #{purchasedDate} , #{expirationDate}
+		)
+	</insert>
 
-    <select id="getListByName" parameterType="string" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-        where NAME = #{name}
-    </select>
-    <select id="getListBySerialNo" parameterType="string" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-        where SERIAL_NO = #{serialNo}
-    </select>
-    <select id="getListByLicenseKey" parameterType="string" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-        where LICENSE_KEY = #{licenseKey}
-    </select>
-    <select id="getListByPurchasedDate" parameterType="date" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-        where PURCHASED_DATE = #{purchasedDate}
-    </select>
-    <select id="getListByExpirationDate" parameterType="date" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-        where EXPIRATION_DATE = #{expirationDate}
-    </select>
-
-
-    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Software">
-        update SOFTWARE set
-            KEY                                 = #{key} ,
-            NAME                                = #{name} ,
-            SERIAL_NO                           = #{serialNo} ,
-            VERSION                             = #{version} ,
-            LICENSE_KEY                         = #{licenseKey} ,
-            DESCRIPTION                         = #{description} ,
-            COST                                = #{cost} ,
-            PURCHASED_DATE                      = #{purchasedDate} ,
-            EXPIRATION_DATE                     = #{expirationDate}
-        where KEY = #{key}
-    </update>
-
-    <delete id="delete" parameterType="map">
-        delete from SOFTWARE
-        where ${where}
-    </delete>
+	<select id="getListByName" parameterType="string" resultMap="SoftwareMapper">
+		select * from SOFTWARE
+		where NAME = #{name}
+	</select>
+	<select id="getListBySerialNo" parameterType="string" resultMap="SoftwareMapper">
+		select * from SOFTWARE
+		where SERIAL_NO = #{serialNo}
+	</select>
+	<select id="getListByLicenseKey" parameterType="string"
+		resultMap="SoftwareMapper">
+		select * from SOFTWARE
+		where LICENSE_KEY = #{licenseKey}
+	</select>
+	<select id="getListByPurchasedDate" parameterType="date"
+		resultMap="SoftwareMapper">
+		select * from SOFTWARE
+		where PURCHASED_DATE = #{purchasedDate}
+	</select>
+	<select id="getListByExpirationDate" parameterType="date"
+		resultMap="SoftwareMapper">
+		select * from SOFTWARE
+		where EXPIRATION_DATE = #{expirationDate}
+	</select>
 
 
-    <!-- PROTECTED CODE -->
-    
-    <select id="getListByPurchaseRange" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-        where PURCHASED_DATE BETWEEN #{start, jdbcType=DATE} AND #{end, jdbcType=DATE};
-    </select>
-    
-    <select id="getListByExpirationRange" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-        where EXPIRATION_DATE BETWEEN #{start, jdbcType=DATE} AND #{end, jdbcType=DATE};
-    </select>
+	<update id="update" parameterType="com.simoncomputing.app.winventory.domain.Software">
+		update SOFTWARE set
+		KEY = #{key} ,
+		NAME = #{name} ,
+		SERIAL_NO = #{serialNo} ,
+		VERSION = #{version} ,
+		LICENSE_KEY = #{licenseKey} ,
+		DESCRIPTION = #{description} ,
+		COST = #{cost} ,
+		PURCHASED_DATE = #{purchasedDate} ,
+		EXPIRATION_DATE = #{expirationDate}
+		where KEY = #{key}
+	</update>
 
-    
-<!--Hasn't been tested: theoretical advanced search method -->  
-<!--             AND PURCHASED_DATE BETWEEN #{pStart, jdbcType=DATE AND #{pEnd, jdbcType=DATE}
-            AND EXPIRATION_DATE BETWEEN #{eStart, jdbcType=DATE AND #{eEnd, jdbcType=DATE} -->
-            <!-- select * from SOFTWARE
-            where NAME LIKE '%${name}%'
-            AND SERIAL_NO LIKE '%${serialNo}%'
-            AND VERSION LIKE '%${version}%'
-            AND LICENSE_KEY LIKE '%${licenseKey}%'
-            AND COST LIKE '%${cost}%'
-            AND PURCHASED_DATE BETWEEN #{pStart, jdbcType=DATE AND #{pEnd, jdbcType=DATE}
-            AND EXPIRATION_DATE BETWEEN #{eStart, jdbcType=DATE AND #{eEnd, jdbcType=DATE}; -->
+	<delete id="delete" parameterType="map">
+		delete from SOFTWARE
+		where ${where}
+	</delete>
+
+
+	<!-- PROTECTED CODE -->
+
+	<select id="getListByPurchaseRange" resultMap="SoftwareMapper">
+		select * from SOFTWARE
+		where PURCHASED_DATE BETWEEN #{start, jdbcType=DATE} AND #{end,
+		jdbcType=DATE};
+	</select>
+
+	<select id="getListByExpirationRange" resultMap="SoftwareMapper">
+		select * from SOFTWARE
+		where EXPIRATION_DATE BETWEEN #{start, jdbcType=DATE} AND #{end,
+		jdbcType=DATE};
+	</select>
+
+
     <select id="advancedSearch" resultMap="SoftwareMapper">
- 			<!-- select * FROM SOFTWARE 
- 			where NAME=#{name} AND
- 			SERIAL_NO=#{serialNo} AND
- 			VERSION=#{version} AND
- 			LICENSE_KEY=#{licenseKey} AND
- 			COST=#{cost} AND
-			PURCHASED_DATE BETWEEN #{pStart, jdbcType=DATE AND #{pEnd, jdbcType=DATE} AND
-            EXPIRATION_DATE BETWEEN #{eStart, jdbcType=DATE AND #{eEnd, jdbcType=DATE}; -->
-            select * from SOFTWARE
-            where NAME LIKE '%${name}%'
-            AND SERIAL_NO LIKE '%${serialNo}%'
-            AND VERSION LIKE '%${version}%'
-            AND LICENSE_KEY LIKE '%${licenseKey}%'
-            AND COST LIKE '%${cost}%'
-            AND PURCHASED_DATE BETWEEN #{pStart, jdbcType=DATE AND #{pEnd, jdbcType=DATE}
-            AND EXPIRATION_DATE BETWEEN #{eStart, jdbcType=DATE AND #{eEnd, jdbcType=DATE};
+ 		SELECT *
+		FROM SOFTWARE
+		WHERE
+		<foreach item="field" index="i" collection="fields" open="("
+			separator="AND" close=")">
+
+			<foreach item="input" index="s" collection="inputs.get(i)"
+				open="(" separator="OR" close=")">
+				UPPER(${field}) LIKE '%${input}%'
+			</foreach>
+
+		</foreach>
  			
     </select>
+
 	<select id="search" parameterType="string" resultMap="SoftwareMapper">
-		select * FROM SOFTWARE
+		select *
+		FROM SOFTWARE
 		where UPPER(name) LIKE '%${value}%' OR
-		UPPER(serial_No) LIKE '%${value}%' OR
+		UPPER(serial_No)
+		LIKE '%${value}%' OR
 		UPPER(version) LIKE '%${value}%' OR
 		UPPER(license_Key) LIKE '%${value}%' OR
-		UPPER(cost) LIKE '%${value}%' OR
+		UPPER(cost) LIKE '%${value}%'
+		OR
 		UPPER(purchased_date) LIKE '%${value}%' OR
-		UPPER(expiration_date) LIKE '%${value}%'; 
+		UPPER(expiration_date)
+		LIKE '%${value}%';
 	</select>
-	
+
 	<select id="getDefaultResults" parameterType="int" resultMap="SoftwareMapper">
 		SELECT * FROM SOFTWARE LIMIT #{size}		<!-- find where to get size -->
 	</select>
+	
+	<select id="getAll" resultMap="SoftwareMapper">
+		SELECT * FROM SOFTWARE;
+	</select>
+
 </mapper>

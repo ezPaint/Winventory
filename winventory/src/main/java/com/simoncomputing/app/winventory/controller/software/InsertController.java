@@ -30,20 +30,18 @@ public class InsertController extends BaseController {
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Get info that the user entered
+        //Retrieve info that the user entered
         String serialNo = (String) request.getParameter("serialNo");
         String name = (String) request.getParameter("name");
         String version = (String) request.getParameter("version");
         String licenseKey = (String) request.getParameter("licenseKey");
         String description = (String) request.getParameter("description");
                
-        //For non-string values, attempt to convert to desired type. If not possible, default values
-        //are assigned.
+        //For non-string values, attempt to convert to desired type. 
         Double cost = null;
         try{
             cost = (Double) Double.parseDouble((String) request.getParameter("cost"));
         } catch (Exception e){
-            cost = 0d;
             log.error(e.getMessage());
         }
         
@@ -51,7 +49,6 @@ public class InsertController extends BaseController {
         try{
             datePurchased = Date.valueOf((String) request.getParameter("purchasedDate"));
         } catch (Exception e){
-            datePurchased = Date.valueOf("2000-01-01");
             log.error(e.getMessage());
         }
         
@@ -59,7 +56,6 @@ public class InsertController extends BaseController {
         try{
             expirationDate = Date.valueOf((String) request.getParameter("expirationDate"));
         } catch (Exception e){
-            expirationDate = Date.valueOf("2000-01-01");
             log.error(e.getMessage());
         }
         

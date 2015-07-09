@@ -30,15 +30,13 @@
 		<div class="row">
 			<jsp:include page="swBase.jsp" />
 			<div class="col-md-8">
-
-
-
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">Application Info</h2>
 					</div>
-
 					<div class="padme">
+					
+					    <!-- Get the information of the software object selected by the user to view. -->
 						<%@ page
 							import="com.simoncomputing.app.winventory.domain.Software"%>
 						<%@ page import="java.util.ArrayList"%>
@@ -57,6 +55,8 @@
 							</div>
 							<div class="media-body">
 								<ul class="list-group">
+								
+								    <!-- Displays the software's key -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Key</b>
@@ -65,6 +65,8 @@
 											<p><%=software.getKey()%></p>
 										</div>
 									</li>
+									
+									<!-- Displays the software's name -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Name</b>
@@ -73,6 +75,8 @@
 											<p><%=software.getName()%></p>
 										</div>
 									</li>
+									
+									<!--  Displays the software's serial number -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Serial Number</b>
@@ -81,6 +85,8 @@
 											<p><%=software.getSerialNo()%></p>
 										</div>
 									</li>
+									
+									<!-- Displays the software's license key -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>License Key</b>
@@ -89,6 +95,8 @@
 											<p><%=software.getLicenseKey()%></p>
 										</div>
 									</li>
+									
+									<!-- Displays the software's version -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Version</b>
@@ -97,6 +105,8 @@
 											<p><%=software.getVersion()%></p>
 										</div>
 									</li>
+									
+									<!-- Displays the software's cost -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Cost</b>
@@ -105,6 +115,8 @@
 											<p><%=software.getCost()%></p>
 										</div>
 									</li>
+									
+									<!-- Displays the software's purchase date -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Date Purchased</b>
@@ -113,6 +125,8 @@
 											<p><%=software.getPurchasedDate()%></p>
 										</div>
 									</li>
+									
+									<!-- Displays the software's expiraiton date -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Expiration Date</b>
@@ -121,6 +135,8 @@
 											<p><%=software.getExpirationDate()%></p>
 										</div>
 									</li>
+									
+									<!-- Displays the software's description -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Description</b>
@@ -133,6 +149,7 @@
 							</div>
 						</div>
 						<div>
+						    <!-- Button for the user to edit the software object. -->
 							<%-- <c:if test="${userInfo.hasPermission.updateSoftware}"> --%>
 								<a class="btn btn-default"
 									href="edit?key=<%=software.getKey()%>" role="button">Edit</a>

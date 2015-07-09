@@ -1,15 +1,15 @@
 package com.simoncomputing.app.winventory.bo;
 
-import java.util.List;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.session.*;
+import org.apache.ibatis.session.SqlSession;
 
-import com.simoncomputing.app.winventory.dao.*;
-import com.simoncomputing.app.winventory.domain.Event;
-import com.simoncomputing.app.winventory.domain.Hardware;
+import com.simoncomputing.app.winventory.dao.SessionFactory;
+import com.simoncomputing.app.winventory.dao.SoftwareDao;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.util.BoException;
 
@@ -317,25 +317,27 @@ public class SoftwareBo {
         return list;
     }
     
-    
-    //Hasn't been tested -- theoretical advanced search method
-    public List<Software> advancedSearch(String name, String serialNo, String version, 
-                                         String licenseKey, String cost) throws BoException {//, Date pStart, Date pEnd, Date eStart, Date eEnd) throws BoException {
+    public List<Software> searchAdvanced(ArrayList<String> columns,
+            ArrayList<ArrayList<String>> searches) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
+        if (columns.equals("") || searches == null) {
+            // TODO throw application error
+            return null;
+        }
+
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
-            list = mapper.advancedSearch( name, serialNo, version, licenseKey, cost);//, pStart, pEnd, eStart, eEnd);
+            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
+            list = mapper.searchAdvanced(columns, searches);
             session.commit();
-
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             session.rollback();
-            throw new BoException( e );
+            throw new BoException(e);
 
-        } finally { 
-            if ( session != null )
+        } finally {
+            if (session != null)
                 session.close();
         }
 

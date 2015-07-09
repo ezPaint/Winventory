@@ -1,9 +1,9 @@
 package com.simoncomputing.app.winventory.controller.software;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.ListIterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.simoncomputing.app.winventory.bo.SoftwareBo;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.util.BoException;
-import org.apache.log4j.Logger;
 
+import org.apache.log4j.Logger;
 
 /**
  * Controller for Advanced Search functionality
@@ -25,156 +25,154 @@ import org.apache.log4j.Logger;
  */
 @WebServlet("/software/advancedsearch")
 public class AdvancedSearchController extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-	private static Logger log = Logger.getLogger(AdvancedSearchController.class);
+    private static final long serialVersionUID = 1L;
+    private static Logger log = Logger.getLogger(AdvancedSearchController.class);
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-//		SoftwareBo softwareBo = SoftwareBo.getInstance();
-//
-//		String name = (String) request.getParameter("name");
-//		String serialNo = (String) request.getParameter("serialNo");
-//		String version = (String) request.getParameter("version");
-//		String licenseKey = (String) request.getParameter("licenseKey");
-//		String cost = (String) request.getParameter("cost");
-////		String purchaseDateStart = (String) request.getParameter("purchaseDateStart");
-////		String purchaseDateEnd = (String) request.getParameter("purchaseDateEnd");
-////		String expirationDateStart = (String) request.getParameter("expirationDateStart");
-////		String expirationDateEnd = (String) request.getParameter("expirationDateEnd");
-////		
-////		SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
-////	      java.sql.Date sqlPStartDate=null;
-////	      java.sql.Date sqlPEndDate=null;
-////	      java.sql.Date sqlEStartDate = null;
-////	      java.sql.Date sqlEEndDate = null;
-////	      
-////	      try{
-////	      sqlPStartDate= new java.sql.Date(dateFormat.parse(purchaseDateStart).getTime());
-////	      //System.out.println("Date as String; "+response.getReturnedStartDate()+" SqlDate: "+sqlStartDate );
-////	      sqlPEndDate= new java.sql.Date(dateFormat.parse(purchaseDateEnd).getTime());
-////	      //System.out.println("Date as String; "+response.getNextPaymentDate()+" SqlDate: "+sqlNextDate );
-////	      sqlEStartDate = new java.sql.Date(dateFormat.parse(expirationDateStart).getTime());
-////	      sqlEEndDate = new java.sql.Date(dateFormat.parse(expirationDateEnd).getTime());
-////	      } catch (ParseException e){
-////	          log.error(e.getMessage());
-////	      }
-//
-//      request.setAttribute("name", name);      
-//      request.setAttribute("serialNo", serialNo);
-//      request.setAttribute("version", version);
-//      request.setAttribute("licenseKey", licenseKey);
-//      request.setAttribute("cost", cost);
-//      
-////      request.setAttribute("purchaseDateStart", purchaseDateStart);
-////      request.setAttribute("purchaseDateEnd", purchaseDateEnd);
-////      
-////      request.setAttribute("expirationDateStart", expirationDateStart);
-////      request.setAttribute("expirationDateEnd", expirationDateEnd);
-//		
-//		
-//		ArrayList<Software> softwares = new ArrayList<Software>();
-//		if (name == null && serialNo == null && version == null && licenseKey == null && cost == null) {
-//			try {
-//				softwares = (ArrayList<Software>) softwareBo.getDefaultResults(10);
-//			} catch (BoException e) {
-//				log.error(e.getMessage());
-//			}
-//		} else {
-//			try {
-//				name = name.toUpperCase();
-//				serialNo = serialNo.toUpperCase();
-//				version = version.toUpperCase();
-//				licenseKey = licenseKey.toUpperCase();
-//				softwares = (ArrayList<Software>) softwareBo.advancedSearch(name, serialNo,
-//						version, licenseKey, cost);//, sqlPStartDate, sqlPEndDate, sqlEStartDate, sqlEEndDate);
-//			} catch (BoException e) {
-//				log.error(e.getMessage());
-//			}
-//		}
-//
-//		if (softwares.size() > 0) {
-//			request.setAttribute("softwares", softwares);
-//			request.setAttribute("swResult", true);
-//		}
-		request.getRequestDispatcher("/WEB-INF/flows/software/search.jsp").forward(request,
-				response);
-	}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
-		SoftwareBo softwareBo = SoftwareBo.getInstance();
+        request.getRequestDispatcher("/WEB-INF/flows/software/advanced-search.jsp").forward(request,
+                response);
+    }
 
-		
-		String name = (String) request.getParameter("name");
-		System.out.println(name);
-				String serialNo = (String) request.getParameter("serialNo");
-		System.out.println(serialNo);
-				String version = (String) request.getParameter("version");
-		System.out.println(version);
-				String licenseKey = (String) request.getParameter("licenseKey");
-		System.out.println(licenseKey);
-				String cost = (String) request.getParameter("cost");
-		System.out.println(cost);
-//				String purchaseDateStart = (String) request.getParameter("purchaseDateStart");
-//				String purchaseDateEnd = (String) request.getParameter("purchaseDateEnd");
-//				String expirationDateStart = (String) request.getParameter("expirationDateStart");
-//				String expirationDateEnd = (String) request.getParameter("expirationDateEnd");
-//				
-//				SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
-//			      java.sql.Date sqlPStartDate=null;
-//			      java.sql.Date sqlPEndDate=null;
-//			      java.sql.Date sqlEStartDate = null;
-//			      java.sql.Date sqlEEndDate = null;
-//			      
-//			      try{
-//			      sqlPStartDate= new java.sql.Date(dateFormat.parse(purchaseDateStart).getTime());
-//			      //System.out.println("Date as String; "+response.getReturnedStartDate()+" SqlDate: "+sqlStartDate );
-//			      sqlPEndDate= new java.sql.Date(dateFormat.parse(purchaseDateEnd).getTime());
-//			      //System.out.println("Date as String; "+response.getNextPaymentDate()+" SqlDate: "+sqlNextDate );
-//			      sqlEStartDate = new java.sql.Date(dateFormat.parse(expirationDateStart).getTime());
-//			      sqlEEndDate = new java.sql.Date(dateFormat.parse(expirationDateEnd).getTime());
-//			      } catch (ParseException e){
-//			          log.error(e.getMessage());
-//			      }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String error = null;
 
-		      request.setAttribute("name", name);      
-		      request.setAttribute("serialNo", serialNo);
-		      request.setAttribute("version", version);
-		      request.setAttribute("licenseKey", licenseKey);
-		      request.setAttribute("cost", cost);
-		      
-		      
-				ArrayList<Software> softwares = new ArrayList<Software>();
-				if (name == null && serialNo == null && version == null && licenseKey == null && cost == null) {
-					try {
-						softwares = (ArrayList<Software>) softwareBo.getDefaultResults(10);
-					} catch (BoException e) {
-						log.error(e.getMessage());
-					}
-				} else {
-					try {
-						name = name.toUpperCase();
-						serialNo = serialNo.toUpperCase();
-						version = version.toUpperCase();
-						licenseKey = licenseKey.toUpperCase();
-						softwares = (ArrayList<Software>) softwareBo.advancedSearch(name, serialNo,
-								version, licenseKey, cost);//, sqlPStartDate, sqlPEndDate, sqlEStartDate, sqlEEndDate);
-					} catch (BoException e) {
-						log.error(e.getMessage());
-					}
-				}
+        // get search terms and fields from form
+        ArrayList<String> names = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("name")));
+        ArrayList<String> serials = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("serialNo")));
+        ArrayList<String> versions = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("version")));
+        ArrayList<String> costs = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("cost")));
+        ArrayList<String> keys = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("licenseKey")));
+        ArrayList<String> startPDate = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("startPDate")));
+        ArrayList<String> endPDate = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("endPDate")));
+        ArrayList<String> startExDate = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("startExDate")));
+        ArrayList<String> endExDate = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("endExDate")));
 
-				if (softwares.size() > 0) {
-					request.setAttribute("softwares", softwares);
-					request.setAttribute("swResult", true);
-				}
-//		      request.setAttribute("purchaseDateStart", purchaseDateStart);
-//		      request.setAttribute("purchaseDateEnd", purchaseDateEnd);
-		      
-//		      request.setAttribute("expirationDateStart", expirationDateStart);
-//		      request.setAttribute("expirationDateEnd", expirationDateEnd);
-		request.getRequestDispatcher("/WEB-INF/flows/software/swResults.jsp").forward(request,
-				response);
-	}
+        // remove blank fields
+        cleanFields(names);
+        cleanFields(serials);
+        cleanFields(versions);
+        cleanFields(costs);
+        cleanFields(keys);
+        cleanFields(startPDate);
+        cleanFields(endPDate);
+        cleanFields(startExDate);
+        cleanFields(endExDate);
+
+        // passed as parameters to the dao 
+        // columns contains the list of columns in the database to search
+        // searchs contains the actual search terms to match to when selecting records
+        ArrayList<String> columns = new ArrayList<String>();
+        ArrayList<ArrayList<String>> searches = new ArrayList<ArrayList<String>>();
+
+        // if the user specified search terms for "name", add "name" to columns
+        // and all of the search terms to searches, otherwise ignore the arraylist
+        if (names != null && names.size() > 0) {
+            columns.add("name");
+            searches.add(names);
+        }
+
+        if (serials != null && serials.size() > 0) {
+            columns.add("serialNo");
+            searches.add(serials);
+        }
+
+        if (versions != null && versions.size() > 0) {
+            columns.add("version");
+            searches.add(versions);
+        }
+
+        if (costs != null && costs.size() > 0) {
+            columns.add("cost");
+            searches.add(costs);
+        }
+
+        if (keys != null && keys.size() > 0) {
+            columns.add("licenseKey");
+            searches.add(names);
+        }
+
+        if (startPDate != null && startPDate.size() > 0) {
+            columns.add("startPDate");
+            searches.add(startPDate);
+        }
+
+        if (endPDate != null && endPDate.size() > 0) {
+            columns.add("endPDate");
+            searches.add(endPDate);
+        }
+
+        if (startExDate != null && startExDate.size() > 0) {
+            columns.add("startExDate");
+            searches.add(startExDate);
+        }
+
+        if (endExDate != null && endExDate.size() > 0) {
+            columns.add("endExDate");
+            searches.add(endExDate);
+        }
+
+        // do sql stuff
+        ArrayList<Software> results = null;
+        
+        //check that at least one search term was given
+        if (names.size() == 0 && serials.size() == 0 && versions.size() == 0 && costs.size() == 0
+                && keys.size() == 0 && startPDate.size() == 0 && endPDate.size() == 0
+                && startExDate.size() == 0 && endExDate.size() == 0) {
+            error = "Nothing was entered.";
+        } else {
+
+            try {
+                results = new ArrayList<Software>(SoftwareBo.getInstance().searchAdvanced(columns,
+                        searches));
+            } catch (BoException e) {
+                error = e.getLocalizedMessage();
+                log.error(e.getMessage());
+            }
+
+        }
+
+        if (results != null) {
+            request.setAttribute("results", results);
+        }
+
+        request.setAttribute("page_header", "Search Results");
+        request.setAttribute("error", error);
+
+        // only redirect to results page if no error occurred 
+        if (error != null) {
+            request.getRequestDispatcher("/WEB-INF/flows/software/advancedsearch.jsp").forward(request,
+                    response);
+        } else {
+            request.getRequestDispatcher("/WEB-INF/flows/software/results.jsp").forward(request,
+                    response);
+        }
+
+    }
+
+    /** 
+     * Helper method to remove blank fields from form results.
+     * @param fields
+     */
+    private void cleanFields(ArrayList<String> fields) {
+        for (ListIterator<String> iterator = fields.listIterator(); iterator.hasNext();) {
+            String field = iterator.next();
+            if (field.equals("")) {
+                iterator.remove();
+            } else {
+                iterator.set(field.toUpperCase());
+            }
+        }
+    }
 }

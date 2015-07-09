@@ -94,7 +94,7 @@ body {
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 50px;
-  background-color: #f4e5d9;
+  background-color: #d6e4f0;
     color: #0f0f0f;
 }
 
@@ -284,14 +284,14 @@ body {
 
 /* End Typeahead */
 
-/*
-.table-striped>tbody>tr:nth-child(odd)>td, 
+
+/* .table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {
-   background-color: #faf4ef;
- }
+   background-color: #fefefe;
+ } */
  
- .table-striped>tbody>tr:nth-child(even)>td, 
+/*  .table-striped>tbody>tr:nth-child(even)>td, 
 .table-striped>tbody>tr:nth-child(even)>th {
-   background-color: #eaf1f7;
- }
- */
+   background-color: #f7f7f7;
+ } */
+ 

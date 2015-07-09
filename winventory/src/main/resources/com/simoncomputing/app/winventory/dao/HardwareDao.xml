@@ -85,7 +85,7 @@
 		'%${value}%';
 	</select>
 
-	<select id="searchAdvanced" resultMap="HardwareMapper">
+	<select id="searchAdvanced" parameterType="map" resultMap="HardwareMapper">
 		SELECT *
 		FROM HARDWARE
 		WHERE

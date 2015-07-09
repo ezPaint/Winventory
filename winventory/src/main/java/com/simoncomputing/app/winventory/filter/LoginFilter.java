@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.simoncomputing.app.winventory.formbean.UserInfoBean;
+
 /**
  * Servlet Filter implementation class LoginFilter
  */
@@ -58,9 +60,20 @@ public class LoginFilter implements Filter {
         // get the current session. do not create new one if null
         HttpSession session = req.getSession(false);
         
+        UserInfoBean userInfo = null;
+        // get the userInfo bean attached to the session
+        if (session != null) {
+            if (session.getAttribute("userInfo") != null) {
+                userInfo = (UserInfoBean) session.getAttribute("userInfo");
+            }
+        }
+        
         // check that the user is either logged in or accessing publicly available locations
-        if (!(uri.startsWith(appName + "/resources")) && (session == null || session.getAttribute("userInfo") == null) 
-                && !(uri.startsWith(appName +"/login"))  && !(uri.startsWith(appName + "/logout"))) {
+        if (
+                (session == null || userInfo == null || !userInfo.isActive()) 
+                && !(uri.startsWith(appName + "/resources")) 
+                && !(uri.startsWith(appName +"/login"))  
+                && !(uri.startsWith(appName + "/logout"))) {
             
             //redirect the user if neither logged in nor visiting a public location
             res.sendRedirect(req.getContextPath() + "/login?next=" + uri);
