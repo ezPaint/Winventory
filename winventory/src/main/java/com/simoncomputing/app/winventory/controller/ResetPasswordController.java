@@ -74,7 +74,8 @@ public class ResetPasswordController extends BaseController {
 	    	
 	    	//should be changed to https
 	        String urlPath = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-	        String message = urlPath + "/changepassword" + "?token=" + token + "&user=" + resetUser.getKey().intValue();
+	        String message = "Please reset your password at: " +
+	        		urlPath + "/changepassword" + "?token=" + token + "&user=" + resetUser.getKey().intValue();
 	          
 	        //insert into database hashed version of token
 			AccessTokenBo accessTokenBo = AccessTokenBo.getInstance();

@@ -1,4 +1,4 @@
-package com.simoncomputing.app.winventory.controller;
+package com.simoncomputing.app.winventory.controller.hardware;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
+import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.util.BoException;
@@ -24,7 +25,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 public class HardwareEditController extends BaseController {
     private static final long serialVersionUID = 1L;
     
-    private Logger log = Logger.getLogger(ViewHardwareController.class); 
+    private Logger log = Logger.getLogger(HardwareEditController.class); 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

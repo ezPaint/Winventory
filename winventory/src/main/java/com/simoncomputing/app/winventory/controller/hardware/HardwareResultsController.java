@@ -1,4 +1,4 @@
-package com.simoncomputing.app.winventory.controller;
+package com.simoncomputing.app.winventory.controller.hardware;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,22 +11,23 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.HardwareBo;
+import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.util.BoException;
 
-@WebServlet("/hardware/storage")
-public class StorageController extends BaseController {
+@WebServlet("/hardware/results")
+public class HardwareResultsController extends BaseController {
     private static final long serialVersionUID = 1L;
 
-    private Logger log = Logger.getLogger(ResultsController.class); 
-    
+    private Logger log = Logger.getLogger(HardwareResultsController.class);
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         ArrayList<Hardware> results = null;
-        
+
         try {
-            results = new ArrayList<Hardware>(HardwareBo.getInstance().getStorage());
+            results = new ArrayList<Hardware>(HardwareBo.getInstance().getAll());
         } catch (BoException e) {
             request.setAttribute("error", e.getMessage());
             log.error(e.getMessage());
@@ -35,15 +36,28 @@ public class StorageController extends BaseController {
         if (results != null) {
             request.setAttribute("results", results);
         }
-        
-        request.setAttribute("page_header", "Hardware in Storage");
+
+        request.setAttribute("page_header", "All Hardware");
 
         request.getRequestDispatcher("/WEB-INF/flows/hardware/results.jsp").forward(request,
                 response);
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        @SuppressWarnings("unchecked")
+        ArrayList<Hardware> results = (ArrayList<Hardware>) request.getAttribute("results");
+
+        if (results != null) {
+            request.setAttribute("results", results);
+        }
+
+        request.setAttribute("page_header", "Results");
+
+        request.getRequestDispatcher("/WEB-INF/flows/hardware/results.jsp").forward(request,
+                response);
     }
+
 }

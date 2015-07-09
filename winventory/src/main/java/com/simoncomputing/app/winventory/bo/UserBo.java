@@ -141,31 +141,60 @@ public class UserBo {
 
     // PROTECTED CODE -->
 	
+    /**
+     * Returns the user with the given username, if found.
+     * Returns null if not found.
+     */
 	public User getUserByUsername(String username) {
+	    
         SqlSession sqlSession = null;
+        
+        // try to get the user
         try {
+            
         	sqlSession = SessionFactory.getSession();
             UserDao userMapper = sqlSession.getMapper(UserDao.class);
+            
+            // get the user by the given username param
             User user = userMapper.getUserByUsername(username);
+            
+            // returns the user, returns null if user not found
             return user;
+            
         } finally {
+            
+            // close the sql session
             if (sqlSession != null) {
                 sqlSession.close();
             }
+            
         }
+        
 	}
 	
+	
+	/**
+     * Returns the user with the given email, if found.
+     * Returns null if not found.
+     */
 	public User getUserByEmail(String email) {
+	    
         SqlSession sqlSession = null;
+        
         try {
         	sqlSession = SessionFactory.getSession();
             UserDao userMapper = sqlSession.getMapper(UserDao.class);
+            
+            // get the user with the given email, gets null otherwise
             User user = userMapper.getUserByEmail(email);
             return user;
+            
         } finally {
+            
             if (sqlSession != null) {
                 sqlSession.close();
             }
+            
         }
 	}
 	

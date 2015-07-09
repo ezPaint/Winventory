@@ -1,10 +1,8 @@
-package com.simoncomputing.app.winventory.controller;
+package com.simoncomputing.app.winventory.controller.hardware;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.ListIterator;
 
 import javax.servlet.ServletException;
@@ -16,15 +14,16 @@ import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
+import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.util.BoException;
 
 @WebServlet("/hardware/advanced-search")
-public class AdvancedSearchController extends BaseController {
+public class HardwareAdvancedSearchController extends BaseController {
     private static final long serialVersionUID = 1L;
 
-    private Logger log = Logger.getLogger(AdvancedSearchController.class);
+    private Logger log = Logger.getLogger(HardwareAdvancedSearchController.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

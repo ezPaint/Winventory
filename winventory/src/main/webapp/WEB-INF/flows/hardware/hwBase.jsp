@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<div class="col-xs-2">
+<div class="col-md-2">
 	<div class="list-group">
 		<a id="results" href="results" class="list-group-item"> <span
 			class="glyphicon glyphicon-th-list" aria-hidden="true"> All</span></a> <a
