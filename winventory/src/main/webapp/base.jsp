@@ -31,7 +31,7 @@
 				<li id="services"><a href="#">Services</a></li>
 				<%-- </c:if>
 				<c:if test="${userInfo.hasPermission.readSoftware}"> --%>
-				<li id="applications"><a href="${contextPath}/software">Applications</a></li>
+				<li id="software"><a href="${contextPath}/software">Software</a></li>
 				<%-- </c:if>
 				<c:if test="${userInfo.hasPermission.readServers}"> --%>
 				<li id="servers"><a href="#">Servers</a></li>
@@ -76,5 +76,5 @@
 
 <script>
 	pathArray = location.href.replace('#', '').split('/');
-	document.getElementById(pathArray[4]).className = "active"
+	document.getElementById(pathArray[4]).className = "active";
 </script>

@@ -36,6 +36,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+    	debugger;
         $('#resultsTable').DataTable({
             "pagingType": "full"
         });
@@ -66,9 +67,10 @@
                             style="display: none;">
                             <thead>
                                 <tr>
+                                	<th>Key</th>
                                     <th>Name</th>
 									<th>Serial Number</th>
-									<th>Description()</th>
+									<th>Description</th>
 									<th>Version</th>
 									<th>License Key</th>
 									<th>Cost</th>
@@ -99,8 +101,8 @@
                                     <td><%=results.get(i).getVersion()%></td>
                                     <td><%=results.get(i).getLicenseKey()%></td>
                                     <td><%=results.get(i).getCost()%></td>
-                                    <td><%=results.get(i).getExpirationDate()%></td>
                                     <td><%=results.get(i).getPurchasedDate()%></td>
+                                    <td><%=results.get(i).getExpirationDate()%></td>
                                 </tr>
                                 <%
                                     }
