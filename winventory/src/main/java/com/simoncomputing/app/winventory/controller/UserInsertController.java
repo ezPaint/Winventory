@@ -108,6 +108,7 @@ public class UserInsertController extends BaseController {
             }
         }
         
+        // Create the new user in the db
         UserBo bo = UserBo.getInstance();
         try {
             bo.create(user);
@@ -115,7 +116,8 @@ public class UserInsertController extends BaseController {
             logger.error("BoException when inserting user in UserInsertController");
         }
         
-        request.getRequestDispatcher("/WEB-INF/flows/users/insert.jsp").forward(request, response);
+        // redirect to results 
+        response.sendRedirect(request.getContextPath() + "/users/results");
     }
     
     private void sendInviteGoogle(HttpServletRequest request, User user) {

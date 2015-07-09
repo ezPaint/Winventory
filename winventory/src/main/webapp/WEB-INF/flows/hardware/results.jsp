@@ -69,11 +69,11 @@
 									<tr>
 										<th>Key</th>
 										<th>Type</th>
-										<th>Description</th>
 										<th>Cost</th>
 										<th>Condition</th>
-										<th>Serial No.</th>
 										<th>Purchase Date</th>
+										<th>Description</th>
+										<th>Serial No.</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -93,11 +93,11 @@
 										<td><a href="view?key=<%=results.get(i).getKey()%>">
 												<%=results.get(i).getKey()%></a></td>
 										<td><%=results.get(i).getType()%></td>
-										<td><%=results.get(i).getDescription()%></td>
 										<td><%=results.get(i).getCost()%></td>
 										<td><%=results.get(i).getCondition()%></td>
-										<td><%=results.get(i).getSerialNo()%></td>
 										<td><%=results.get(i).getPurchaseDate()%></td>
+										<td><%=results.get(i).getDescription()%></td>
+										<td><%=results.get(i).getSerialNo()%></td>
 									</tr>
 									<%
 									    }

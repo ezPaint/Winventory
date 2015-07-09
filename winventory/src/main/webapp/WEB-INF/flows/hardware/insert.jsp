@@ -50,7 +50,7 @@
 							<div class="form-group">
 								<label for="type" class="col-sm-2 control-label">Type </label>
 								<div class="col-sm-9 search-field">
-									<input name="type" type="text" id="type"
+									<input name="type" type="text" id="type" pattern="^[^\'\&quot]*$"
 										class="form-control search-hardware-type" placeholder="Laptop"
 										required>
 								</div>
@@ -62,7 +62,7 @@
 								<label for="description" class="col-sm-2 control-label">Description
 								</label>
 								<div class="col-sm-9">
-									<input name="description" type="text" id="description"
+									<input name="description" type="text" id="description" pattern="^[^\'\&quot]*$"
 										class="form-control" placeholder="MacbookPro 13" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
@@ -128,7 +128,7 @@
 								<label for="date" class="col-sm-2 control-label">Serial
 									No </label>
 								<div class="col-sm-9">
-									<input name="serialNo" type="text" id="serialNo"
+									<input name="serialNo" type="text" id="serialNo" pattern="^[^\'\&quot]*$"
 										class="form-control" placeholder="1A2SDF6537H" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">

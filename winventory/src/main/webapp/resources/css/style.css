@@ -25,9 +25,14 @@ body {
 
 .boom {
 	width: 100%;
-	color: #f3f8fb;
-	background-color: #ca8142;
-	padding: 5px;
+	color: #6a6a6a;
+	background-color: #efefef;
+}
+
+.boom h2 {
+	color: #6a6a6a;
+	padding: 10px;
+	margin: 0px;
 }
 
 .full {
@@ -278,3 +283,15 @@ body {
 }
 
 /* End Typeahead */
+
+/*
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #faf4ef;
+ }
+ 
+ .table-striped>tbody>tr:nth-child(even)>td, 
+.table-striped>tbody>tr:nth-child(even)>th {
+   background-color: #eaf1f7;
+ }
+ */

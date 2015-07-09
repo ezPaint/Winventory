@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 /**
  * Servlet Filter implementation class LoginFilter
  */
-@WebFilter("/test")
+@WebFilter("/*")
 public class LoginFilter implements Filter {
     
     final static Logger logger = Logger.getLogger(LoginFilter.class);

@@ -61,7 +61,7 @@
 							<div class="form-group">
 								<label for="type" class="col-sm-2 control-label">Type </label>
 								<div class="col-sm-9 search-field">
-									<input name="type" type="text" id="type"
+									<input name="type" type="text" id="type" pattern="^[^\'\&quot]*$"
 										class="form-control search-hardware-type"
 										value="<%=hardware.getType()%>" required>
 								</div>
@@ -73,7 +73,7 @@
 								<label for="description" class="col-sm-2 control-label">Description
 								</label>
 								<div class="col-sm-9">
-									<input name="description" type="text" id="description"
+									<input name="description" type="text" id="description" pattern="^[^\'\&quot]*$"
 										class="form-control" value="<%=hardware.getDescription()%>"
 										required>
 								</div>
@@ -140,7 +140,7 @@
 								<label for="serialNo" class="col-sm-2 control-label">Serial
 									No </label>
 								<div class="col-sm-9">
-									<input name="serialNo" type="text" id="serialNo"
+									<input name="serialNo" type="text" id="serialNo" pattern="^[^\'\&quot]*$"
 										class="form-control" value="<%=hardware.getSerialNo()%>"
 										required>
 								</div>
@@ -152,7 +152,7 @@
 								<div class="col-sm-10 col-sm-offset-2">
 									<button type="submit" class="btn btn-default">Submit
 										Changes</button>
-									<button type="reset" class="btn btn-default" onClick="reloadConditions();return false;">Reset
+									<button type="reset" class="btn btn-default" onClick="reloadConditions(); return false;">Reset
 										Values</button>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
@@ -181,30 +181,87 @@
 	<script>
 		var date = '${pageContext.request.getAttribute("hardware").getPurchaseDate()}';
 		var month = date.substring(4, 7);
-
-		if (month = 'Jan') {
+		
+		if (month == 'Jan') {
 			month = '01';
-		} else if (month = 'Feb') {
+		} else if (month == 'Feb') {
 			month = '02';
-		} else if (month = 'Mar') {
+		} else if (month == 'Mar') {
 			month = '03';
-		} else if (month = 'Apr') {
+		} else if (month == 'Apr') {
 			month = '04';
-		} else if (month = 'May') {
+		} else if (month == 'May') {
 			month = '05';
-		} else if (month = 'Jun') {
+		} else if (month == 'Jun') {
 			month = '06';
-		} else if (month = 'Jul') {
+		} else if (month == 'Jul') {
 			month = '07';
-		} else if (month = 'Aug') {
+		} else if (month == 'Aug') {
 			month = '08';
-		} else if (month = 'Sep') {
+		} else if (month == 'Sep') {
 			month = '09';
-		} else if (month = 'Oct') {
+		} else if (month == 'Oct') {
 			month = '10';
-		} else if (month = 'Nov') {
+		} else if (month == 'Nov') {
 			month = '11';
-		} else if (month = 'Dec') {
+		} else if (month == 'Dec') {
+			month = '12';
+		}
+		
+		var day = date.substring(8, 10);
+		var year = date.substring(24);
+		
+		var today = new Date();
+		today = year + '-' + month + '-' + day;
+		$("#date").val(today);//attr("value", today);
+		
+		var condition = '${pageContext.request.getAttribute("hardware").getCondition()}';
+		$('select[name=condition]').val(condition);
+	</script>
+	<script>
+	function reloadConditions() {
+		var type = '${pageContext.request.getAttribute("hardware").getType()}';
+		console.log(type);
+		$("#type").val(type);
+		var description = '${pageContext.request.getAttribute("hardware").getDescription()}';
+		console.log(description);
+		$("#description").val(description);
+		var cost = '${pageContext.request.getAttribute("hardware").getCost()}';
+		console.log(cost);
+		$("#cost").val(cost);
+		var serialNo = '${pageContext.request.getAttribute("hardware").getSerialNo()}';
+		console.log(serialNo);
+		$("#serialNo").val(serialNo);
+		var condition = '${pageContext.request.getAttribute("hardware").getCondition()}';
+		console.log(condition);
+		$('select[name=condition]').val(condition);
+		
+		var date = '${pageContext.request.getAttribute("hardware").getPurchaseDate()}';
+		var month = date.substring(4, 7);
+		
+		if (month == 'Jan') {
+			month = '01';
+		} else if (month == 'Feb') {
+			month = '02';
+		} else if (month == 'Mar') {
+			month = '03';
+		} else if (month == 'Apr') {
+			month = '04';
+		} else if (month == 'May') {
+			month = '05';
+		} else if (month == 'Jun') {
+			month = '06';
+		} else if (month == 'Jul') {
+			month = '07';
+		} else if (month == 'Aug') {
+			month = '08';
+		} else if (month == 'Sep') {
+			month = '09';
+		} else if (month == 'Oct') {
+			month = '10';
+		} else if (month == 'Nov') {
+			month = '11';
+		} else if (month == 'Dec') {
 			month = '12';
 		}
 
@@ -213,17 +270,7 @@
 		
 		var today = new Date();
 		today = year + '-' + month + '-' + day;
-		$("#date").attr("value", today);
-		
-		var condition = '${pageContext.request.getAttribute("hardware").getCondition()}';
-		$('select[name=condition]').val(condition);
-		//$('.selectpicker').selectpicker('refresh');
-	</script>
-	<script>
-	function reloadConditions() {
-		var condition = '${pageContext.request.getAttribute("hardware").getCondition()}';
-		console.log(condition);
-		$('select[name=condition]').val(condition);
+		$("#date").val(today);
 	}
 	</script>
 

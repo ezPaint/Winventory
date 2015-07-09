@@ -26,17 +26,17 @@
 <body>
 	<jsp:include page="/base.jsp"/>
     <div class="container-fluid">
-	    <form class="form-group center" method="post" action="${contextPath}/barcodes/barcode">
+	    <form id="form" class="form-group center" method="post" action="${contextPath}/barcodes/barcode">
        		<label>Barcode Entry</label>
        		<input style="width:50%;margin-left:25%" id="barcode" name="barcode" class="form-control center"
        			pattern=".{11,13}" placeholder="Scan Barcode Now" type="text" autocomplete="off" autofocus/>
-	   		<input type="hidden" id="toSubmit" name="toSubmit" value="false"/>
+	   		<input type="hidden" id="toSubmit" name="toSubmit" value=false/>
 	   	</form>
 	   	<c:if test="${not empty error}">
 			<div class="alert alert-danger text-center">${error}</div>
 		</c:if>
 		<br> <br>
-		<form id="form" action="${contextPath}/barcodes/barcode" method="post">
+		<form action="${contextPath}/barcodes/barcode" method="post">
 			<div class="row">
 				<div class="col-xs-6 form-group">
 					<label>Owner</label> <input id="person" name="person" class="form-control"
@@ -72,80 +72,44 @@
 									<td><c:out value="${i.getShortDescription()}"/></td>
 									<td><c:out value="${ub.read(i.userId).firstName}"/></td>
 									<td><c:out value="${lb.read(i.locationId).description}"/></td>
-									<td><button class="btn btn-danger" onClick="this.parentNode.parentNode.remove()">Delete</button></td>
+									<td><button class="btn btn-warning" onClick="toggleRemove(this,<c:out value="${i.key}"/>); return false;">Remove</button></td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
 				</div>
-				</div>
-				<div class="center">
-				 	<button class="btn btn-default" onclick="finalSubmission()">Confirm Changes</button>
-				</div>
 			</c:if>
-		</form>
+		</div>
+	</form>
+	<div class="center">
+	 	<button class="btn btn-default" onclick="finalSubmission()">Confirm Changes</button>
 	</div>
-    <script>
-    	function finalSubmission(){
-    		var hiddenInput = document.getElementById("toSubmit");
-    		hiddenInput.value="true"
-    		document.getElementById("form").submit();
-    	}
-    
-		function placeBarcode() {
-			var bar = document.getElementById("barcode").value;
-			var table = bar.charAt(0);
-			switch (table) {
-			case "1":
-				placeAsPerson(bar);
-				break;
-			case "2":
-				placeAsHardware(bar);
-				break;
-			case "3":
-				alert("try again");
-				break;
-			case "4":
-				placeAsLocation(bar);
-				break;
-			default:
-				alert("try again");
-				break;
-			}
-			document.getElementById("barcode").value = "";
-			document.getElementById("form").submit();
-		}
-	
-		function placeAsPerson(code) {
-			var person = document.getElementById("person");
-			if (person.value == '') {
-				person.value = code;
-			}
-			document.getElementById("location").value="Cannot modify both Owner and Location";
-		}
-	
-		function placeAsHardware(code) {
-			var hardwares = document.getElementById("hardwares");
-			var input = document.createElement("input");
-			input.name="hardware";
-			input.type="text";
-			input.value=code;
-			input.className="form-control";
-			input.readOnly=true;
-			document.getElementById("hardwares").appendChild(input);
-		}
-	
-		function placeAsLocation(code) {
-			var location = document.getElementById("location");
-			if (location.value==""){
-				location.value = code;
-			}
-			document.getElementById("person").value="Cannot modify both Owner and Location";
-		}
-		
-		function removeInput(obj) {
-			obj.parentNode.parentNode.remove();
-		}
-	</script>
+</div>
+<script>
+function finalSubmission(){
+	var hiddenInput = document.getElementById("toSubmit");
+	hiddenInput.value=true;
+	document.getElementById("form").submit();
+}
+
+function toggleRemove(obj, pk){
+	var crntName = obj.parentNode.parentNode.className;
+	nextName = '';
+	var input;
+	if (crntName==''){
+		input = document.createElement("input");
+		input.setAttribute("type","hidden");
+		input.setAttribute("name","removeHw");
+		input.setAttribute("id",pk);
+		input.setAttribute("value",pk);
+		document.getElementById("form").appendChild(input);
+		nextName='alert alert-warning';
+	} else {
+		input = document.getElementById(pk);
+		input.setAttribute("value",null);
+	}
+	obj.parentNode.parentNode.className=nextName;
+}
+</script>
 </body>
 </html>

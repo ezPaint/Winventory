@@ -117,35 +117,27 @@
                                         </span>
                                     </div>
                                 </div>
-                                <br> 
-                                <div id="idContainer6" class="myClass">
-                                    <div class="input-group" id="idDiv6">
-                                        <span class="input-group-addon" id="basic-addon1">Date Purchased</span>
-                                            <input name="id[]" type="date" class="form-control"
-                                            placeholder="YYYY-MM-DD"> <span class="input-group-btn"
-                                            aria-hidden="true">
-                                            <button class="btn btn-default"
-                                                onclick="addInput6('idContainer6');return false;">
-                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                            </button> <br>
-                                        </span>
+                                <br>
+							<div id="idContainer6" class="myClass">
+                                <div class="input-group double-input">
+                                    <span class="input-group-addon" id="basic-addon1">Date Purchased Range</span>
+                                           <input name="id[]" type="date" class="form-control"
+                                                    placeholder="YYYY-MM-DD">
+                                           <input name="id[]" type="date" class="form-control"
+                                                    placeholder="YYYY-MM-DD">
                                     </div>
-                                </div>
-                                <br> 
-                                <div id="idContainer7" class="myClass">
-                                    <div class="input-group" id="idDiv7">
-                                        <span class="input-group-addon" id="basic-addon1">Expiration Date</span>
-                                            <input name="id[]" type="date" class="form-control"
-                                            placeholder="YYYY-MM-DD"> <span class="input-group-btn"
-                                            aria-hidden="true">
-                                            <button class="btn btn-default"
-                                                onclick="addInput7('idContainer7');return false;">
-                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                            </button> <br>
-                                        </span>
+                            </div>
+                            <br>
+                            <div id="idContainer7" class="myClass">
+                                <div class="input-group double-input">
+                                    <span class="input-group-addon" id="basic-addon1">Expiration Date Range</span>
+                                           <input name="id[]" type="date" class="form-control"
+                                                    placeholder="YYYY-MM-DD">
+                                           <input name="id[]" type="date" class="form-control"
+                                                    placeholder="YYYY-MM-DD">
                                     </div>
-                                </div>
-                                <br> 
+                            </div>
+                            <br>
                                 <input type="hidden" name="action" value="doInsert">
                                 <input type="hidden" name="table" value="property">
                             </div>

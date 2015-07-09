@@ -92,15 +92,34 @@
 
     
 <!--Hasn't been tested: theoretical advanced search method -->  
+<!--             AND PURCHASED_DATE BETWEEN #{pStart, jdbcType=DATE AND #{pEnd, jdbcType=DATE}
+            AND EXPIRATION_DATE BETWEEN #{eStart, jdbcType=DATE AND #{eEnd, jdbcType=DATE} -->
+            <!-- select * from SOFTWARE
+            where NAME LIKE '%${name}%'
+            AND SERIAL_NO LIKE '%${serialNo}%'
+            AND VERSION LIKE '%${version}%'
+            AND LICENSE_KEY LIKE '%${licenseKey}%'
+            AND COST LIKE '%${cost}%'
+            AND PURCHASED_DATE BETWEEN #{pStart, jdbcType=DATE AND #{pEnd, jdbcType=DATE}
+            AND EXPIRATION_DATE BETWEEN #{eStart, jdbcType=DATE AND #{eEnd, jdbcType=DATE}; -->
     <select id="advancedSearch" resultMap="SoftwareMapper">
-        select * from SOFTWARE
-            where NAME=#{name}
-            AND SERIAL_NO=#{serialNo}
-            AND VERSION=#{version}
-            AND LICENSE_KEY=#{licenseKey}
-            AND COST=#{cost, jdbcType=DOUBLE}
+ 			<!-- select * FROM SOFTWARE 
+ 			where NAME=#{name} AND
+ 			SERIAL_NO=#{serialNo} AND
+ 			VERSION=#{version} AND
+ 			LICENSE_KEY=#{licenseKey} AND
+ 			COST=#{cost} AND
+			PURCHASED_DATE BETWEEN #{pStart, jdbcType=DATE AND #{pEnd, jdbcType=DATE} AND
+            EXPIRATION_DATE BETWEEN #{eStart, jdbcType=DATE AND #{eEnd, jdbcType=DATE}; -->
+            select * from SOFTWARE
+            where NAME LIKE '%${name}%'
+            AND SERIAL_NO LIKE '%${serialNo}%'
+            AND VERSION LIKE '%${version}%'
+            AND LICENSE_KEY LIKE '%${licenseKey}%'
+            AND COST LIKE '%${cost}%'
             AND PURCHASED_DATE BETWEEN #{pStart, jdbcType=DATE AND #{pEnd, jdbcType=DATE}
             AND EXPIRATION_DATE BETWEEN #{eStart, jdbcType=DATE AND #{eEnd, jdbcType=DATE};
+ 			
     </select>
 	<select id="search" parameterType="string" resultMap="SoftwareMapper">
 		select * FROM SOFTWARE
@@ -116,8 +135,4 @@
 	<select id="getDefaultResults" parameterType="int" resultMap="SoftwareMapper">
 		SELECT * FROM SOFTWARE LIMIT #{size}		<!-- find where to get size -->
 	</select>
-	
-	<select id="getAll" resultMap="SoftwareMapper">
-        select * from SOFTWARE;
-    </select>
 </mapper>

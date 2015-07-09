@@ -117,7 +117,7 @@ public class AdvancedSearchController extends BaseController {
                 results = new ArrayList<Hardware>(HardwareBo.getInstance().searchAdvanced(columns,
                         searches));
             } catch (BoException e) {
-                request.setAttribute("error", e.getMessage());
+                error = e.getLocalizedMessage();
                 log.error(e.getMessage());
             }
             

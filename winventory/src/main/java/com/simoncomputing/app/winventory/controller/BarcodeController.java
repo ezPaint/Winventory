@@ -29,7 +29,6 @@ public class BarcodeController extends HttpServlet {
     static Logger logger = Logger.getLogger(BarcodeController.class);
 	private static UserBo ub = UserBo.getInstance();
 	private static HardwareBo hb = HardwareBo.getInstance();
-	private static SoftwareBo sb = SoftwareBo.getInstance();
 	private static LocationBo lb = LocationBo.getInstance();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,16 +39,17 @@ public class BarcodeController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	if (request.getParameter("toSubmit").equals("true")){
-    		updateDatabase(request.getParameterMap());
-    		logger.trace("updating database");
-    	}
+    	logger.trace("parameter map is " + request.getParameterMap());
     		
     	request.getSession().setAttribute("ub", ub);
     	request.getSession().setAttribute("lb", lb);
 		String barcode = request.getParameter("barcode");
-		logger.trace("barcode is " + barcode);
-		if(barcode != null){
+		boolean update = Boolean.parseBoolean(request.getParameter("toSubmit"));
+		if (update) {
+    		updateDatabase(request.getParameterMap());
+    		logger.trace("updating database");
+		}
+		else if(barcode != null){
 			long pk = -1;
 			String first = parseTableIdentifier(barcode);
 			try{
@@ -60,7 +60,9 @@ public class BarcodeController extends HttpServlet {
 			try{
     			switch(first){
     			case "1":
+    				logger.trace("preloading based on user " + pk);
     				request.getSession().setAttribute("user", ub.read(pk));
+    				request.getSession().setAttribute("location", null);
     				request.getSession().setAttribute("hardware", hb.getListByUserId((int)pk));
     				break;
     			case "2":
@@ -74,6 +76,8 @@ public class BarcodeController extends HttpServlet {
     				request.getSession().setAttribute("hardware", hwList);
     				break;
     			case "4":
+    				logger.trace("preloading based on location " + pk);
+    				request.getSession().setAttribute("user", null);
     				request.getSession().setAttribute("location", lb.read(pk));
     				request.getSession().setAttribute("hardware", hb.getListByLocationId((int)pk));
     				logger.debug(hb.getListByLocationId((int)pk));

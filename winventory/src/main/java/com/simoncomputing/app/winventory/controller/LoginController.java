@@ -46,6 +46,8 @@ public class LoginController extends BaseController {
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     * This method handles logins for users logging in with a password,
+     * as opposed to using the Google login
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
@@ -68,7 +70,15 @@ public class LoginController extends BaseController {
             return;
         }
         
+        // if the user is inactive, reject
+        if (!user.getIsActive()) {
+            logger.info("Inactive user " + user.getUsername() + " attempted to login.");
+            request.setAttribute("error", incorrectMsg);
+            request.getRequestDispatcher(loginJsp).forward(request, response);
+            return;
+        }
         
+        // if the user exists and a password was typed in
         if (password != null && user != null) {
             
             try {
@@ -85,7 +95,10 @@ public class LoginController extends BaseController {
             // check the password, login user if password check returns true
             if (PasswordHasher.checkPassword(password, user.getPassword())) {
                 
+                // logout any user which may have already been logged in
             	request.getSession().invalidate();
+            	
+            	// log the successful login
             	logger.info("Logging in user " + username + " now.");
                 
                 // add the user info to the session
@@ -95,10 +108,13 @@ public class LoginController extends BaseController {
             	
                 // redirect as appropriate
                 if (request.getParameter("next") != null) {
+                    // if the user attempted to reach another page and was redirected to login,
+                    // next is the location the user wanted to reach in the first place
                     response.sendRedirect( request.getParameter("next") ); 
                 }
                 else {
-                    response.sendRedirect("");
+                    // default destination
+                    response.sendRedirect(request.getContextPath() + "/hardware/results");
                     return;
                 }
             }
@@ -112,6 +128,7 @@ public class LoginController extends BaseController {
                 return;
             }
         } 
+        // the username is not in the db
         else {
         	logger.info("User not found.");
             request.setAttribute("error", incorrectMsg);
