@@ -44,12 +44,12 @@ public class SetGoogleClientController extends BaseController {
 			gc = GoogleClientBo.getInstance().read(1L);
 		} catch (BoException e) {
 			logger.fatal("REALLY BAD STUFF");
-			this.forward(request, response, "/login");
+			this.forward(request, response, "/admin");
 			return;
 		}
 		if (gc == null) {
 			logger.fatal("Your Database doesn't have smtp at correct key");
-			this.forward(request, response, "/login");
+			this.forward(request, response, "/admin");
 			return;
 		}
 		SetGoogleClientBean clientBean = new SetGoogleClientBean(); 
