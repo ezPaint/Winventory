@@ -12,13 +12,9 @@
 				aria-hidden="true"> Add</span>
 			</a>
 		<%-- </c:if> --%>
-		<a href="${contextPath}/winventory/software/search"
-			class="list-group-item"> <span class="glyphicon glyphicon-search"
-			aria-hidden="true"> Search</span>
-		</a>
 		<a href="${contextPath}/winventory/software/advancedsearch"
             class="list-group-item"> <span class="glyphicon glyphicon-search"
-            aria-hidden="true"> Advanced Search</span>
+            aria-hidden="true"> Search</span>
         </a>
 	</div>
 </div>

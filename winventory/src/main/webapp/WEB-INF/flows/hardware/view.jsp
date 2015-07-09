@@ -116,12 +116,17 @@
 								</ul>
 							</div>
 						</div>
+						<form action="view" method="post">
 						<div>
 							<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
 							<a class="btn btn-default" href="edit?key=<%=hardware.getKey()%>"
 								role="button">Edit</a>
+							<input type="hidden" id="key" name="key"
+								value="<%=hardware.getKey()%>">
+							<button type="submit" class="btn btn-danger pull-right">Delete</button>							
 							<%-- </c:if> --%>
 						</div>
+						</form>
 
 						<%
 						    }

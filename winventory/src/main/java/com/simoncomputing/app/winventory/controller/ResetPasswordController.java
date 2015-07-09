@@ -60,8 +60,11 @@ public class ResetPasswordController extends BaseController {
 		User resetUser = userBo.getUserByEmail(email);
 		
 		//user does not exist
-		if (resetUser.getKey() == null) {
-			
+		if (resetUser == null) {
+			//user does not have an associated access token
+			request.getSession().setAttribute("changePasswordError", "Invalid email address");
+			request.getRequestDispatcher("/WEB-INF/flows/authentication/resetPassword.jsp").forward(request,
+			        response);
 		}
 		//user was found
 		else {
@@ -122,7 +125,7 @@ public class ResetPasswordController extends BaseController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			request.getSession().removeAttribute("changePasswordError");
 			request.getRequestDispatcher("/WEB-INF/flows/authentication/login.jsp").forward(request,
 			        response);
 			   

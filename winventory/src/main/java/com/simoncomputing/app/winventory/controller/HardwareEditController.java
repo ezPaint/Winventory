@@ -66,7 +66,6 @@ public class HardwareEditController extends BaseController {
             throws ServletException, IOException {
 
         String key = request.getParameter("key");
-        System.out.println(key);
         HardwareBo bo = HardwareBo.getInstance();
         Hardware hardware = null;
         if (key != null) {

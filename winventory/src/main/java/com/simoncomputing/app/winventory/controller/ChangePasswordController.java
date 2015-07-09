@@ -58,6 +58,7 @@ public class ChangePasswordController extends BaseController {
 					String hashedToken = accessToken.getToken();
 					//user and token are correct
 					if (PasswordHasher.checkPassword(token, hashedToken)) {
+						request.getSession().removeAttribute("changePasswordError");
 						request.getSession().setAttribute("resetPasswordUser", userId);
 						request.getRequestDispatcher("/WEB-INF/flows/authentication/changePassword.jsp").forward(request,
 						        response);
