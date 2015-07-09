@@ -9,9 +9,10 @@ import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
@@ -22,6 +23,8 @@ import com.simoncomputing.app.winventory.util.BoException;
 @WebServlet("/hardware/edit")
 public class HardwareEditController extends BaseController {
     private static final long serialVersionUID = 1L;
+    
+    private Logger log = Logger.getLogger(ViewHardwareController.class); 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -36,6 +39,11 @@ public class HardwareEditController extends BaseController {
             } catch (BoException e) {
                 e.printStackTrace();
             }
+        }
+        
+        if (hardware == null) {
+            request.setAttribute("error", "The key is not valid or there is no hardware with that key");
+            log.error("The key is not valid or there is no hardware with that key");
         }
         
         ArrayList<RefCondition> conditions = null;

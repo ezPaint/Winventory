@@ -62,7 +62,7 @@
                 Enter the email address associated with your account. We'll send you an email with a link to reset your password.
 
                 
-				<form name="resetform" action="" method="POST" accept-charset="UTF-8" role="form" class="form-login">
+				<form name="resetform" action="resetpassword" method="POST" accept-charset="UTF-8" role="form" class="form-login">
 					<div class="">
 					<input  id="email"  name="email"  class="form-control" placeholder="Email Address"
 			                                    	type="text" value="" autocomplete="off" > 

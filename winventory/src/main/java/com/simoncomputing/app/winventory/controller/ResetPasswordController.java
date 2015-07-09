@@ -107,9 +107,10 @@ public class ResetPasswordController extends BaseController {
 				EmailService sendResetEmail = new EmailService();
 				try {
 					sendResetEmail.setSmtp();
+					//TODO: change this to actual email
 					sendResetEmail.setFrom("fivewetmice@gmail.com");
 					//currently send here for testing purposes
-					sendResetEmail.addTo("jspemailtest@gmail.com");
+					sendResetEmail.addTo(resetUser.getEmail());
 					sendResetEmail.setSubject("Winventory Password Reset");
 					sendResetEmail.setMessage(message);
 					sendResetEmail.sendEmail();

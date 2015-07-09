@@ -40,7 +40,7 @@
                 <div class="">
                 Input your new password
                 
-				<form name="resetform" action="" method="POST" accept-charset="UTF-8" role="form" class="form-login">
+				<form name="resetform" action="changepassword" method="POST" accept-charset="UTF-8" role="form" class="form-login">
 					<div class="">
 					<input  id="newPassword"  name="newPassword"  class="form-control" placeholder="New Password"
 			                                    	type="password" value="" autocomplete="off" > 
