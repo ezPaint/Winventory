@@ -93,7 +93,8 @@
                         %>
                     
                         <form class="form-horizontal" action="edit"
-                            data-toggle="validator" role="form" method="post" name="myform">
+                            data-toggle="validator" role="form" method="post" name="myform"
+                            onsubmit="return validateDates();">
                             
                             <!-- Software object's name -->
                             <div class="form-group">

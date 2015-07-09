@@ -91,9 +91,8 @@
 								        for (int i = 0; i < results.size(); i++) {
 								%>
 								<tr>
-									<td><a href="view?key=<%=results.get(i).getKey()%>"> <%=results.get(i).getKey()%></a>
-									</td>
-									<td><%=results.get(i).getUsername()%></td>
+									<td><%=results.get(i).getKey()%></td>
+									<td><a href="view?key=<%=results.get(i).getKey()%>"> <%=results.get(i).getUsername()%></a></td>
 									<td><%=results.get(i).getFirstName()%></td>
 									<td><%=results.get(i).getLastName()%></td>
 									<td><%=results.get(i).getEmail()%></td>

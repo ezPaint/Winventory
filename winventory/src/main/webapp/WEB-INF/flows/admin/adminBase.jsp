@@ -7,6 +7,8 @@
 	<div class="list-group">
 		<a id="results" href="${contextPath}/admin/setSmtp" class="list-group-item"> <span
 			class="glyphicon glyphicon-envelope" aria-hidden="true"> SMTP</span></a>
+		<a id="results" href="${contextPath}/admin/setGoogleClient" class="list-group-item"> <span
+			class="glyphicon glyphicon-globe" aria-hidden="true"> Google Client</span></a>
 		<!--  <a
 			id="storage" href="storage" class="list-group-item"> <span
 			class="glyphicon glyphicon-briefcase" aria-hidden="true">

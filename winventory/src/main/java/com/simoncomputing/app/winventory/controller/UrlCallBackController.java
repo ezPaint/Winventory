@@ -67,7 +67,14 @@ public class UrlCallBackController extends BaseController {
 		String code = request.getParameter("code");
 		
 		// Construct the access token
-		Token token = service.getAccessToken(null, new Verifier(code));
+		Token token = null;
+		try {
+			token = service.getAccessToken(null, new Verifier(code));
+		}
+		catch(Exception e) {
+			this.bootAttempt(request, response, "Google Client Error");
+			return;
+		}
 		if (token == null) {
 			this.bootAttempt(request, response, "Google didn't give a Token");
 			return;
@@ -91,8 +98,8 @@ public class UrlCallBackController extends BaseController {
 		try {
 			jsonResponse = new JSONObject(str.toString());
 		} catch (JSONException e) {
-			logger.fatal("Incorrect JSON from Google");
-			jsonResponse = null;
+			this.bootAttempt(request, response, "Incorrect JSON from Google");
+			return;
 		}
 
 		UserInfoBean userBean = new UserInfoBean(); 

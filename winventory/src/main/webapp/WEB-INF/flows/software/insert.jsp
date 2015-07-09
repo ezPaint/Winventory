@@ -40,7 +40,8 @@
 						<br>
 						
 						<form class="form-horizontal" action="insert"
-							data-toggle="validator" role="form" method="post" name="myform">
+							data-toggle="validator" role="form" method="post" name="myform" 
+							onsubmit="return validateDates();">
 							
 							<!-- Name entry field -->
 							<div class="form-group">

@@ -3,14 +3,14 @@
 	<div class="list-group">
 		<a id="results" href="results" class="list-group-item"> <span
 			class="glyphicon glyphicon-th-list" aria-hidden="true"> List</span></a> 
-		<%-- <c:if test="${userInfo.hasPermission.createUser}"> --%>
+		<c:if test="${userInfo.hasPermission.createUser}">
 			<a id="insert" href="insert" class="list-group-item"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true"> Add</span></a>
-		<%-- </c:if> --%>
-		<a id="advanced-search" href="advanced-search" class="list-group-item">
+		</c:if>
+		<!-- <a id="advanced-search" href="advanced-search" class="list-group-item">
 			<span class="glyphicon glyphicon-search" aria-hidden="true">
 				Search</span>
-		</a>
+		</a> -->
 	</div>
 </div>
 

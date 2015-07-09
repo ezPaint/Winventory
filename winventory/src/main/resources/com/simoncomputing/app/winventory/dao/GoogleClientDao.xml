@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.GoogleClientDao">
+
+    <resultMap id="GoogleClientMapper" type="com.simoncomputing.app.winventory.domain.GoogleClient">
+        <result column ="KEY"                 property = "key" />
+        <result column ="CLIENT_ID"           property = "clientId" />
+        <result column ="CLIENT_SECRET"       property = "clientSecret" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="GoogleClientMapper">
+        select * from GOOGLE_CLIENT
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.GoogleClient">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select GOOGLE_CLIENT_SEQ.nextval from dual
+        </selectKey>
+        insert into GOOGLE_CLIENT
+        (
+            KEY , CLIENT_ID , CLIENT_SECRET
+        )
+        values
+        (
+            #{key} , #{clientId} , #{clientSecret}
+        )
+    </insert>
+
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.GoogleClient">
+        update GOOGLE_CLIENT set
+            KEY                                 = #{key} ,
+            CLIENT_ID                           = #{clientId} ,
+            CLIENT_SECRET                       = #{clientSecret}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from GOOGLE_CLIENT
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

@@ -13,6 +13,9 @@ import org.scribe.builder.ServiceBuilder;
 import org.scribe.oauth.OAuthService;
 
 import com.simoncomputing.app.winventory.authentication.Google2Api;
+import com.simoncomputing.app.winventory.bo.GoogleClientBo;
+import com.simoncomputing.app.winventory.domain.GoogleClient;
+import com.simoncomputing.app.winventory.util.BoException;
 
 /**
  * Servlet implementation class googleplus
@@ -22,9 +25,6 @@ public class googleplus extends BaseController {
 	private static final long serialVersionUID = 1L;
 	
 	private static Logger logger = Logger.getLogger(googleplus.class);
-       
-	private static final String CLIENT_ID = "1077593823261-ckjeh5eoq78j9r24mc3nc96u5l4lmcnt.apps.googleusercontent.com";
-	private static final String CLIENT_SECRET = "8CSNUvP_TC-lAdzsQDHop67g";
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -43,11 +43,21 @@ public class googleplus extends BaseController {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
+		
+		GoogleClient gc = null; 
+		try {
+			gc = GoogleClientBo.getInstance().read(1L);
+		} catch (BoException e) {
+			logger.error("GoogleClient DB Error");
+		}
+		String id = gc.getClientId();
+		String client = gc.getClientSecret();
+		
 		ServiceBuilder builder = new ServiceBuilder();
 		OAuthService service = (OAuthService) builder
 			.provider(Google2Api.class)
-			.apiKey(CLIENT_ID)
-			.apiSecret(CLIENT_SECRET)
+			.apiKey(id)
+			.apiSecret(client)
 			.callback(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/login/googleCallback")
 			.scope("email").debugStream(System.out).build(); // Now build
 																	// the call

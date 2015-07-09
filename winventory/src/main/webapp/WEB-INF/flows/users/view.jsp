@@ -37,6 +37,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('#resultsTable').DataTable();
+		document.getElementById("resultsTable").style.display = "table";
 	});
 </script>
 </head>
@@ -54,7 +55,7 @@
 						<h2 class="center">User Info</h2>
 					</div>
 
-					<div class="padme">
+					<div class="padme" style="margin-bottom: 200px;">
 						<%@ page
 							import="com.simoncomputing.app.winventory.domain.User"%>
 						<%@ page import="java.util.ArrayList"%>
@@ -180,7 +181,89 @@
 						<%
 						    }
 						%>
+					
+					
+					
+					
+						<!-- <div id='loader' style="padding-top: 750px;">
+							<div class='diamond'></div>
+							<div class='diamond'></div>
+							<div class='diamond'></div>
+						</div> -->
+						
+						
+						<div class="user-hardware-title">
+							<h2>User's Hardware</h2>
+						</div>
+						
+						<%@ page
+										import="com.simoncomputing.app.winventory.domain.Hardware"%>
+									<%@ page import="java.util.ArrayList"%>
+						
+						<%
+							
+							// Table of hardware the user owns
+							
+							ArrayList<Hardware> results = (ArrayList<Hardware>) request.getAttribute("results");
+
+					    	if (results != null && results.size() != 0) {
+						
+						%>
+						
+						<div class="table-responsive" >
+							<table class="table table-striped" id="resultsTable"
+								style="display: none;">
+								<thead>
+									<tr>
+										<th>Key</th>
+										<th>Type</th>
+										<th>Cost</th>
+										<th>Condition</th>
+										<th>Purchase Date</th>
+										<th>Description</th>
+										<th>Serial No.</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									
+
+									<%
+											
+									        for (int i = 0; i < results.size(); i++) {
+									%>
+									<tr>
+										<td><a href="${contextPath}/hardware/view?key=<%=results.get(i).getKey()%>">
+												<%=results.get(i).getKey()%></a></td>
+										<td><%=results.get(i).getType()%></td>
+										<td><%=results.get(i).getCost()%></td>
+										<td><%=results.get(i).getCondition()%></td>
+										<td><%=results.get(i).getPurchaseDate()%></td>
+										<td><%=results.get(i).getDescription()%></td>
+										<td><%=results.get(i).getSerialNo()%></td>
+									</tr>
+									<%
+									    }
+									    
+									%>
+								</tbody>
+							</table>
+							
+						</div>
+						
+						<%
+					    	} // endif(hardware results == null)
+					    	else {
+						%>
+						<p class="user-hardware-message">This user owns no hardware. </p>
+						</div>
+						<%
+					    	}
+						%>
+						
 					</div>
+					
+					
 				</div>
 			</div>
 		</div>

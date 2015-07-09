@@ -307,3 +307,14 @@ body {
    background-color: #f7f7f7;
  } */
  
+ .user-hardware-title {
+ 	text-align: center;
+ }
+ 
+ .user-hardware-message {
+ 	text-align: center;
+ 	margin-top: 25px;
+ 	margin-bottom: 25px;
+ 	font-size: 15px;
+ }
+ 

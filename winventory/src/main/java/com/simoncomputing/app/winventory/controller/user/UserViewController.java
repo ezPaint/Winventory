@@ -2,6 +2,7 @@ package com.simoncomputing.app.winventory.controller.user;
 
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -58,6 +59,23 @@ public class UserViewController extends BaseController {
         else {
             request.setAttribute("user", user);
         }
+        
+        // get the hardware the user owns
+        ArrayList<Hardware> results = null;
+        
+        // try to get the hardware list
+        try {
+            results = new ArrayList<Hardware>(HardwareBo.getInstance().getListByUserId(Integer.parseInt(key)));
+        } catch (BoException e) {
+            request.setAttribute("error", e.getMessage());
+            log.error("BoException when getting hardware for view user, user: " + user.getUsername());
+        }
+        
+        // set the results attribute
+        if (results != null) {
+            request.setAttribute("results", results);
+        }
+        
         
         // forward to the users/view jsp
         request.getRequestDispatcher("/WEB-INF/flows/users/view.jsp").forward(request, response);

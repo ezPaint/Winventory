@@ -84,7 +84,8 @@
 						    if (loc != null) {
 						%>
 						<h4 class="center">
-							Item stored at <%= loc.getDescription() %>
+							Item stored at
+							<%=loc.getDescription()%>
 						</h4>
 						<%
 						    }
@@ -96,74 +97,76 @@
 						    if (hardware != null) {
 						%>
 
-
-						<div class="media">
-							<div class="media-left">
-								<img class="media-object"
-									src="${contextPath}/resources/images/barcode.gif">
-							</div>
-							<div class="media-body">
-								<ul class="list-group">
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Key</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=hardware.getKey()%></p>
-										</div>
-									</li>
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Type</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=hardware.getType()%></p>
-										</div>
-									</li>
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Description</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=hardware.getDescription()%></p>
-										</div>
-									</li>
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Cost</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=hardware.getCost()%></p>
-										</div>
-									</li>
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Date Purchased</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=hardware.getPurchaseDate()%></p>
-										</div>
-									</li>
-								</ul>
-							</div>
+						<div class="col-md-4">
+							<img src="${contextPath}/resources/images/barcode.gif"
+								class="img img-responsive">
 						</div>
+						<div class="col-md-8">
+							<ul class="list-group" style="word-wrap: break-word;">
+								<li class="list-group-item row">
+									<div class="col-md-4">
+										<b>Key</b>
+									</div>
+									<div class="col-md-8">
+										<p><%=hardware.getKey()%></p>
+									</div>
+								</li>
+								<li class="list-group-item row">
+									<div class="col-md-4">
+										<b>Type</b>
+									</div>
+									<div class="col-md-4">
+										<p><%=hardware.getType()%></p>
+									</div>
+								</li>
+								<li class="list-group-item row">
+									<div class="col-md-4">
+										<b>Description</b>
+									</div>
+									<div class="col-md-8">
+										<p><%=hardware.getDescription()%></p>
+									</div>
+								</li>
+								<li class="list-group-item row">
+									<div class="col-md-4">
+										<b>Cost</b>
+									</div>
+									<div class="col-md-8">
+										<p><%=hardware.getCost()%></p>
+									</div>
+								</li>
+								<li class="list-group-item row">
+									<div class="col-md-4">
+										<b>Date Purchased</b>
+									</div>
+									<div class="col-md-8">
+										<p><%=hardware.getPurchaseDate()%></p>
+									</div>
+								</li>
+							</ul>
+						</div>
+
+						
+						
+							<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
+							<a class="btn btn-default pull-right"
+								href="edit?key=<%=hardware.getKey()%>" role="button">Edit</a>
+							<%-- </c:if> --%>
 						<form action="view" method="post">
-							<div>
-								<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
-								<a class="btn btn-default"
-									href="edit?key=<%=hardware.getKey()%>" role="button">Edit</a>
-								<%-- </c:if> --%>
-								<%-- <c:if test="${userInfo.hasPermission.deleteHardware}"> --%>
-								<input type="hidden" id="key" name="key"
-									value="<%=hardware.getKey()%>">
-								<button type="submit" class="btn btn-danger pull-right">Delete</button>
-								<%-- </c:if> --%>
-							</div>
+							<%-- <c:if test="${userInfo.hasPermission.deleteHardware}"> --%>
+							<input type="hidden" id="key" name="key"
+								value="<%=hardware.getKey()%>">
+							<button type="submit" class="btn btn-danger pull-right">Delete</button>
+							<%-- </c:if> --%>
 						</form>
+						<div class="container">
+						
+						</div>
 
 						<%
 						    }
 						%>
+						
 					</div>
 				</div>
 			</div>

@@ -18,6 +18,7 @@
     <script src='${contextPath}/resources/js/actions.js' type="text/javascript"></script>
     <script src='${contextPath}/resources/js/jquery-1.11.3.min.js' type="text/javascript"></script>
     <script src='${contextPath}/resources/js/bootstrap.min.js' type="text/javascript"></script>
+    <script src='${contextPath}/resources/js/validator.js' type="text/javascript"></script>
 </head>
 <body>
         <div class="top-header">
@@ -39,13 +40,15 @@
                 <div class="account-wall">
                 <div class="">
                 Input your new password
-                
-				<form name="resetform" action="changepassword" method="POST" accept-charset="UTF-8" role="form" class="form-login">
-					<div class="">
-					<input  id="newPassword"  name="newPassword"  class="form-control" placeholder="New Password"
-			                                    	type="password" value="" autocomplete="off" > 
-			        </div>
-			         <input class="btn btn-lg btn-primary btn-block" type="submit" value="Send">                
+                <br> 
+					<form data-toggle="validator" role="form" name="resetform" action="changepassword" method="POST" accept-charset="UTF-8" role="form" class="form-login">
+						<div class="form-group">
+						   
+						      <input type="password" data-minlength="8" class="form-control" id="newPassword" name="newPassword" placeholder="Password" required>
+						      <span class="help-block">Minimum of 8 characters</span>
+						  
+						     <input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">  
+						  </div>
 					</form>
 				</div>
 				</div>

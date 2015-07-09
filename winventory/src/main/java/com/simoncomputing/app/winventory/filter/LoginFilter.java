@@ -78,6 +78,8 @@ public class LoginFilter implements Filter {
             //redirect the user if neither logged in nor visiting a public location
             res.sendRedirect(req.getContextPath() + "/login?next=" + uri);
             
+        } else if (uri.equals("")) {
+            res.sendRedirect(req.getContextPath() + "/hardware/results");
         } else if (uri.startsWith("/login") && userInfo != null) {
             res.sendRedirect(req.getContextPath() + "/logout");
         } else {

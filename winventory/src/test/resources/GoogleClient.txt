@@ -1,0 +1,9 @@
+/**
+* The GoogleClient Table.
+*/
+[Settings]
+CLASS       GoogleClient
+
+[Fields]
+STRING(100)  clientId
+STRING(50)  clientSecret

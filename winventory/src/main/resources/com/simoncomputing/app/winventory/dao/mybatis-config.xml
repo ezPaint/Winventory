@@ -52,6 +52,7 @@
         <mapper resource="com/simoncomputing/app/winventory/dao/EventToLocationDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/EventToSoftwareDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/EventToUserDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/GoogleClientDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/HardwareDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/HardwareToSoftwareDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/LocationDao.xml" />

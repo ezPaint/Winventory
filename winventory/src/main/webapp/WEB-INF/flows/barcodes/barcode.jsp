@@ -15,6 +15,9 @@
 	href='${contextPath}/resources/css/normalize.css' />
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/bootstrap.css' />
+<link type="text/css" rel="stylesheet"
+	href='https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.css
+' />
 
 <script src='${contextPath}/resources/js/actions.js'
 	type="text/javascript"></script>
@@ -29,7 +32,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
     var table = $('#hardwares').DataTable({
-    	"pagingtype":"full"
+    	"scrollY":"300px",
+    	"scrollCollapse":true,
+    	"paging":false,
+    	"dom": '<"top"i>rt<"bottom"flp><"clear">'
     });
     $('#hardwares tr').on( 'click', 'td:eq(7)', function () {
     	var input;
@@ -37,15 +43,15 @@ $(document).ready(function() {
     	var pk = parentNode.find("td:nth-child(1)").text();
     	var icon = parentNode.find("td:nth-child(8)");
         $(this).find("span").toggleClass('glyphicon glyphicon-remove').toggleClass('glyphicon glyphicon-repeat')
-        if ( parentNode.hasClass('alert alert-warning') ) {
-            parentNode.removeClass('alert alert-warning');
+        if ( parentNode.hasClass('alert alert-danger') ) {
+            parentNode.removeClass('alert alert-danger');
             input = $("#"+pk).attr({
             	value:null
             });
         }
         else {
-            table.$('tr.alert alert-warning').removeClass('alert alert-warning');
-            parentNode.addClass('alert alert-warning');
+            table.$('tr.alert alert-danger').removeClass('alert alert-danger');
+            parentNode.addClass('alert alert-danger');
             $('<input>').attr({
             	type:'hidden',
             	id:pk,
@@ -54,10 +60,6 @@ $(document).ready(function() {
             }).appendTo('form');
         }
     } );
- 
-/*     $('#button').click( function () {
-        table.row('.selected').remove().draw( false );
-    } ); */
 } );
 </script>
 </head>
@@ -73,7 +75,7 @@ $(document).ready(function() {
 	   	<c:if test="${not empty error}">
 			<div class="alert alert-danger text-center">${error}</div>
 		</c:if>
-		<br> <br>
+		<br>
 		<div class="row">
 			<div class="col-xs-6 form-group">
 				<label>Owner</label> <input id="person" name="person" class="form-control"
@@ -86,7 +88,7 @@ $(document).ready(function() {
 			<c:if test="${not empty hardware}">
 				<div class="col-xs-12">
 					<label for="hardwares">Hardware</label>
-					<table id="hardwares" class="table">
+					<table id="hardwares" class="table" style="width:100%">
 						<thead>
 							<tr>
 								<th>Key</th>
@@ -107,7 +109,7 @@ $(document).ready(function() {
 									<td><c:out value="${i.cost}"/></td>
 									<td><c:out value="${i.condition}"/></td>
 									<td><c:out value="${i.getShortDescription()}"/></td>
-									<td><c:out value="${ub.read(i.userId).firstName}"/></td>
+									<td><c:out value="${ub.read(i.userId).firstName} ${ub.read(i.userId).lastName}"/></td>
 									<td><c:out value="${lb.read(i.locationId).description}"/></td>
 									<td><span style="margin-left:15%" class="glyphicon glyphicon-remove"></span></td>
 								</tr>
