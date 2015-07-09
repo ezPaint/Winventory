@@ -2,6 +2,8 @@ package com.simoncomputing.app.winventory.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +22,9 @@ import com.simoncomputing.app.winventory.bo.LocationBo;
 import com.simoncomputing.app.winventory.bo.SoftwareBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.domain.Hardware;
+import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.Software;
+import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
 
 @WebServlet("/barcodes/barcode")
@@ -40,13 +44,38 @@ public class BarcodeController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	logger.trace("parameter map is " + request.getParameterMap());
-    		
+    	try {
+			Hardware h = hb.read((long) 216);
+			h.setUserId(null);
+			hb.update(h);
+		} catch (BoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	request.getSession().setAttribute("ub", ub);
     	request.getSession().setAttribute("lb", lb);
 		String barcode = request.getParameter("barcode");
 		boolean update = Boolean.parseBoolean(request.getParameter("toSubmit"));
 		if (update) {
-    		updateDatabase(request.getParameterMap());
+			String[] pkList = request.getParameterValues("removeHw");
+			if (pkList==null){
+				pkList=new String[0];
+			}
+			ArrayList<Hardware> hwList = (ArrayList<Hardware>) request.getSession().getAttribute("hardware");
+			String modifyCode;
+			User owner = (User)request.getSession().getAttribute("user");
+			Location loc = (Location)request.getSession().getAttribute("location");
+			if(owner==null){
+				modifyCode="004"+padZeroes(loc.getKey().toString());
+			} else {
+				modifyCode="001"+padZeroes(owner.getKey().toString());
+			}
+			modifyCode+="3";	//TODO make valid checksum; random number right now
+			logger.trace("pkList is " + Arrays.asList(pkList));
+    		updateDatabase(pkList, hwList, modifyCode);
+    		request.getSession().removeAttribute("user");
+    		request.getSession().removeAttribute("hardware");
+    		request.getSession().removeAttribute("location");
     		logger.trace("updating database");
 		}
 		else if(barcode != null){
@@ -72,14 +101,20 @@ public class BarcodeController extends HttpServlet {
     				if (hwList==null){
     					hwList = new ArrayList<Hardware>();
     				}
-    				hwList.add(hb.read(pk));
+    				Hardware h = hb.read(pk);
+    				if (!hwList.contains(h))
+    					hwList.add(hb.read(pk));
+    				else {
+    					request.setAttribute("error", "That Hardware is already in the list");
+    				}
     				request.getSession().setAttribute("hardware", hwList);
     				break;
     			case "4":
     				logger.trace("preloading based on location " + pk);
     				request.getSession().setAttribute("user", null);
     				request.getSession().setAttribute("location", lb.read(pk));
-    				request.getSession().setAttribute("hardware", hb.getListByLocationId((int)pk));
+    				List<Hardware> hardware = hb.getListByLocationId((int)pk);
+    				request.getSession().setAttribute("hardware", hardware);
     				logger.debug(hb.getListByLocationId((int)pk));
     				break;
     			default:
@@ -89,23 +124,7 @@ public class BarcodeController extends HttpServlet {
 				logger.error("Could not get an object from table id:" + first + " with pk " + pk);
 			}
 		}
-//    		if (s.contains("hardware")) {
-//    			request.setAttribute(s, getNames(request.getParameterValues(s)));
-//    		} else {
-//    			request.setAttribute(s, getName(request.getParameter(s)));
-//    			try {
-//    				String param = request.getParameter(s);
-//    				int pk = Integer.parseInt(parsePk(param));
-//    				List<Hardware> hwList;
-//    				hwList = hb.getListByUserId(pk);
-//    				logger.trace("list of hardware:" + hwList);
-//					request.setAttribute("hardware", hb.getListByUserId(pk));
-//				} catch (NumberFormatException e) {
-//					logger.error("Error parsing pk from " + s + ":" + request.getParameter(s));
-//				} catch (BoException e) {
-//					logger.error("Error trying to get Hardware using " + s);
-//				}
-//    		}
+
     	if (request.getSession().getAttribute("user")==null && request.getSession().getAttribute("location")==null){
     		request.getSession().setAttribute("hardware",null);
     		request.setAttribute("error","You must enter an Owner or Location first");
@@ -116,85 +135,73 @@ public class BarcodeController extends HttpServlet {
                 response);
     }
     
-//    private HashMap<String,String[]> preloadPage(String barcode){
-//		if(barcode.startsWith("1"))
-//			return preloadPage(ub);
-//		else
-//			return preloadPage(lb);
-//    }
-//    
-//    private HashMap<String,String[]> preloadPage(UserBo userBo){
-//    	HashMap<String,String[]> ret = new HashMap<String,String[]>();
-//    	hb.getListByUserId(key);
-//    	return ret;
-//    }
-//    
-//    private HashMap<String,String[]> preloadPage(LocationBo locationBo){
-//    	HashMap<String,String[]> ret = new HashMap<String,String[]>();
-//    	
-//    	return ret;
-//    }
-    
-    private void updateDatabase(Map<String, String[]> parameterMap) {
-		
+    private void updateDatabase(String[] pkList, ArrayList<Hardware> hwList, String barcode) {
+		String tableId = parseTableIdentifier(barcode);
+		Long updatePk = parsePk(barcode);
+    	for (String pk: pkList) {
+			try {
+				Hardware rem = hb.read(Long.parseLong(pk));
+				logger.debug("*before* hardware userid to remove is " + rem.getUserId());
+				logger.debug("*before* hardware locationid to remove is " + rem.getLocationId());
+				hwList.remove(rem);
+				if (tableId.equals("1")) {
+					rem.setUserId(null);
+					logger.trace("removing a user");
+				} else {
+					rem.setLocationId(null);
+					logger.trace("removing a location");
+				}
+				logger.debug("*after* hardware userid to remove is " + rem.getUserId());
+				logger.debug("*before* hardware locationid to remove is " + rem.getLocationId());
+				hb.update(rem);
+				Hardware please = hb.read(Long.parseLong(pk));
+				logger.debug("*after update* hardware pk is " + please.getKey());
+				logger.debug("*after update* hardware userid is " + please.getUserId());
+				logger.debug("*after update* hardware locationid is " + please.getLocationId());
+				logger.debug("size of getListByUserId(1) after update is " + hb.getListByUserId(1).size());
+			} catch (NumberFormatException e) {
+				logger.error("Cannot dissociate hardware with pk " + pk + " because pk is not a number");
+			} catch (BoException e) {
+				logger.error("Cannot get Hardware with pk to remove " + pk);
+			}
+		}
+		for (Hardware hw: hwList) {
+			if(tableId.equals("1")){
+				hw.setUserId(updatePk.intValue());
+			}else{
+				hw.setLocationId(updatePk.intValue());
+			}
+			try {
+				hb.update(hw);
+			} catch (BoException e) {
+				logger.error("Could not update Hardware with pk " + hw.getKey());
+			}
+		}
 	}
-    
-//    private String[] getNames(String[] barcodes) throws NumberFormatException {
-//    	String[] ret = new String[barcodes.length];
-//    	for (int x = 0; x < barcodes.length;x++){
-//    		ret[x]=getName(barcodes[x]);
-//    	}
-//    	return ret;
-//    }
-    
-//    private String getName(String barcode) throws NumberFormatException {
-//    	String ret;
-//    	char first;
-//    	if (barcode.length() < 3){
-//    		return "";
-//    	}
-//    	if (!isNumeric(barcode)){
-//    		return barcode;
-//    	}
-//    	first = barcode.charAt(0);
-//    	int code = parsePk(barcode);
-//		try{
-//			switch(first){
-//			case '1':
-//				ret = ub.read(code).getFirstName();
-//				break;
-//			case '2':
-//				ret=hb.read(Long.parseLong(code)).getDescription();
-//				break;
-//			case '3':
-//				ret="Not a valid barcode";
-//				break;
-//			case '4':
-//				ret = lb.read(Long.parseLong(code)).getDescription();
-//				break;
-//			default:
-//				ret = "Not a valid barcode";
-//			}
-//		} catch(BoException be){
-//			ret = "Not a valid selection";
-//		}
-//		if (ret.length() > 22) {
-//			ret = ret.substring(0,20)+"...";
-//		}
-//    	return ret;
-//    }
     
     private static boolean isNumeric(String str)
     {
     	try
     	{
-    		double d = Double.parseDouble(str);
+    		int d = Integer.parseInt(str);
     	}
     	catch(NumberFormatException nfe)
     	{
     		return false;
     	}
     	return true;
+    }
+    
+    private static String padZeroes(String str) {
+    	if (str.length() > 9 || !isNumeric(str)){
+    		logger.error("Cannot pad zeroes onto string " + str);
+    		throw new IllegalArgumentException(str + " cannot be validly padded");
+    	}
+    	String appRet = "";
+    	for (int x = 0; x < 9-str.length();x++){
+    		appRet+="0";
+    	}
+    	return appRet+str;
     }
     
     private static String parseTableIdentifier(String str){

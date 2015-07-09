@@ -125,77 +125,77 @@ function addSoftware() {
  * PRECONDITIONS:  The submission form must have 'myform' as its id.
  * 				   The date's ids from the form must be 'purchasedDate' and 'expirationDate'
  */
-function validateDates() {
-    var pDate = document.forms["myform"]["purchasedDate"].value;
-    var regex = /^(\d{4}-\d{2}-\d{2})$/;
-    if (!pDate.match(regex)) {
-        alert("Purchase Date must be in format YYYY-MM-DD");
-        return false;
-    } else {
-         var pSplit = pDate.split("-");
-         var pYear = pSplit[0];
-         var pMonth = pSplit[1] - 1; 
-         var pDay = pSplit[2];     
-            
-         //Number of days in each month where 0=January, 1=Feb, etc.
-         var days = [31,28,31,30,31,30,31,31,30,31,30,31];
-          
-        //Check if leap year -- switch array if leap year
-        if (pMonth === 1){
-             if (pYear % 400 == 0){
-            	 days[1] = 29;
-             }
-             else if (pYear % 100 == 0){
-            	 days[1] = 28;
-             } 
-             else if (pYear % 4 == 0){
-            	 days[1] = 29;
-             }else{
-            	 days[1] = 28;
-             }
-        }    
-         
-        if (days[pMonth] < pDay){ 
-         alert(pDate + " is not a valid date.");
-         return false;
-        }
-    
-    }
-        
-    //Validate Expiration date
-    var eDate = document.forms["myform"]["expirationDate"].value;
-    if (!eDate.match(regex)) {
-        alert("Expiration Date must be in format YYYY-MM-DD");
-        return false;
-    }else{
-	
-    	var eSplit = eDate.split("-");
-        var eYear = eSplit[0];
-        var eMonth = eSplit[1] - 1; 
-        var eDay = eSplit[2];     
-           
-        //Number of days in each month where 0=January, 1=Feb, etc.
-        var days = [31,28,31,30,31,30,31,31,30,31,30,31];
-         
-       //Check if leap year -- switch array if leap year
-       if (eMonth === 1){
-            if (eYear % 400 == 0){
-                days[1] = 29;
-            }
-            else if (eYear % 100 == 0){
-                days[1] = 28;
-            } 
-            else if (eYear % 4 == 0){
-                days[1] = 29;
-            }else{
-                days[1] = 28;
-            }
-       }    
-        
-       if (days[eMonth] < pDay){ 
-        alert(eDate + " is not a valid date.");
-        return false;
-       }
-    }
-    return true; 
-}
+//function validateDates() {
+//    var pDate = document.forms["myform"]["purchasedDate"].value;
+//    var regex = /^(\d{4}-\d{2}-\d{2})$/;
+//    if (!pDate.match(regex)) {
+//        alert("Purchase Date must be in format YYYY-MM-DD");
+//        return false;
+//    } else {
+//         var pSplit = pDate.split("-");
+//         var pYear = pSplit[0];
+//         var pMonth = pSplit[1] - 1; 
+//         var pDay = pSplit[2];     
+//            
+//         //Number of days in each month where 0=January, 1=Feb, etc.
+//         var days = [31,28,31,30,31,30,31,31,30,31,30,31];
+//          
+//        //Check if leap year -- switch array if leap year
+//        if (pMonth === 1){
+//             if (pYear % 400 == 0){
+//            	 days[1] = 29;
+//             }
+//             else if (pYear % 100 == 0){
+//            	 days[1] = 28;
+//             } 
+//             else if (pYear % 4 == 0){
+//            	 days[1] = 29;
+//             }else{
+//            	 days[1] = 28;
+//             }
+//        }    
+//         
+//        if (days[pMonth] < pDay){ 
+//         alert(pDate + " is not a valid date.");
+//         return false;
+//        }
+//    
+//    }
+//        
+//    //Validate Expiration date
+//    var eDate = document.forms["myform"]["expirationDate"].value;
+//    if (!eDate.match(regex)) {
+//        alert("Expiration Date must be in format YYYY-MM-DD");
+//        return false;
+//    }else{
+//	
+//    	var eSplit = eDate.split("-");
+//        var eYear = eSplit[0];
+//        var eMonth = eSplit[1] - 1; 
+//        var eDay = eSplit[2];     
+//           
+//        //Number of days in each month where 0=January, 1=Feb, etc.
+//        var days = [31,28,31,30,31,30,31,31,30,31,30,31];
+//         
+//       //Check if leap year -- switch array if leap year
+//       if (eMonth === 1){
+//            if (eYear % 400 == 0){
+//                days[1] = 29;
+//            }
+//            else if (eYear % 100 == 0){
+//                days[1] = 28;
+//            } 
+//            else if (eYear % 4 == 0){
+//                days[1] = 29;
+//            }else{
+//                days[1] = 28;
+//            }
+//       }    
+//        
+//       if (days[eMonth] < pDay){ 
+//        alert(eDate + " is not a valid date.");
+//        return false;
+//       }
+//    }
+//    return true; 
+//}

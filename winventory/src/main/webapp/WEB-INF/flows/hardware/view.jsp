@@ -121,6 +121,8 @@
 							<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
 							<a class="btn btn-default" href="edit?key=<%=hardware.getKey()%>"
 								role="button">Edit</a>
+							<%-- </c:if> --%>
+							<%-- <c:if test="${userInfo.hasPermission.deleteHardware}"> --%>
 							<input type="hidden" id="key" name="key"
 								value="<%=hardware.getKey()%>">
 							<button type="submit" class="btn btn-danger pull-right">Delete</button>							

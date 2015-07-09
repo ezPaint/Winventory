@@ -43,4 +43,61 @@ public class Hardware {
     	else
     		return description;
     }
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Hardware other = (Hardware) obj;
+		if (condition == null) {
+			if (other.condition != null)
+				return false;
+		} else if (!condition.equals(other.condition))
+			return false;
+		if (cost == null) {
+			if (other.cost != null)
+				return false;
+		} else if (!cost.equals(other.cost))
+			return false;
+		if (description == null) {
+			if (other.description != null)
+				return false;
+		} else if (!description.equals(other.description))
+			return false;
+		if (key == null) {
+			if (other.key != null)
+				return false;
+		} else if (!key.equals(other.key))
+			return false;
+		if (locationId == null) {
+			if (other.locationId != null)
+				return false;
+		} else if (!locationId.equals(other.locationId))
+			return false;
+		if (purchaseDate == null) {
+			if (other.purchaseDate != null)
+				return false;
+		} else if (!purchaseDate.equals(other.purchaseDate))
+			return false;
+		if (serialNo == null) {
+			if (other.serialNo != null)
+				return false;
+		} else if (!serialNo.equals(other.serialNo))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equals(other.userId))
+			return false;
+		return true;
+	}
 }

@@ -48,6 +48,10 @@ public class ViewHardwareController extends BaseController {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        if (this.requirePermission(request, response, "deleteHardware")) {
+            return;
+        }
+        
         String key = request.getParameter("key");
         HardwareBo bo = HardwareBo.getInstance();
         Long long_key = null;
