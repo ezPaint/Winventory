@@ -1,0 +1,13 @@
+/**
+* Maps events to locations
+*/
+[Settings]
+CLASS EventToLocation
+
+[Fields]
+LONG(10) eventId*?
+LONG(10) locationId*?
+
+[ForeignKeys]
+eventId constrainsTo Event.key
+locationId constrainsTo Location.key

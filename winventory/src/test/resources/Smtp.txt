@@ -1,0 +1,12 @@
+/**
+* The Smtp Table.
+*/
+[Settings]
+CLASS       Smtp
+
+[Fields]
+STRING(50)  hostName
+INTEGER(10) port
+STRING(50)  authUserName
+STRING(50)  authPassword
+BOOLEAN     ssl

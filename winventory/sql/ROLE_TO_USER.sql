@@ -1,0 +1,25 @@
+-- Remove Original Table and Sequence
+
+DROP TABLE ROLE_TO_USER;
+DROP SEQUENCE ROLE_TO_USER_SEQ;
+-- Create Table
+
+
+CREATE TABLE ROLE_TO_USER (
+    KEY                NUMBER(10) NOT NULL,
+    ROLE_ID            NUMBER(10) NOT NULL,
+    USER_ID            NUMBER(10) NOT NULL,
+    CONSTRAINT ROLE_TO_USER_PK PRIMARY KEY ( KEY ));
+
+CREATE SEQUENCE ROLE_TO_USER_SEQ;
+
+
+-- Sample Select Statement
+
+SELECT
+    KEY, ROLE_ID, USER_ID 
+from ROLE_TO_USER
+WHERE
+    KEY = 0;
+
+-- PROTECTED CODE -->

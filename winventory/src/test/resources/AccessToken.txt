@@ -1,0 +1,17 @@
+/**
+* AccessToken
+* 
+* used when creating new Users and resetting a password
+*/
+
+[Settings]
+
+CLASS AccessToken
+
+[Fields]
+INTEGER(10) userKey*!-	//The User being created/updated	
+String(200) token*
+Date expiration*	//Time that token expires
+
+[ForeignKeys]
+userKey constrainsTo User.key

@@ -1,0 +1,13 @@
+/**
+* The HardwareToSoftware Table.
+*/
+[Settings]
+CLASS		HardwareToSoftware
+
+[Fields]
+INTEGER(10)	hardwareId*?
+INTEGER(10)	softwareId*?
+
+[ForeignKeys]
+hardwareId constrainsTo Hardware.key
+softwareId constrainsTo Software.key

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.TeamDao">
+
+    <resultMap id="TeamMapper" type="com.simoncomputing.app.winventory.domain.Team">
+        <result column ="KEY"                 property = "key" />
+        <result column ="NAME"                property = "name" />
+        <result column ="IS_ACTIVE"           property = "isActive" />
+        <result column ="LEADER_ID"           property = "leaderId" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="TeamMapper">
+        select * from TEAM
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.Team">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select TEAM_SEQ.nextval from dual
+        </selectKey>
+        insert into TEAM
+        (
+            KEY , NAME , IS_ACTIVE , LEADER_ID
+        )
+        values
+        (
+            #{key} , #{name} , #{isActive} , #{leaderId}
+        )
+    </insert>
+
+    <select id="getListByLeaderId" parameterType="integer" resultMap="TeamMapper">
+        select * from TEAM
+        where LEADER_ID = #{leaderId}
+    </select>
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Team">
+        update TEAM set
+            KEY                                 = #{key} ,
+            NAME                                = #{name} ,
+            IS_ACTIVE                           = #{isActive} ,
+            LEADER_ID                           = #{leaderId}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from TEAM
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

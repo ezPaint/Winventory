@@ -1,0 +1,13 @@
+/**
+* The Many<->Many Table describing relationship between roles and permissions.
+*/
+[Settings]
+CLASS       RefPermissionToRole
+
+[Fields]
+INTEGER(10) permissionId*?
+INTEGER(10) roleId*?
+
+[ForeignKeys]
+permissionId constrainsTo RefPermission.key
+roleId constrainsTo Role.key

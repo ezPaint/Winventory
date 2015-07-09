@@ -1,0 +1,25 @@
+-- Remove Original Table and Sequence
+
+DROP TABLE EVENT_TO_USER;
+DROP SEQUENCE EVENT_TO_USER_SEQ;
+-- Create Table
+
+
+CREATE TABLE EVENT_TO_USER (
+    KEY                NUMBER(10) NOT NULL,
+    EVENT_ID           NUMBER(10) NOT NULL,
+    USER_ID            NUMBER(10) NOT NULL,
+    CONSTRAINT EVENT_TO_USER_PK PRIMARY KEY ( KEY ));
+
+CREATE SEQUENCE EVENT_TO_USER_SEQ;
+
+
+-- Sample Select Statement
+
+SELECT
+    KEY, EVENT_ID, USER_ID 
+from EVENT_TO_USER
+WHERE
+    KEY = 0;
+
+-- PROTECTED CODE -->

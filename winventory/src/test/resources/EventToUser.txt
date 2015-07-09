@@ -1,0 +1,13 @@
+/**
+* Maps events to users
+*/
+[Settings]
+CLASS EventToUser
+
+[Fields]
+LONG(10) eventId*?
+LONG(10) userId*?
+
+[ForeignKeys]
+eventId constrainsTo Event.key
+userId constrainsTo User.key

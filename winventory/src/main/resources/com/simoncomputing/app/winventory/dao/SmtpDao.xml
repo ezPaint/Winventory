@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.SmtpDao">
+
+    <resultMap id="SmtpMapper" type="com.simoncomputing.app.winventory.domain.Smtp">
+        <result column ="KEY"                 property = "key" />
+        <result column ="HOST_NAME"           property = "hostName" />
+        <result column ="PORT"                property = "port" />
+        <result column ="AUTH_USER_NAME"      property = "authUserName" />
+        <result column ="AUTH_PASSWORD"       property = "authPassword" />
+        <result column ="SSL"                 property = "ssl" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="SmtpMapper">
+        select * from SMTP
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.Smtp">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select SMTP_SEQ.nextval from dual
+        </selectKey>
+        insert into SMTP
+        (
+            KEY , HOST_NAME , PORT , AUTH_USER_NAME , AUTH_PASSWORD , 
+            SSL
+        )
+        values
+        (
+            #{key} , #{hostName} , #{port} , #{authUserName} , #{authPassword} , 
+            #{ssl}
+        )
+    </insert>
+
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Smtp">
+        update SMTP set
+            KEY                                 = #{key} ,
+            HOST_NAME                           = #{hostName} ,
+            PORT                                = #{port} ,
+            AUTH_USER_NAME                      = #{authUserName} ,
+            AUTH_PASSWORD                       = #{authPassword} ,
+            SSL                                 = #{ssl}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from SMTP
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

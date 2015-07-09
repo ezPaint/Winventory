@@ -1,0 +1,13 @@
+/**
+* Maps events to hardware
+*/
+[Settings]
+CLASS EventToHardware
+
+[Fields]
+LONG(10) eventId*?
+LONG(10) hardwareId*?
+
+[ForeignKeys]
+eventId constrainsTo Event.key
+hardwareId constrainsTo Hardware.key

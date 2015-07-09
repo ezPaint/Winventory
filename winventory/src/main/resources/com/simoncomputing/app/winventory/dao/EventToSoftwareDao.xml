@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.EventToSoftwareDao">
+
+    <resultMap id="EventToSoftwareMapper" type="com.simoncomputing.app.winventory.domain.EventToSoftware">
+        <result column ="KEY"                 property = "key" />
+        <result column ="EVENT_ID"            property = "eventId" />
+        <result column ="SOFTWARE_ID"         property = "softwareId" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="EventToSoftwareMapper">
+        select * from EVENT_TO_SOFTWARE
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.EventToSoftware">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select EVENT_TO_SOFTWARE_SEQ.nextval from dual
+        </selectKey>
+        insert into EVENT_TO_SOFTWARE
+        (
+            KEY , EVENT_ID , SOFTWARE_ID
+        )
+        values
+        (
+            #{key} , #{eventId} , #{softwareId}
+        )
+    </insert>
+
+    <select id="getListByEventId" parameterType="long" resultMap="EventToSoftwareMapper">
+        select * from EVENT_TO_SOFTWARE
+        where EVENT_ID = #{eventId}
+    </select>
+    <select id="getListBySoftwareId" parameterType="long" resultMap="EventToSoftwareMapper">
+        select * from EVENT_TO_SOFTWARE
+        where SOFTWARE_ID = #{softwareId}
+    </select>
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.EventToSoftware">
+        update EVENT_TO_SOFTWARE set
+            KEY                                 = #{key} ,
+            EVENT_ID                            = #{eventId} ,
+            SOFTWARE_ID                         = #{softwareId}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from EVENT_TO_SOFTWARE
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

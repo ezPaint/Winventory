@@ -1,0 +1,19 @@
+/**
+* The User Table.
+*/
+[Settings]
+CLASS		User
+
+[Fields]
+STRING(40)	username
+STRING(200)	password*		//not necessarily the actual password, but some encrypted version
+STRING(40)	firstName
+STRING(40)	lastName
+STRING(40)	email*
+STRING(40)	cellPhone
+STRING(40)	workPhone
+BOOLEAN		isActive
+INTEGER(10) roleId*?
+
+[ForeignKeys]
+roleId constrainsTo Role.key

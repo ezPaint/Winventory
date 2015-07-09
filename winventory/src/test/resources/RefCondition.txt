@@ -1,0 +1,10 @@
+/** 
+* The RefCondition Table.
+ */ 
+ [Settings]
+ CLASS RefCondition
+ 
+[Fields] 
+
+STRING(40) code!* 		 //FAIR, GOOD, etc. These can be user defined.
+STRING(2000) description* // Valid Condition for Hardware 

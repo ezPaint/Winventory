@@ -1,0 +1,13 @@
+/**
+* Maps events to software
+*/
+[Settings]
+CLASS EventToSoftware
+
+[Fields]
+LONG(10) eventId*?
+LONG(10) softwareId*?
+
+[ForeignKeys]
+eventId constrainsTo Event.key
+softwareId constrainsTo Software.key

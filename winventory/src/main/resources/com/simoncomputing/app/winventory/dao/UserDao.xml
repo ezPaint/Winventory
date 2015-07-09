@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.UserDao">
+
+    <resultMap id="UserMapper" type="com.simoncomputing.app.winventory.domain.User">
+        <result column ="KEY"                 property = "key" />
+        <result column ="USERNAME"            property = "username" />
+        <result column ="PASSWORD"            property = "password" />
+        <result column ="FIRST_NAME"          property = "firstName" />
+        <result column ="LAST_NAME"           property = "lastName" />
+        <result column ="EMAIL"               property = "email" />
+        <result column ="CELL_PHONE"          property = "cellPhone" />
+        <result column ="WORK_PHONE"          property = "workPhone" />
+        <result column ="IS_ACTIVE"           property = "isActive" />
+        <result column ="ROLE_ID"             property = "roleId" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="UserMapper">
+        select * from USER
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.User">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select USER_SEQ.nextval from dual
+        </selectKey>
+        insert into USER
+        (
+            KEY , USERNAME , PASSWORD , FIRST_NAME , LAST_NAME , 
+            EMAIL , CELL_PHONE , WORK_PHONE , IS_ACTIVE , ROLE_ID
+        )
+        values
+        (
+            #{key} , #{username} , #{password} , #{firstName} , #{lastName} , 
+            #{email} , #{cellPhone} , #{workPhone} , #{isActive} , #{roleId}
+        )
+    </insert>
+
+    <select id="getListByRoleId" parameterType="integer" resultMap="UserMapper">
+        select * from USER
+        where ROLE_ID = #{roleId}
+    </select>
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.User">
+        update USER set
+            KEY                                 = #{key} ,
+            USERNAME                            = #{username} ,
+            PASSWORD                            = #{password} ,
+            FIRST_NAME                          = #{firstName} ,
+            LAST_NAME                           = #{lastName} ,
+            EMAIL                               = #{email} ,
+            CELL_PHONE                          = #{cellPhone} ,
+            WORK_PHONE                          = #{workPhone} ,
+            IS_ACTIVE                           = #{isActive} ,
+            ROLE_ID                             = #{roleId}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from USER
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+	<select id="getUserByUsername" parameterType="String"
+		resultType="com.simoncomputing.app.winventory.domain.User">
+		SELECT
+		KEY as key,
+		USERNAME as username,
+		PASSWORD as password,
+		FIRST_NAME as
+		firstName,
+		LAST_NAME as lastName,
+		EMAIL as email,
+		CELL_PHONE as
+		cellPhone,
+		WORK_PHONE as workPhone,
+		IS_ACTIVE as isActive,
+		ROLE_ID as
+		roleId
+		FROM USER
+		WHERE USERNAME = #{username};
+	</select>
+
+	<select id='getUserByEmail' parameterType='String'
+		resultType='com.simoncomputing.app.winventory.domain.User'>
+		SELECT
+		KEY as key,
+		USERNAME as username,
+		PASSWORD as password,
+		FIRST_NAME as firstName,
+		LAST_NAME as lastName,
+		EMAIL as email,
+		CELL_PHONE as cellPhone,
+		WORK_PHONE as workPhone,
+		IS_ACTIVE as isActive,
+		ROLE_ID as roleId
+		FROM USER
+		WHERE EMAIL = #{email};
+	</select>
+
+	<select id="getPermissionsByUserKey" parameterType="long"
+		resultType="String">
+		select REF_PERMISSION.DESCRIPTION from REF_PERMISSION
+		inner
+		join REF_PERMISSION_TO_ROLE on
+		REF_PERMISSION_TO_ROLE.PERMISSION_ID=REF_PERMISSION.KEY
+		inner join USER
+		on USER.ROLE_ID = REF_PERMISSION_TO_ROLE.ROLE_ID
+		WHERE USER.KEY =
+		#{key};
+	</select>
+
+	<select id="getPermissionsByUser" parameterType="com.simoncomputing.app.winventory.domain.User"
+		resultType="String">
+		select REF_PERMISSION.DESCRIPTION from REF_PERMISSION
+		inner
+		join REF_PERMISSION_TO_ROLE on
+		REF_PERMISSION_TO_ROLE.PERMISSION_ID=REF_PERMISSION.KEY
+		inner join USER
+		on USER.ROLE_ID = REF_PERMISSION_TO_ROLE.ROLE_ID
+		WHERE USER.KEY =
+		#{key};
+	</select>
+	
+	<select id="getAll" parameterType="com.simoncomputing.app.winventory.domain.User" resultMap="UserMapper">
+		select * from USER;
+	</select>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.EventToUserDao">
+
+    <resultMap id="EventToUserMapper" type="com.simoncomputing.app.winventory.domain.EventToUser">
+        <result column ="KEY"                 property = "key" />
+        <result column ="EVENT_ID"            property = "eventId" />
+        <result column ="USER_ID"             property = "userId" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="EventToUserMapper">
+        select * from EVENT_TO_USER
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.EventToUser">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select EVENT_TO_USER_SEQ.nextval from dual
+        </selectKey>
+        insert into EVENT_TO_USER
+        (
+            KEY , EVENT_ID , USER_ID
+        )
+        values
+        (
+            #{key} , #{eventId} , #{userId}
+        )
+    </insert>
+
+    <select id="getListByEventId" parameterType="long" resultMap="EventToUserMapper">
+        select * from EVENT_TO_USER
+        where EVENT_ID = #{eventId}
+    </select>
+    <select id="getListByUserId" parameterType="long" resultMap="EventToUserMapper">
+        select * from EVENT_TO_USER
+        where USER_ID = #{userId}
+    </select>
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.EventToUser">
+        update EVENT_TO_USER set
+            KEY                                 = #{key} ,
+            EVENT_ID                            = #{eventId} ,
+            USER_ID                             = #{userId}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from EVENT_TO_USER
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

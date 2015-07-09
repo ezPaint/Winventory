@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.HardwareDao">
+
+    <resultMap id="HardwareMapper" type="com.simoncomputing.app.winventory.domain.Hardware">
+        <result column ="KEY"                 property = "key" />
+        <result column ="TYPE"                property = "type" />
+        <result column ="DESCRIPTION"         property = "description" />
+        <result column ="COST"                property = "cost" />
+        <result column ="SERIAL_NO"           property = "serialNo" />
+        <result column ="CONDITION"           property = "condition" />
+        <result column ="LOCATION_ID"         property = "locationId" />
+        <result column ="USER_ID"             property = "userId" />
+        <result column ="PURCHASE_DATE"       property = "purchaseDate" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="HardwareMapper">
+        select * from HARDWARE
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.Hardware">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select HARDWARE_SEQ.nextval from dual
+        </selectKey>
+        insert into HARDWARE
+        (
+            KEY , TYPE , DESCRIPTION , COST , SERIAL_NO , 
+            CONDITION , LOCATION_ID , USER_ID , PURCHASE_DATE
+        )
+        values
+        (
+            #{key} , #{type} , #{description} , #{cost} , #{serialNo} , 
+            #{condition} , #{locationId} , #{userId} , #{purchaseDate}
+        )
+    </insert>
+
+    <select id="getListByLocationId" parameterType="integer" resultMap="HardwareMapper">
+        select * from HARDWARE
+        where LOCATION_ID = #{locationId}
+    </select>
+    <select id="getListByUserId" parameterType="integer" resultMap="HardwareMapper">
+        select * from HARDWARE
+        where USER_ID = #{userId}
+    </select>
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Hardware">
+        update HARDWARE set
+            KEY                                 = #{key} ,
+            TYPE                                = #{type} ,
+            DESCRIPTION                         = #{description} ,
+            COST                                = #{cost} ,
+            SERIAL_NO                           = #{serialNo} ,
+            CONDITION                           = #{condition} ,
+            LOCATION_ID                         = #{locationId} ,
+            USER_ID                             = #{userId} ,
+            PURCHASE_DATE                       = #{purchaseDate}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from HARDWARE
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+	<select id="getAll" resultMap="HardwareMapper">
+		select * from HARDWARE;
+	</select>
+
+	<select id="searchBasic" resultMap="HardwareMapper">
+		SELECT *
+		FROM HARDWARE
+		WHERE
+		KEY LIKE '%${value}%' OR
+		UPPER(TYPE) LIKE '%${value}%' OR
+		UPPER(DESCRIPTION) LIKE
+		'%${value}%' OR
+		COST LIKE '%${value}%' OR
+		UPPER(SERIAL_NO) LIKE
+		'%${value}%';
+	</select>
+
+	<select id="searchAdvanced" resultMap="HardwareMapper">
+		SELECT *
+		FROM HARDWARE
+		WHERE
+		<foreach item="column" index="i" collection="columns" open="("
+			separator="AND" close=")">
+
+			<foreach item="search" index="s" collection="searches.get(i)"
+				open="(" separator="OR" close=")">
+				UPPER(${column}) LIKE '%${search}%'
+			</foreach>
+
+		</foreach>
+	</select>
+
+	<select id="getInUse" resultMap="HardwareMapper">
+		SELECT *
+		FROM HARDWARE
+		WHERE USER_ID IS NOT NULL;
+	</select>
+
+	<select id="getStorage" resultMap="HardwareMapper">
+		SELECT *
+		FROM HARDWARE
+		WHERE USER_ID IS NULL;
+	</select>
+
+	<select id="getTopTypes" resultType="String" parameterType="int">
+		SELECT TYPE, COUNT(KEY)
+		FROM HARDWARE
+		GROUP BY TYPE
+		ORDER BY COUNT(KEY)
+		DESC
+		LIMIT #{limit};
+	</select>
+</mapper>

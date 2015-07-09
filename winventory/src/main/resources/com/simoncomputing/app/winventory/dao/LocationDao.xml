@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.LocationDao">
+
+    <resultMap id="LocationMapper" type="com.simoncomputing.app.winventory.domain.Location">
+        <result column ="KEY"                 property = "key" />
+        <result column ="DESCRIPTION"         property = "description" />
+        <result column ="IS_ACTIVE"           property = "isActive" />
+        <result column ="ADDRESS_ID"          property = "addressId" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="LocationMapper">
+        select * from LOCATION
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.Location">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select LOCATION_SEQ.nextval from dual
+        </selectKey>
+        insert into LOCATION
+        (
+            KEY , DESCRIPTION , IS_ACTIVE , ADDRESS_ID
+        )
+        values
+        (
+            #{key} , #{description} , #{isActive} , #{addressId}
+        )
+    </insert>
+
+    <select id="getListByAddressId" parameterType="integer" resultMap="LocationMapper">
+        select * from LOCATION
+        where ADDRESS_ID = #{addressId}
+    </select>
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Location">
+        update LOCATION set
+            KEY                                 = #{key} ,
+            DESCRIPTION                         = #{description} ,
+            IS_ACTIVE                           = #{isActive} ,
+            ADDRESS_ID                          = #{addressId}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from LOCATION
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

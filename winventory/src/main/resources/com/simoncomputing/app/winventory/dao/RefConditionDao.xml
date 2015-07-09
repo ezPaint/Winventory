@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.RefConditionDao">
+
+    <resultMap id="RefConditionMapper" type="com.simoncomputing.app.winventory.domain.RefCondition">
+        <result column ="CODE"                property = "code" />
+        <result column ="DESCRIPTION"         property = "description" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="RefConditionMapper">
+        select * from REF_CONDITION
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.RefCondition">
+        insert into REF_CONDITION
+        (
+            CODE , DESCRIPTION
+        )
+        values
+        (
+            #{code} , #{description}
+        )
+    </insert>
+
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.RefCondition">
+        update REF_CONDITION set
+            CODE                                = #{code} ,
+            DESCRIPTION                         = #{description}
+        where CODE = #{code}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from REF_CONDITION
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+    
+    <select id="getAll" resultMap="RefConditionMapper">
+		select * from REF_CONDITION;
+	</select>
+
+</mapper>

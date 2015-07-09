@@ -1,0 +1,13 @@
+/**
+* The Many<->Many Table describing relationship between roles and users.
+*/
+[Settings]
+CLASS		RoleToUser
+
+[Fields]
+INTEGER(10) roleId*?
+INTEGER(10) userId*?
+
+[ForeignKeys]
+roleId constrainsTo Role.key
+userId constrainsTo User.key

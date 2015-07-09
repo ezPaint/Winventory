@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.PermissionToUserDao">
+
+    <resultMap id="PermissionToUserMapper" type="com.simoncomputing.app.winventory.domain.PermissionToUser">
+        <result column ="KEY"                 property = "key" />
+        <result column ="PERMISSION_CODE"     property = "permissionCode" />
+        <result column ="USER_ID"             property = "userId" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="PermissionToUserMapper">
+        select * from PERMISSION_TO_USER
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.PermissionToUser">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select PERMISSION_TO_USER_SEQ.nextval from dual
+        </selectKey>
+        insert into PERMISSION_TO_USER
+        (
+            KEY , PERMISSION_CODE , USER_ID
+        )
+        values
+        (
+            #{key} , #{permissionCode} , #{userId}
+        )
+    </insert>
+
+    <select id="getListByPermissionCode" parameterType="string" resultMap="PermissionToUserMapper">
+        select * from PERMISSION_TO_USER
+        where PERMISSION_CODE = #{permissionCode}
+    </select>
+    <select id="getListByUserId" parameterType="integer" resultMap="PermissionToUserMapper">
+        select * from PERMISSION_TO_USER
+        where USER_ID = #{userId}
+    </select>
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.PermissionToUser">
+        update PERMISSION_TO_USER set
+            KEY                                 = #{key} ,
+            PERMISSION_CODE                     = #{permissionCode} ,
+            USER_ID                             = #{userId}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from PERMISSION_TO_USER
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

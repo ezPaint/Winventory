@@ -1,0 +1,10 @@
+/**
+ * The RefHardwareType Table.
+ */
+[Settings]
+CLASS RefHardwareType
+
+[Fields]
+
+STRING(40)       code*!			//LAPTOP, MOUSE, KEYBOARD, etc. These can be user-defined.
+STRING(2000)       description*

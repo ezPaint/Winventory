@@ -1,0 +1,25 @@
+-- Remove Original Table and Sequence
+
+DROP TABLE TEAM_TO_USER;
+DROP SEQUENCE TEAM_TO_USER_SEQ;
+-- Create Table
+
+
+CREATE TABLE TEAM_TO_USER (
+    KEY                NUMBER(10) NOT NULL,
+    USER_ID            NUMBER(10) NOT NULL,
+    TEAM_ID            NUMBER(10) NOT NULL,
+    CONSTRAINT TEAM_TO_USER_PK PRIMARY KEY ( KEY ));
+
+CREATE SEQUENCE TEAM_TO_USER_SEQ;
+
+
+-- Sample Select Statement
+
+SELECT
+    KEY, USER_ID, TEAM_ID 
+from TEAM_TO_USER
+WHERE
+    KEY = 0;
+
+-- PROTECTED CODE -->

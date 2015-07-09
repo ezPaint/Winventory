@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.TeamToUserDao">
+
+    <resultMap id="TeamToUserMapper" type="com.simoncomputing.app.winventory.domain.TeamToUser">
+        <result column ="KEY"                 property = "key" />
+        <result column ="USER_ID"             property = "userId" />
+        <result column ="TEAM_ID"             property = "teamId" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="TeamToUserMapper">
+        select * from TEAM_TO_USER
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.TeamToUser">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select TEAM_TO_USER_SEQ.nextval from dual
+        </selectKey>
+        insert into TEAM_TO_USER
+        (
+            KEY , USER_ID , TEAM_ID
+        )
+        values
+        (
+            #{key} , #{userId} , #{teamId}
+        )
+    </insert>
+
+    <select id="getListByUserId" parameterType="integer" resultMap="TeamToUserMapper">
+        select * from TEAM_TO_USER
+        where USER_ID = #{userId}
+    </select>
+    <select id="getListByTeamId" parameterType="integer" resultMap="TeamToUserMapper">
+        select * from TEAM_TO_USER
+        where TEAM_ID = #{teamId}
+    </select>
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.TeamToUser">
+        update TEAM_TO_USER set
+            KEY                                 = #{key} ,
+            USER_ID                             = #{userId} ,
+            TEAM_ID                             = #{teamId}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from TEAM_TO_USER
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

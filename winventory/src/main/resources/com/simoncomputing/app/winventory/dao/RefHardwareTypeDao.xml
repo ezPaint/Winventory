@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.RefHardwareTypeDao">
+
+    <resultMap id="RefHardwareTypeMapper" type="com.simoncomputing.app.winventory.domain.RefHardwareType">
+        <result column ="CODE"                property = "code" />
+        <result column ="DESCRIPTION"         property = "description" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="RefHardwareTypeMapper">
+        select * from REF_HARDWARE_TYPE
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.RefHardwareType">
+        insert into REF_HARDWARE_TYPE
+        (
+            CODE , DESCRIPTION
+        )
+        values
+        (
+            #{code} , #{description}
+        )
+    </insert>
+
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.RefHardwareType">
+        update REF_HARDWARE_TYPE set
+            CODE                                = #{code} ,
+            DESCRIPTION                         = #{description}
+        where CODE = #{code}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from REF_HARDWARE_TYPE
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

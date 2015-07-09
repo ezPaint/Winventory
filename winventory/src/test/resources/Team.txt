@@ -1,0 +1,12 @@
+/**
+* The Teams Table.
+*/
+[Settings]
+CLASS		Team
+
+[Fields]
+STRING(30)	name*
+BOOLEAN		isActive
+INTEGER(10)		leaderId	LEADER_ID?
+
+[ForeignKeys]

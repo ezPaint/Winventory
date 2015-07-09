@@ -1,0 +1,16 @@
+/**
+* The Software Table.
+*/
+[Settings]
+CLASS       Software
+
+[Fields]
+
+STRING(30)      name?               
+STRING(30)      serialNo?
+STRING(20)      version
+STRING(30)      licenseKey?
+STRING(2000)     description
+DOUBLE(10,2)    cost
+DATE            purchasedDate?
+DATE            expirationDate?

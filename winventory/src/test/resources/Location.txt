@@ -1,0 +1,13 @@
+/**
+* The Location Table.
+*/
+[Settings]
+CLASS       Location
+
+[Fields]
+STRING(2000)  description* //Specific location of item at specified address (e.g. suite 200, desk #3)
+BOOLEAN     isActive*
+INTEGER(10) addressId ADDRESS_ID?*
+
+[ForeignKeys]
+addressId constrainsTo Address.key

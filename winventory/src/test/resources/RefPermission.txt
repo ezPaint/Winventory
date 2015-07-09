@@ -1,0 +1,13 @@
+/**
+* RefPermissions
+* 
+* stores codes and descriptions for different permissions
+*/
+
+[Settings]
+
+CLASS RefPermission
+
+[Fields]
+String(40) code*       //admin, self view, selfedit, etc.  These can be user defined.
+String(2000) description*

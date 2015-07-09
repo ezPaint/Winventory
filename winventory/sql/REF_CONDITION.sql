@@ -1,0 +1,21 @@
+-- Remove Original Table and Sequence
+
+DROP TABLE REF_CONDITION;
+-- Create Table
+
+
+CREATE TABLE REF_CONDITION (
+    CODE               VARCHAR2(40) NOT NULL NOT NULL,
+    DESCRIPTION        VARCHAR2(2000) NOT NULL,
+    CONSTRAINT REF_CONDITION_PK PRIMARY KEY ( CODE ));
+
+
+-- Sample Select Statement
+
+SELECT
+    CODE, DESCRIPTION 
+from REF_CONDITION
+WHERE
+    CODE = 0;
+
+-- PROTECTED CODE -->

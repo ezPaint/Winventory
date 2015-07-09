@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.RoleDao">
+
+    <resultMap id="RoleMapper" type="com.simoncomputing.app.winventory.domain.Role">
+        <result column ="KEY"                 property = "key" />
+        <result column ="TITLE"               property = "title" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="RoleMapper">
+        select * from ROLE
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.Role">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select ROLE_SEQ.nextval from dual
+        </selectKey>
+        insert into ROLE
+        (
+            KEY , TITLE
+        )
+        values
+        (
+            #{key} , #{title}
+        )
+    </insert>
+
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Role">
+        update ROLE set
+            KEY                                 = #{key} ,
+            TITLE                               = #{title}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from ROLE
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+    
+    <select id="getAll" resultMap="RoleMapper">
+		select * from Role;
+	</select>
+
+</mapper>

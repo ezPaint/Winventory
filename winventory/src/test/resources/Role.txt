@@ -1,0 +1,8 @@
+/**
+* The Many<->Many Table describing relationship between users and permissions.
+*/
+[Settings]
+CLASS       Role
+
+[Fields]
+STRING(30) title //e.g. Admin

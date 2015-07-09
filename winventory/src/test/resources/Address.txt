@@ -1,0 +1,12 @@
+/**
+* The Addresses Table.
+*/
+[Settings]
+CLASS       Address
+
+[Fields]
+STRING(50)  street1
+STRING(50)  street2
+STRING(50)  city
+STRING(50)  state
+STRING(10)  zipcode

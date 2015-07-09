@@ -1,0 +1,13 @@
+/**
+* The Many<->Many Table describing relationship between users and teams.
+*/
+[Settings]
+CLASS		TeamToUser
+
+[Fields]
+INTEGER(10) userId*?
+INTEGER(10)	teamId*?
+
+[ForeignKeys]
+userId constrainsTo User.key
+teamId constrainsTo Team.key

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <environments default="H2">
+
+        <environment id="H2">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="org.h2.Driver" />
+                <property name="url" value="jdbc:h2:tcp://localhost:9096/sample/testDB" />
+                <property name="username" value="sa" />
+                <property name="password" value="123" />
+            </dataSource>
+        </environment>
+
+        <environment id="ORACLE">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="oracle.jdbc.OracleDriver" />
+                <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+                <property name="username" value="sa" />
+                <property name="password" value="123" />
+            </dataSource>
+        </environment>
+
+        <environment id="TESTING">
+            <transactionManager type="JDBC" />
+            <dataSource type="POOLED">
+                <property name="driver" value="org.h2.Driver" />
+                <property name="url" value="jdbc:h2:tcp://localhost:9096/sample/testDB" />
+                <property name="username" value="sa" />
+                <property name="password" value="123" />
+            </dataSource>
+        </environment>
+
+        <environment id="JNDI">
+            <transactionManager type="JDBC" />
+            <dataSource type="JNDI">
+                <property name="data_source" value="java:/comp/env/jdbc/sample/testDB" />
+            </dataSource>
+        </environment>
+
+    </environments>
+
+    <mappers>
+        <mapper resource="com/simoncomputing/app/winventory/dao/AccessTokenDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/AddressDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/EventDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/EventToHardwareDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/EventToLocationDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/EventToSoftwareDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/EventToUserDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/HardwareDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/HardwareToSoftwareDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/LocationDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/RefConditionDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/RefHardwareTypeDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/RefPermissionDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/RefPermissionToRoleDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/RoleDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/RoleToUserDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/SmtpDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/SoftwareDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/TeamDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/TeamToUserDao.xml" />
+        <mapper resource="com/simoncomputing/app/winventory/dao/UserDao.xml" />
+    </mappers>
+
+</configuration>

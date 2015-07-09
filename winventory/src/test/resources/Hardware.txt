@@ -1,0 +1,20 @@
+/**
+* The Hardware Table.
+*/
+[Settings]
+CLASS		Hardware
+
+[Fields]
+STRING(40)		type			//LAPTOP, DESKTOP, MONTIOR, etc. Links to RefHardwareType
+STRING(2000)	description
+DOUBLE(10,2)	cost
+STRING(40)		serialNo
+STRING(40)		condition		//GOOD, FAIR, NEW, etc. Links to RefCondition
+INTEGER(10)		locationId	LOCATION_ID?
+INTEGER(10)  	userId		USER_ID?
+DATE 			purchaseDate
+
+[ForeignKeys]
+locationId constrainsTo Location.key
+userId constrainsTo User.key
+condition constrainsTo RefCondition.code

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.AccessTokenDao">
+
+    <resultMap id="AccessTokenMapper" type="com.simoncomputing.app.winventory.domain.AccessToken">
+        <result column ="USER_KEY"            property = "userKey" />
+        <result column ="TOKEN"               property = "token" />
+        <result column ="EXPIRATION"          property = "expiration" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="AccessTokenMapper">
+        select * from ACCESS_TOKEN
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.AccessToken">
+        insert into ACCESS_TOKEN
+        (
+            USER_KEY , TOKEN , EXPIRATION
+        )
+        values
+        (
+            #{userKey} , #{token} , #{expiration}
+        )
+    </insert>
+
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.AccessToken">
+        update ACCESS_TOKEN set
+            USER_KEY                            = #{userKey} ,
+            TOKEN                               = #{token} ,
+            EXPIRATION                          = #{expiration}
+        where USER_KEY = #{userKey}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from ACCESS_TOKEN
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>
