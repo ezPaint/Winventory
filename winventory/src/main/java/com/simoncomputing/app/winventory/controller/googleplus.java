@@ -38,21 +38,22 @@ public class googleplus extends BaseController {
     //
     
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-    	      throws IOException, ServletException {
-    	      ServiceBuilder builder= new ServiceBuilder(); 
-    	      OAuthService service = (OAuthService) builder.provider(Google2Api.class) 
-    	         .apiKey(CLIENT_ID) 
-    	         .apiSecret(CLIENT_SECRET) 
-    	         .callback("http://localhost:8181/winventory/login/googleCallback") 
-    	         .scope("email")
-    	         .debugStream(System.out)
-    	         .build(); //Now build the call
-    	      request.getSession().setAttribute("service", service);
-    	      response.sendRedirect(service.getAuthorizationUrl(null)); 
-    }
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws IOException, ServletException {
+		ServiceBuilder builder = new ServiceBuilder();
+		OAuthService service = (OAuthService) builder
+			.provider(Google2Api.class)
+			.apiKey(CLIENT_ID)
+			.apiSecret(CLIENT_SECRET)
+			.callback(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/login/googleCallback")
+			.scope("email").debugStream(System.out).build(); // Now build
+																	// the call
+		request.getSession().setAttribute("service", service);
+		response.sendRedirect(service.getAuthorizationUrl(null));
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

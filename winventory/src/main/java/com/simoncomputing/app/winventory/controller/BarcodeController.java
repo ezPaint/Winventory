@@ -44,14 +44,6 @@ public class BarcodeController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     	logger.trace("parameter map is " + request.getParameterMap());
-    	try {
-			Hardware h = hb.read((long) 216);
-			h.setUserId(null);
-			hb.update(h);
-		} catch (BoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     	request.getSession().setAttribute("ub", ub);
     	request.getSession().setAttribute("lb", lb);
 		String barcode = request.getParameter("barcode");
@@ -73,9 +65,6 @@ public class BarcodeController extends HttpServlet {
 			modifyCode+="3";	//TODO make valid checksum; random number right now
 			logger.trace("pkList is " + Arrays.asList(pkList));
     		updateDatabase(pkList, hwList, modifyCode);
-    		request.getSession().removeAttribute("user");
-    		request.getSession().removeAttribute("hardware");
-    		request.getSession().removeAttribute("location");
     		logger.trace("updating database");
 		}
 		else if(barcode != null){
