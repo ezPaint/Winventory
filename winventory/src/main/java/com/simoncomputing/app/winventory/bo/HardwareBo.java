@@ -274,7 +274,7 @@ public class HardwareBo {
     }
 
     public List<Hardware> searchAdvanced(ArrayList<String> columns,
-            ArrayList<ArrayList<String>> searches) throws BoException {
+            ArrayList<ArrayList<String>> searches, Boolean stored, Boolean owned) throws BoException {
         SqlSession session = null;
         List<Hardware> list;
 
@@ -286,7 +286,7 @@ public class HardwareBo {
         try {
             session = SessionFactory.getSession();
             HardwareDao mapper = session.getMapper(HardwareDao.class);
-            list = mapper.searchAdvanced(columns, searches);
+            list = mapper.searchAdvanced(columns, searches, stored, owned);
             session.commit();
         } catch (Exception e) {
             session.rollback();

@@ -34,6 +34,9 @@ public interface HardwareDao {
     
     public List<String> getTopTypes( Integer limit ) throws DaoException; 
     
-    public List<Hardware> searchAdvanced( @Param("columns") List<String> columns, @Param("searches") ArrayList<ArrayList<String>> searches ) throws DaoException; 
+    public List<Hardware> searchAdvanced( @Param("columns") List<String> columns, 
+            @Param("searches") ArrayList<ArrayList<String>> searches,
+            @Param("stored") Boolean stored,
+            @Param("owned") Boolean owned) throws DaoException; 
 
 }

@@ -2,56 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simoncomputing.app.winventory.dao.EventToHardwareDao">
-
-    <resultMap id="EventToHardwareMapper" type="com.simoncomputing.app.winventory.domain.EventToHardware">
+    <!-- PROTECTED CODE -->
+    
+    <resultMap id="EventMapper" type="com.simoncomputing.app.winventory.domain.Event">
         <result column ="KEY"                 property = "key" />
-        <result column ="EVENT_ID"            property = "eventId" />
-        <result column ="HARDWARE_ID"         property = "hardwareId" />
+        <result column ="DATE_CREATED"        property = "dateCreated" />
+        <result column ="DESCRIPTION"         property = "description" />
+        <result column ="CATEGORY"            property = "category" />
     </resultMap>
-
-    <select id="read" parameterType="map" resultMap="EventToHardwareMapper">
-        select * from EVENT_TO_HARDWARE
-        where ${where}
-    </select>
-
-    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.EventToHardware">
-        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
-            select EVENT_TO_HARDWARE_SEQ.nextval from dual
-        </selectKey>
+    
+    <resultMap id="HardwareMapper" type="com.simoncomputing.app.winventory.domain.Hardware">
+        <result column ="KEY"                 property = "key" />
+        <result column ="TYPE"                property = "type" />
+        <result column ="DESCRIPTION"         property = "description" />
+        <result column ="COST"                property = "cost" />
+        <result column ="SERIAL_NO"           property = "serialNo" />
+        <result column ="CONDITION"           property = "condition" />
+        <result column ="LOCATION_ID"         property = "locationId" />
+        <result column ="USER_ID"             property = "userId" />
+        <result column ="PURCHASE_DATE"       property = "purchaseDate" />
+    </resultMap>
+    
+    
+	<!-- Gets all of the Events associated with a Hardware -->
+	<select id='getEventsByHardwareId' resultMap='EventMapper'>
+		SELECT * FROM Event e
+   		INNER JOIN Event_To_Hardware map ON e.key = map.event_id
+		WHERE map.hardware_id = #{param1}
+	</select>
+	
+	
+	
+	<select id='getHardwareByEventId' resultMap='HardwareMapper'>
+		SELECT * FROM Hardware h
+   		INNER JOIN Event_To_Hardware map ON h.key = map.hardware_id
+		WHERE map.event_id = #{param1}
+	</select>
+	
+	<insert id="link" parameterType="map">
         insert into EVENT_TO_HARDWARE
         (
-            KEY , EVENT_ID , HARDWARE_ID
+            EVENT_ID , HARDWARE_ID
         )
         values
         (
-            #{key} , #{eventId} , #{hardwareId}
+            #{param1} , #{param2}
         )
     </insert>
+    
 
-    <select id="getListByEventId" parameterType="long" resultMap="EventToHardwareMapper">
-        select * from EVENT_TO_HARDWARE
-        where EVENT_ID = #{eventId}
-    </select>
-    <select id="getListByHardwareId" parameterType="long" resultMap="EventToHardwareMapper">
-        select * from EVENT_TO_HARDWARE
-        where HARDWARE_ID = #{hardwareId}
-    </select>
-
-
-    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.EventToHardware">
-        update EVENT_TO_HARDWARE set
-            KEY                                 = #{key} ,
-            EVENT_ID                            = #{eventId} ,
-            HARDWARE_ID                         = #{hardwareId}
-        where KEY = #{key}
-    </update>
-
-    <delete id="delete" parameterType="map">
+    <delete id="unlink" parameterType="map">
         delete from EVENT_TO_HARDWARE
-        where ${where}
+        where hardwareId=#{param2} AND eventId=#{param1};
     </delete>
-
-
-    <!-- PROTECTED CODE -->
-
+    
 </mapper>

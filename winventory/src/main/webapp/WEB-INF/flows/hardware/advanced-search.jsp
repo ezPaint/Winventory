@@ -136,7 +136,7 @@
 							</div>
 							<br>
 							<div class="form-group" id="serial_container">
-								<div class="input-group" id=serial>
+								<div class="input-group" id="serial">
 									<span class="input-group-addon" id="basic-addon1">Serial
 										No</span> <input name="serial" type="text" class="form-control"
 										placeholder="13456FFB" pattern="^[a-zA-Z0-9\s]*$"> <span class="input-group-btn"
@@ -150,6 +150,27 @@
 								<div class="col-sm-10 col-sm-offset-2">
 										<div class="help-block with-errors"></div>
 								</div>
+							</div>
+							<br>
+							<div class="form-group" id="search_container">
+							<div class="radio">
+								<label>
+    								<input type="radio" name="optionsSearch" id="search1" value="all" checked>
+    							Search All
+  								</label>
+							</div>
+							<div class="radio">
+								<label>
+    								<input type="radio" name="optionsSearch" id="search2" value="owned">
+    							Search Owned
+  								</label>
+							</div>
+							<div class="radio">
+								<label>
+    								<input type="radio" name="optionsSearch" id="search3" value="stored">
+    							Search Stored
+  								</label>
+							</div>
 							</div>
 							<br>
 							<button type="submit" class="btn btn-default">Search</button>

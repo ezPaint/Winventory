@@ -96,7 +96,7 @@ INSERT INTO USER VALUES ( 14, 'elizabeth.villaflor', 'SHA-256$20000$UTF-8$uegf5h
 
 INSERT INTO REF_CONDITION  VALUES ('good', 'good');
 
-INSERT INTO GOOGLE_CLIENT VALUES (1,  'id', 'secret') 
+INSERT INTO GOOGLE_CLIENT VALUES (1,  'id', 'secret');
 
 -- Adds google login info to USER --
 INSERT INTO USER Values(123, 'bjg3wk', 'googleUser', 'Brendan', 'Goggin', 'bjg3wk@virginia.edu', '1234567890', '1234567890', true, 1);

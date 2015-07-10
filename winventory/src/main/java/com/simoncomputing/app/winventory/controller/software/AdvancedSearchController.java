@@ -1,6 +1,7 @@
 package com.simoncomputing.app.winventory.controller.software;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ListIterator;
@@ -31,8 +32,8 @@ public class AdvancedSearchController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/WEB-INF/flows/software/advanced-search.jsp").forward(request,
-                response);
+        request.getRequestDispatcher("/WEB-INF/flows/software/advanced-search.jsp").forward(
+                request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -50,14 +51,6 @@ public class AdvancedSearchController extends HttpServlet {
                 .getParameterValues("cost")));
         ArrayList<String> keys = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("licenseKey")));
-/*        ArrayList<String> startPDate = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("purchasedDateStart")));
-        ArrayList<String> endPDate = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("purchasedDateEnd")));
-        ArrayList<String> startExDate = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("expirationDateStart")));
-        ArrayList<String> endExDate = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("expirationDateEnd")));*/
 
         // remove blank fields
         cleanFields(names);
@@ -65,19 +58,17 @@ public class AdvancedSearchController extends HttpServlet {
         cleanFields(versions);
         cleanFields(costs);
         cleanFields(keys);
-       /* cleanFields(startPDate);
-        cleanFields(endPDate);
-        cleanFields(startExDate);
-        cleanFields(endExDate);*/
 
-        // passed as parameters to the dao 
+        // passed as parameters to the dao
         // columns contains the list of columns in the database to search
-        // searchs contains the actual search terms to match to when selecting records
+        // searchs contains the actual search terms to match to when selecting
+        // records
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<ArrayList<String>> searches = new ArrayList<ArrayList<String>>();
 
         // if the user specified search terms for "name", add "name" to columns
-        // and all of the search terms to searches, otherwise ignore the arraylist
+        // and all of the search terms to searches, otherwise ignore the
+        // arraylist
         if (names != null && names.size() > 0) {
             columns.add("name");
             searches.add(names);
@@ -103,39 +94,78 @@ public class AdvancedSearchController extends HttpServlet {
             searches.add(names);
         }
 
-      /*  if (startPDate != null && startPDate.size() > 0) {
-            columns.add("purchased_date");
-            searches.add(startPDate);
-        }
+        
+        String startPDate = request.getParameter("purchasedDateStart");
+        String endPDate = request.getParameter("purchasedDateEnd");
+        String startExDate = request.getParameter("expirationDateStart");
+        String endExDate = request.getParameter("expirationDateEnd");
+        
+        ArrayList<String> labels = new ArrayList<String>();
+        ArrayList<String> dates = new ArrayList<String>();
 
-        if (endPDate != null && endPDate.size() > 0) {
-            columns.add("purchased_date");
-            searches.add(endPDate);
+        if (startPDate != null && endPDate != null) {
+            labels.add("purchased_date");
+            dates.add(startPDate);
+            dates.add(endPDate);
+        } else if (endPDate == null) {
+            labels.add("purchased_date");
+            dates.add(startPDate);
+            dates.add(startPDate);
+        } else if (startPDate == null) {
+            labels.add("purchased_date");
+            dates.add("0000-00-00");
+            dates.add(endPDate);
         }
-
-        if (startExDate != null && startExDate.size() > 0) {
-            columns.add("expiration_date");
-            searches.add(startExDate);
+        else{
+            labels.add("purchased_date");
+            dates.add("");
+            dates.add("");
         }
+        
 
-        if (endExDate != null && endExDate.size() > 0) {
-            columns.add("expiration_date");
-            searches.add(endExDate);
-        }*/
+        if (startExDate != null && endExDate != null) {
+            labels.add("expiration_date");
+            dates.add(startExDate);
+            dates.add(endExDate);
+        } else if (endExDate == null) {
+            labels.add("purchased_date");
+            dates.add(startExDate);
+            dates.add(startExDate);
+        } else if (startExDate == null) {
+            labels.add("purchased_date");
+            dates.add("0000-00-00");
+            dates.add(endExDate);
+        }
+        else{
+            labels.add("expired_date");
+            dates.add("");
+            dates.add("");
+        }
 
         // do sql stuff
         ArrayList<Software> results = null;
-        
-        //check that at least one search term was given
+        ArrayList<Software> resultsInRange = null;
+
+        // check that at least one search term was given
         if (names.size() == 0 && serials.size() == 0 && versions.size() == 0 && costs.size() == 0
-                && keys.size() == 0 /*&& startPDate.size() == 0 && endPDate.size() == 0
-                && startExDate.size() == 0 && endExDate.size() == 0*/) {
+                && keys.size() == 0 && startPDate == null && endPDate == null
+                && startExDate == null && endExDate == null) {
             error = "Nothing was entered.";
         } else {
 
             try {
-                results = new ArrayList<Software>(SoftwareBo.getInstance().searchAdvanced(columns,
-                        searches));
+
+                if (columns.size() == 0 || searches.size() == 0) {
+                    results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
+                } else {
+                    results = new ArrayList<Software>(SoftwareBo.getInstance().searchAdvanced(
+                            columns, searches));
+                }
+
+                if (!(startPDate == null && endPDate == null && startExDate == null && endExDate == null)) {
+                    resultsInRange = new ArrayList<Software>(SoftwareBo.getInstance().searchRange(
+                            results, dates));
+                }
             } catch (BoException e) {
                 error = e.getLocalizedMessage();
                 log.error(e.getMessage());
@@ -143,26 +173,28 @@ public class AdvancedSearchController extends HttpServlet {
 
         }
 
-        if (results != null) {
+        if (resultsInRange != null) {
+            request.setAttribute("results", resultsInRange);
+        } else if (results != null) {
             request.setAttribute("results", results);
         }
 
         request.setAttribute("page_header", "Search Results");
         request.setAttribute("error", error);
 
-        // only redirect to results page if no error occurred 
+        // only redirect to results page if no error occurred
         if (error != null) {
-            request.getRequestDispatcher("/WEB-INF/flows/software/advanced-search.jsp").forward(request,
-                    response);
+            request.getRequestDispatcher("/WEB-INF/flows/software/advanced-search.jsp").forward(
+                    request, response);
         } else {
             request.getRequestDispatcher("/WEB-INF/flows/software/results.jsp").forward(request,
                     response);
         }
 
     }
-
-    /** 
+    /**
      * Helper method to remove blank fields from form results.
+     * 
      * @param fields
      */
     private void cleanFields(ArrayList<String> fields) {

@@ -50,6 +50,11 @@ public class googleplus extends BaseController {
 		} catch (BoException e) {
 			logger.error("GoogleClient DB Error");
 		}
+		if (gc == null) {
+			logger.error("Google CLient is Null Error");
+			this.sendRedirect(request, response, "/login");
+			return;
+		}
 		String id = gc.getClientId();
 		String client = gc.getClientSecret();
 		

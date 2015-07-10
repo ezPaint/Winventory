@@ -3,11 +3,7 @@ package com.simoncomputing.app.winventory.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,11 +15,9 @@ import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.LocationBo;
-import com.simoncomputing.app.winventory.bo.SoftwareBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.Location;
-import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
 
@@ -48,11 +42,14 @@ public class BarcodeController extends HttpServlet {
     	request.getSession().setAttribute("lb", lb);
 		String barcode = request.getParameter("barcode");
 		boolean update = Boolean.parseBoolean(request.getParameter("toSubmit"));
+		boolean clear = Boolean.parseBoolean(request.getParameter("clear"));
+		boolean valid = isValidInput(barcode);
 		if (update) {
 			String[] pkList = request.getParameterValues("removeHw");
 			if (pkList==null){
 				pkList=new String[0];
 			}
+			@SuppressWarnings("unchecked")
 			ArrayList<Hardware> hwList = (ArrayList<Hardware>) request.getSession().getAttribute("hardware");
 			String modifyCode;
 			User owner = (User)request.getSession().getAttribute("user");
@@ -66,22 +63,32 @@ public class BarcodeController extends HttpServlet {
 			logger.trace("pkList is " + Arrays.asList(pkList));
     		updateDatabase(pkList, hwList, modifyCode);
     		logger.trace("updating database");
-		}
-		else if(barcode != null){
+		} else if (clear){
+			request.getSession().removeAttribute("user");
+			request.getSession().removeAttribute("hardware");
+			request.getSession().removeAttribute("location");
+		} else if (!valid){
+			request.setAttribute("error", barcodeErrorMessage(barcode));
+		} else if(barcode != null){
 			long pk = -1;
-			String first = parseTableIdentifier(barcode);
+			String first = "-1";
 			try{
+				first = parseTableIdentifier(barcode);
 				pk = parsePk(barcode);
 			} catch (NumberFormatException nfe) {
 				logger.error("Could not get a pk from " + barcode);
+			} catch (IllegalArgumentException ie) {
+				logger.error("Could not get a table identifier from " + barcode);
 			}
+			List<Hardware> hardware;
 			try{
     			switch(first){
     			case "1":
     				logger.trace("preloading based on user " + pk);
     				request.getSession().setAttribute("user", ub.read(pk));
     				request.getSession().setAttribute("location", null);
-    				request.getSession().setAttribute("hardware", hb.getListByUserId((int)pk));
+    				hardware = hb.getListByUserId((int)pk);
+    				request.getSession().setAttribute("hardware", hardware);
     				break;
     			case "2":
     				@SuppressWarnings("unchecked")
@@ -92,7 +99,7 @@ public class BarcodeController extends HttpServlet {
     				}
     				Hardware h = hb.read(pk);
     				if (!hwList.contains(h))
-    					hwList.add(hb.read(pk));
+    					hwList.add(h);
     				else {
     					request.setAttribute("error", "That Hardware is already in the list");
     				}
@@ -102,24 +109,30 @@ public class BarcodeController extends HttpServlet {
     				logger.trace("preloading based on location " + pk);
     				request.getSession().setAttribute("user", null);
     				request.getSession().setAttribute("location", lb.read(pk));
-    				List<Hardware> hardware = hb.getListByLocationId((int)pk);
+    				hardware = hb.getListByLocationId((int)pk);
     				request.getSession().setAttribute("hardware", hardware);
     				logger.debug(hb.getListByLocationId((int)pk));
     				break;
     			default:
+    				logger.trace("preloading based on username " + barcode);
+    				User user = ub.getUserByUsername(barcode);
+    				request.getSession().setAttribute("location", null);
+    				request.getSession().setAttribute("user", user);
+    				request.getSession().setAttribute("hardware", hb.getListByUserId(user.getKey().intValue()));
     				break;
     			}
 			} catch (BoException be) {
 				logger.error("Could not get an object from table id:" + first + " with pk " + pk);
 			}
 		}
-
-    	if (request.getSession().getAttribute("user")==null && request.getSession().getAttribute("location")==null){
+		
+		if (request.getAttribute("error")==null && !clear && request.getSession().getAttribute("user")==null && request.getSession().getAttribute("location")==null){
     		request.getSession().setAttribute("hardware",null);
     		request.setAttribute("error","You must enter an Owner or Location first");
     	} else {
     		logger.trace("altering error");
     	}
+		
     	request.getRequestDispatcher("/WEB-INF/flows/barcodes/barcode.jsp").forward(request,
                 response);
     }
@@ -168,11 +181,55 @@ public class BarcodeController extends HttpServlet {
 		}
 	}
     
+    private static boolean isValidInput(String str) {
+    	return isBarcode(str) || isUsername(str);
+    }
+    
+    private static String barcodeErrorMessage(String str){
+    	if (isUsername(str))
+    		return null;
+    	if (!(str.length()==12 || str.length()==13)){
+    		return "Barcode is insufficent length; must be 12 or 13 characters.";
+    	}
+    	String tabId = parseTableIdentifier(str);
+    	Long pk = parsePk(str);
+    	try{
+	    	switch(tabId){
+	    	case "1":
+	    		if (ub.read(pk)==null)
+	    			return "Barcode references an invalid User.";
+	    		break;
+	    	case "2":
+	    		if (hb.read(pk)==null)
+	    			return "Barcode references an invalid Hardware.";
+	    		break;
+	    	case "4":
+	    		if (lb.read(pk)==null)
+	    			return "Barcode references an invalid Location.";
+	    		break;
+	    	default:
+	    		return "Barcode does not reference a valid table.";
+	    	}
+    	} catch (BoException be){
+    		return "Barcode references an invalid object.";
+    	}
+    	return null;
+    }
+    
+    private static boolean isBarcode(String str){
+    	return barcodeErrorMessage(str)==null;
+    }
+    
+    private static boolean isUsername(String str){
+    	return !(ub.getUserByUsername(str)==null);
+    }
+    
     private static boolean isNumeric(String str)
     {
     	try
     	{
-    		int d = Integer.parseInt(str);
+    		@SuppressWarnings("unused")
+			int d = Integer.parseInt(str);
     	}
     	catch(NumberFormatException nfe)
     	{

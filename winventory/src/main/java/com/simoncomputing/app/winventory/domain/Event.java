@@ -1,5 +1,6 @@
 package com.simoncomputing.app.winventory.domain;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -52,22 +53,22 @@ public class Event {
     }
 
     
-    public List<Software> copyOfSoftware()
+    public List<Software> getSoftware()
     {
     	return software;
     }
     
-    public List<Hardware> copyOfHardware()
+    public List<Hardware> getHardware()
     {
     	return hardware;
     }
     
-    public List<Location> copyOfLocation()
+    public List<Location> getLocations()
     {
     	return locations;
     }
     
-    public List<User> copyOfUser()
+    public List<User> getUsers()
     {
     	return users;
     }
@@ -80,5 +81,60 @@ public class Event {
     {
     	ArrayList<Barcoded> items = new ArrayList<Barcoded>();
     	throw new UnsupportedOperationException("EventBo.allAssociations() is net let implemented");
+    }
+    
+    //Test for every field being equal
+    
+    @Override
+    public boolean equals(Object other)
+    {
+    	if (!other.getClass().equals(this.getClass()))
+    	{
+    		return false;
+    	}
+    	Event otherEvent = (Event)other;
+    	
+    	Calendar cal1 = Calendar.getInstance();
+    	Calendar cal2 = Calendar.getInstance();
+    	cal1.setTime(this.dateCreated);
+    	cal2.setTime(otherEvent.dateCreated);
+    	boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+    	                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+    	
+    	return 	
+    			this.deepEquals(this.getSoftware(), otherEvent.getSoftware()) &&
+//    			this.deepEquals(this.getHardware(), otherEvent.getHardware()) &&
+//    			this.deepEquals(this.getLocations(), otherEvent.getLocations()) &&
+//    			this.deepEquals(this.getUsers(), otherEvent.getUsers()) &&
+    			this.category.equals(otherEvent.category) &&
+    			sameDay &&  
+    			this.description.equals(otherEvent.getDescription()) &&
+    			this.key.equals(otherEvent.getKey());
+    }
+    
+    @Override
+    public String toString()
+    {
+    	return String.format("%s, %s, %s, %s\n%s", key, dateCreated, description, category, software);
+    }
+    
+    /**
+     * @return Whether every object in list one is equal to the corresponding object in List two
+     * Uses .equals on the objects so that should be implemented.
+     */
+    private boolean deepEquals(List one, List two)
+    {
+    	if (one.size() != two.size())
+    	{
+    		return false;
+    	}
+    	for (int i = 0;i < one.size(); i++)
+    	{
+    		if (!one.get(i).equals(two.get(i)))
+    		{
+    			return false;
+    		}
+    	}
+    	return true;
     }
 }

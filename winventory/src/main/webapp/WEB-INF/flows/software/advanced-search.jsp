@@ -148,7 +148,7 @@
 							</div>
 							<br>
 							
-							<!-- Date Purchased Range entry field -->
+							<!-- <!-- Date Purchased Range entry field
 							<div id="purchasedDate_container">
 								<div class="input-group">
 									<span class="input-group-addon" id="basic-addon1">Date Purchased Range</span> <input
@@ -163,7 +163,7 @@
 							</div>
 							<br>
 							
-							<!-- Expiration Date range entry field -->
+							Expiration Date range entry field
 							<div id="expirationDate_container">
 								<div class="input-group">
 									<span class="input-group-addon" id="basic-addon1">Expiration Date</span> <input
@@ -176,18 +176,18 @@
 									</span>
 								</div>
 							</div>
-							<br>
+							<br> -->
 							
 							
 							<!-- Date Purchased Range entry field -->
-						<!--  <div id="idContainer6" class="myClass">
+						 <div id="idContainer6" class="myClass">
 								<div class="input-group double-input">
 									<span class="input-group-addon" id="basic-addon1">Date
 										Purchased Range</span> 
-										<input name="id[]" type="date"
+										<input name="purchasedDateStart" type="date"
 										class="form-control" placeholder="YYYY-MM-DD"> 
 										<input
-										name="id[]" type="date" class="form-control"
+										name="purchasedDateEnd" type="date" class="form-control"
 										placeholder="YYYY-MM-DD">
 										<span class="input-group-btn" aria-hidden="true">
                                         <button class="btn btn-default"
@@ -197,15 +197,15 @@
 								</div>
 							</div>
 							<br>
-							-->
+							
 
 							<!-- Expiration Date Range entry field -->
-							<!--  
+							 
 							<div id="idContainer7" class="myClass">
 								<div class="input-group double-input">
 									<span class="input-group-addon" id="basic-addon1">Expiration
-										Date Range</span> <input name="id[]" type="date" class="form-control"
-										placeholder="YYYY-MM-DD"> <input name="id[]"
+										Date Range</span> <input name="expirationDateStart" type="date" class="form-control"
+										placeholder="YYYY-MM-DD"> <input name="expirationDateEnd"
 										type="date" class="form-control" placeholder="YYYY-MM-DD">
 										<span class="input-group-btn" aria-hidden="true">
                                         <button class="btn btn-default"
@@ -217,7 +217,7 @@
 							<br> <input type="hidden" name="action" value="doInsert">
 							<input type="hidden" name="table" value="property">
 						</div> 
-							-->
+							
 							
 							
 							<button type="submit" class="btn btn-default">Search</button>

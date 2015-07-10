@@ -32,10 +32,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
     var table = $('#hardwares').DataTable({
-    	"scrollY":"300px",
+    	"scrollY":"1000px",
     	"scrollCollapse":true,
     	"paging":false,
-    	"dom": '<"top"i>rt<"bottom"flp><"clear">'
+    	"dom": '<"top">rt<"bottom"flp><"clear">'
     });
     $('#hardwares tr').on( 'click', 'td:eq(7)', function () {
     	var input;
@@ -61,6 +61,17 @@ $(document).ready(function() {
         }
     } );
 } );
+function finalSubmission(){
+	var hiddenInput = document.getElementById("toSubmit");
+	hiddenInput.value=true;
+	document.getElementById("form").submit();
+}
+
+function clearBarSession(){
+	var clearInput = document.getElementById("clear");
+	clearInput.value=true;
+	document.getElementById("form").submit();
+}
 </script>
 </head>
 <body>
@@ -69,8 +80,9 @@ $(document).ready(function() {
 	    <form id="form" class="form-group center" method="post" action="${contextPath}/barcodes/barcode">
        		<label>Barcode Entry</label>
        		<input style="width:50%;margin-left:25%" id="barcode" name="barcode" class="form-control center"
-       			pattern=".{11,13}" placeholder="Scan Barcode Now" type="text" autocomplete="off" autofocus/>
+       			placeholder="Scan Barcode Now" type="text" autocomplete="off" autofocus/>
 	   		<input type="hidden" id="toSubmit" name="toSubmit" value=false/>
+	   		<input type="hidden" id="clear" name="clear" value=false/>
 	   	</form>
 	   	<c:if test="${not empty error}">
 			<div class="alert alert-danger text-center">${error}</div>
@@ -79,7 +91,7 @@ $(document).ready(function() {
 		<div class="row">
 			<div class="col-xs-6 form-group">
 				<label>Owner</label> <input id="person" name="person" class="form-control"
-					type="text" value="${user.firstName}" readonly/>
+					type="text" value="${user.username}" readonly/>
 			</div>
 			<div class="col-xs-6 form-group">
 				<label>Location</label> <input id="location" name="location" class="form-control"
@@ -109,45 +121,34 @@ $(document).ready(function() {
 									<td><c:out value="${i.cost}"/></td>
 									<td><c:out value="${i.condition}"/></td>
 									<td><c:out value="${i.getShortDescription()}"/></td>
-									<td><c:out value="${ub.read(i.userId).firstName} ${ub.read(i.userId).lastName}"/></td>
-									<td><c:out value="${lb.read(i.locationId).description}"/></td>
-									<td><span style="margin-left:15%" class="glyphicon glyphicon-remove"></span></td>
+									<c:choose>
+										<c:when test="${not empty ub.read(i.userId).username}">
+											<td><c:out value="${ub.read(i.userId).username}"/></td>
+										</c:when>
+										<c:otherwise>
+											<td>No Owner</td>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${not empty lb.read(i.locationId).description}">
+											<td><c:out value="${lb.read(i.locationId).description}"/></td>
+										</c:when>
+										<c:otherwise>
+											<td>No Registered Location</td>
+										</c:otherwise>
+									</c:choose>									<td><span style="margin-left:15%" class="glyphicon glyphicon-remove"></span></td>
 								</tr>
 							</c:forEach>
 						</tbody>
 					</table>
 				</div>
-			</c:if>
-	</div>
-	<div class="center">
-	 	<button class="btn btn-default" onclick="finalSubmission()">Confirm Changes</button>
+			<div class="center">
+			 	<button class="btn btn-info" onclick="finalSubmission()">Confirm Changes</button><br><br>
+			 	<button class="btn btn-success" onclick="clearBarSession()">New Search</button>
+			</div>
+		</c:if>
 	</div>
 </div>
-<script>
-function finalSubmission(){
-	var hiddenInput = document.getElementById("toSubmit");
-	hiddenInput.value=true;
-	document.getElementById("form").submit();
-}
 
-/* function toggleRemove(obj, pk){
-	var crntName = obj.parentNode.parentNode.className;
-	nextName = '';
-	var input;
-	if (crntName==''){
-		input = document.createElement("input");
-		input.setAttribute("type","hidden");
-		input.setAttribute("name","removeHw");
-		input.setAttribute("id",pk);
-		input.setAttribute("value",pk);
-		document.getElementById("form").appendChild(input);
-		nextName='alert alert-warning';
-	} else {
-		input = document.getElementById(pk);
-		input.setAttribute("value",null);
-	}
-	obj.parentNode.parentNode.className=nextName;
-} */
-</script>
 </body>
 </html>

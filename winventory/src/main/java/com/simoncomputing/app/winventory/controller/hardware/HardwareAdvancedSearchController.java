@@ -63,6 +63,16 @@ public class HardwareAdvancedSearchController extends BaseController {
                 .getParameterValues("condition")));
         ArrayList<String> serials = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("serial")));
+        String searchOption = request.getParameter("optionsSearch");
+        
+        boolean owned = false;
+        boolean stored = false;
+        if (searchOption.equals("stored")) {
+            stored = true;
+        }
+        if (searchOption.equals("owned")) {
+            owned = true;
+        }
 
         // remove blank fields
         cleanFields(types);
@@ -114,7 +124,7 @@ public class HardwareAdvancedSearchController extends BaseController {
 
             try {
                 results = new ArrayList<Hardware>(HardwareBo.getInstance().searchAdvanced(columns,
-                        searches));
+                        searches, stored, owned));
             } catch (BoException e) {
                 error = e.getLocalizedMessage();
                 log.error(e.getMessage());
