@@ -10,6 +10,27 @@ import com.simoncomputing.app.winventory.domain.Smtp;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
+ * HOW TO SEND AN EMAIL CODE EXAMPLE:
+ * 
+ * NOTE!!! You need to make sure that you have a valid SMTP 
+ * server. You can set the settings for this on the web site 
+ * and it will reflect in your DB.
+ * 
+ *   	EmailService emailer = new EmailService();
+ *   	try {
+ *   		emailer.setSmtp();
+ *			emailer.addTo(user.getEmail());
+ *			emailer.setFrom(this.getUserInfo(request).getEmail());
+ *			emailer.setSubject("You're Subject");
+ *			emailer.setMessage("You're Message");
+ *			emailer.sendEmail();
+ *		} catch (Exception e) {
+ *			logger.info("Email Failed to Send to: " + user.getEmail());
+ *		}
+ */
+
+
+/**
  * A Utility Class to ease the proccess of sending emails in the code. Uses the SMTP settings
  * to send an email with the passed in sender, recipient, subject, and message.
  * 

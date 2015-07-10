@@ -6,15 +6,17 @@ import com.simoncomputing.app.winventory.bo.SmtpBo;
 import com.simoncomputing.app.winventory.domain.Smtp;
 import com.simoncomputing.app.winventory.util.BoException;
 
+public class SetSmtpBean extends BaseBean{
 /**
  * A bean to to help track and interact with the forms for the SMTP setting. 
  * 
  * @author nicholas.phillpott
  *
  */
-public class SetSmtpBean {
 
-    private String    hostName;
+	private static final long serialVersionUID = 1L;
+	
+	private String    hostName;
     private Integer   port;
     private String    authUserName;
     private String    authPassword;

@@ -20,6 +20,11 @@ import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.util.BoException;
 
 @WebServlet("/hardware/advanced-search")
+/**
+ * 
+ * @author mack.hasz
+ *
+ */
 public class HardwareAdvancedSearchController extends BaseController {
     private static final long serialVersionUID = 1L;
 
@@ -33,8 +38,8 @@ public class HardwareAdvancedSearchController extends BaseController {
         try {
             conditions = new ArrayList<RefCondition>(RefConditionBo.getInstance().getAll());
         } catch (BoException e) {
-            request.setAttribute("error", e.getMessage());
-            log.error(e.getMessage());
+            String error = logError(log, e);
+            request.setAttribute("error", "Error code: " + error);
         }
 
         if (conditions != null) {
@@ -130,8 +135,8 @@ public class HardwareAdvancedSearchController extends BaseController {
                 results = new ArrayList<Hardware>(HardwareBo.getInstance().searchAdvanced(columns,
                         searches, stored, owned));
             } catch (BoException e) {
-                error = e.getLocalizedMessage();
-                log.error(e.getMessage());
+                error = "An error occured with error code: " + logError(log, e);
+                request.setAttribute("error", error);
             }
             
         }

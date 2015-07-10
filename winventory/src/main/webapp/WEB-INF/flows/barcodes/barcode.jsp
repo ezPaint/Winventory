@@ -78,9 +78,9 @@ function clearBarSession(){
 	<jsp:include page="/base.jsp"/>
     <div class="container-fluid">
 	    <form id="form" class="form-group center" method="post" action="${contextPath}/barcodes/barcode">
-       		<label>Barcode Entry</label>
+       		<label>Barcode Or Username Entry</label>
        		<input style="width:50%;margin-left:25%" id="barcode" name="barcode" class="form-control center"
-       			placeholder="Scan Barcode Now" type="text" autocomplete="off" autofocus/>
+       			placeholder="Scan Barcode Now" type="text" autocomplete="off" autofocus value="${barcode}"/>
 	   		<input type="hidden" id="toSubmit" name="toSubmit" value=false/>
 	   		<input type="hidden" id="clear" name="clear" value=false/>
 	   	</form>

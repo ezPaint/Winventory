@@ -14,16 +14,6 @@
 
 
 
-<!-- <!-- Include Required Prerequisites --> -->
-<!-- <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script> -->
-<!-- <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js"></script> -->
-<%-- <script type="text/javascript" src='${contextPath}/resources/js/moment.min.js'></script> --%>
-<!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3.3.2/css/bootstrap.css" /> -->
-
-<!-- <!-- Include Date Range Picker --> -->
-<!-- <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script> -->
-<!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" /> -->
-
 
 
 
@@ -38,8 +28,8 @@
 
 <script src="${contextPath}/resources/js/actions.js"
 	type="text/javascript"></script>
-<script src='${contextPath}/resources/js/jquery-1.11.3.min.js'
-	type="text/javascript"></script>
+<%-- <script src='${contextPath}/resources/js/jquery-1.11.3.min.js' --%>     <%--Too obsolete for date picker --%>
+<!-- 	type="text/javascript"></script> -->
 <script src='${contextPath}/resources/js/bootstrap.min.js'
 	type="text/javascript"></script>
 <script src='${contextPath}/resources/js/validator.js' type="text/javascript"></script>
@@ -57,8 +47,8 @@
 						<h2 class="center">Insert Software</h2>
 					</div>
 					<div class="padme">
-						<br>
-						
+						<br>                          
+
 						<form class="form-horizontal" action="insert"
 							data-toggle="validator" role="form" method="post" name="myform" 
 							onsubmit="return validateDates();">
@@ -127,7 +117,7 @@
 								</div>
 							</div>
 
-                            <!-- Date purchased entry field -->							
+                            <!-- Date purchased entry field -->
 							<div class="form-group">
 								<label for="purchasedDate" class="col-sm-2 control-label">Date
 									Purchased </label>
@@ -139,19 +129,6 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
-							
-							
-<!-- 							TESTING -->
-<!-- 							<input type="text" name="daterange" -->
-<!-- 								value="01/01/2015 - 01/31/2015" /> -->
-
-<!-- 							<script type="text/javascript"> -->
-// 								$(function() {
-// 									$('input[name="daterange"]')
-// 											.daterangepicker();
-// 								});
-<!-- 							</script> -->
-<!-- 							 -->
 							
 							<!-- Expiration date entry field -->
 							<div class="form-group">

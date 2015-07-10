@@ -48,4 +48,27 @@ public class TestEmailService {
 			fail("Email Failed");
 		}
 	}
+	
+	@Test
+	public void testSendEmailDiffUser() {
+		try {
+			emailer.setSmtp();
+		} catch (BoException e) {
+			fail("Bo Exception!!!");
+		}
+		Smtp sample = emailer.getSmtp();
+		System.out.println(sample.getHostName() + " " 
+			+ sample.getAuthUserName() + " " 
+			+ sample.getAuthPassword() + " "
+			+ sample.getPort() + " "
+			+ sample.getSsl());
+		
+		try {
+			emailer.setFrom("nicholas.phillpott@simoncomputing.com").addTo("nickwp54@vt.edu").setSubject("Test 5").setMessage("Test #");
+			emailer.sendEmail();
+		} catch (EmailException e) {
+			e.printStackTrace();
+			fail("Email Failed");
+		}
+	}
 }

@@ -11,6 +11,26 @@
 <meta charset="UTF-8">
 <title>Inventory</title>
 
+
+
+
+<!-- Include Required Prerequisites for Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="${contextPath}/resources/js/moment.min.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3.3.2/css/bootstrap.css" /> -->  <!-- Duplicate -->
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+<script type="text/javascript">
+    $(function() {
+        $('input[name="purchasedDate"]').daterangepicker({format: 'YYYY-MM-DD'});
+    });
+    $(function() {
+        $('input[name="expirationDate"]').daterangepicker({format: 'YYYY-MM-DD'});
+    });
+</script>
+
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
 <link type="text/css" rel="stylesheet"
@@ -20,8 +40,8 @@
 
 <script src='${contextPath}/resources/js/actions.js'
 	type="text/javascript"></script>
-<script src='${contextPath}/resources/js/jquery-1.11.3.min.js'
-	type="text/javascript"></script>
+<%-- <script src='${contextPath}/resources/js/jquery-1.11.3.min.js' --%> <%-- Obsolete (can't use with Date Range Picker) --%>
+<!-- 	type="text/javascript"></script> -->
 <script src='${contextPath}/resources/js/bootstrap.min.js'
 	type="text/javascript"></script>
 
@@ -147,76 +167,66 @@
 								</div>
 							</div>
 							<br>
-							
-							<!-- <!-- Date Purchased Range entry field
+                            
+							<!-- Date Purchased Range entry field -->
 							<div id="purchasedDate_container">
 								<div class="input-group">
-									<span class="input-group-addon" id="basic-addon1">Date Purchased Range</span> <input
-										name="purchasedDate" type="date" class="form-control"> <span
-										class="input-group-btn" aria-hidden="true">
-										<button class="btn btn-default" type="button"
-											onclick="addDiv('purchasedDate_container', 'purchasedDate', 'date'); return false;">
-											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-										</button> <br>
-									</span>
+									<span class="input-group-addon" id="basic-addon1">Date Purchased</span> 
+									<input
+										name="purchasedDate" type="text" id="purchasedDate" class="form-control"
+										placeholder="YYYY-MM-DD  -  YYY-MM-DD">
 								</div>
 							</div>
 							<br>
 							
-							Expiration Date range entry field
-							<div id="expirationDate_container">
-								<div class="input-group">
-									<span class="input-group-addon" id="basic-addon1">Expiration Date</span> <input
-										name="expirationDate" type="date" class="form-control"> <span
-										class="input-group-btn" aria-hidden="true">
-										<button class="btn btn-default" type="button"
-											onclick="addDiv('expirationDate_container', 'expirationDate', 'date'); return false;">
-											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-										</button> <br>
-									</span>
-								</div>
-							</div>
-							<br> -->
+							<!-- Expiration Date Range entry field -->
+                            <div id="expirationDate_container">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">Expiration Date</span> 
+                                    <input
+                                        name="expirationDate" type="text" id="expirationDate" class="form-control"
+                                        placeholder="YYYY-MM-DD  -  YYY-MM-DD">
+                                </div>
+                            </div>
+                            <br>
 							
-							
-							<!-- Date Purchased Range entry field -->
-						 <div id="idContainer6" class="myClass">
-								<div class="input-group double-input">
-									<span class="input-group-addon" id="basic-addon1">Date
-										Purchased Range</span> 
-										<input name="purchasedDateStart" type="date"
-										class="form-control" placeholder="YYYY-MM-DD"> 
-										<input
-										name="purchasedDateEnd" type="date" class="form-control"
-										placeholder="YYYY-MM-DD">
-										<span class="input-group-btn" aria-hidden="true">
-                                        <button class="btn btn-default"
-                                            onclick="showHelp()" type="button">
-                                            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                                        </button> </span>
-								</div>
-							</div>
-							<br>
+<!-- 							Date Purchased Range entry field -->
+<!-- 						 <div id="idContainer6" class="myClass"> -->
+<!-- 								<div class="input-group double-input"> -->
+<!-- 									<span class="input-group-addon" id="basic-addon1">Date -->
+<!-- 										Purchased Range</span>  -->
+<!-- 										<input name="purchasedDateStart" type="date" -->
+<!-- 										class="form-control" placeholder="YYYY-MM-DD">  -->
+<!-- 										<input -->
+<!-- 										name="purchasedDateEnd" type="date" class="form-control" -->
+<!-- 										placeholder="YYYY-MM-DD"> -->
+<!-- 										<span class="input-group-btn" aria-hidden="true"> -->
+<!--                                         <button class="btn btn-default" -->
+<!--                                             onclick="showHelp()" type="button"> -->
+<!--                                             <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> -->
+<!--                                         </button> </span> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
+<!-- 							<br> -->
 							
 
-							<!-- Expiration Date Range entry field -->
+<!-- 							Expiration Date Range entry field -->
 							 
-							<div id="idContainer7" class="myClass">
-								<div class="input-group double-input">
-									<span class="input-group-addon" id="basic-addon1">Expiration
-										Date Range</span> <input name="expirationDateStart" type="date" class="form-control"
-										placeholder="YYYY-MM-DD"> <input name="expirationDateEnd"
-										type="date" class="form-control" placeholder="YYYY-MM-DD">
-										<span class="input-group-btn" aria-hidden="true">
-                                        <button class="btn btn-default"
-                                            onclick="showHelp()" type="button">
-                                            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-                                        </button> </span>
-								</div>
-							</div>
+<!-- 							<div id="idContainer7" class="myClass"> -->
+<!-- 								<div class="input-group double-input"> -->
+<!-- 									<span class="input-group-addon" id="basic-addon1">Expiration -->
+<!-- 										Date Range</span> <input name="expirationDateStart" type="date" class="form-control" -->
+<!-- 										placeholder="YYYY-MM-DD"> <input name="expirationDateEnd" -->
+<!-- 										type="date" class="form-control" placeholder="YYYY-MM-DD"> -->
+<!-- 										<span class="input-group-btn" aria-hidden="true"> -->
+<!--                                         <button class="btn btn-default" -->
+<!--                                             onclick="showHelp()" type="button"> -->
+<!--                                             <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> -->
+<!--                                         </button> </span> -->
+<!-- 								</div> -->
+<!-- 							</div> -->
 							<br> <input type="hidden" name="action" value="doInsert">
 							<input type="hidden" name="table" value="property">
-						</div> 
 							
 							
 							

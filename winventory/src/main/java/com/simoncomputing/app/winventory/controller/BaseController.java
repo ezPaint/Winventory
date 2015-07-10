@@ -1,7 +1,10 @@
 package com.simoncomputing.app.winventory.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -121,5 +124,17 @@ public class BaseController extends HttpServlet {
             return true;
         }
         return false;
+    }
+    
+    public String logError(Logger errorLog , Exception e) {
+        String errorCode = "";
+        
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HH");
+        Calendar cal = Calendar.getInstance();
+        errorCode += dateFormat.format(cal.getTime());
+
+        errorLog.error(errorCode, e);
+        
+        return errorCode;
     }
 }

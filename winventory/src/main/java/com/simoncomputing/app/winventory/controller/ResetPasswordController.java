@@ -108,20 +108,8 @@ public class ResetPasswordController extends BaseController {
 			// with the token embedded in the url
 			try {
 				accessTokenBo.create(accessToken);
-				EmailService sendResetEmail = new EmailService();
-				try {
-					sendResetEmail.setSmtp();
-					//TODO: change this to actual email
-					sendResetEmail.setFrom("fivewetmice@gmail.com");
-					//currently send here for testing purposes
-					sendResetEmail.addTo(resetUser.getEmail());
-					sendResetEmail.setSubject("Winventory Password Reset");
-					sendResetEmail.setMessage(message);
-					sendResetEmail.sendEmail();
-				} catch (EmailException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				this.sendPasswordResetEmail(resetUser.getEmail(), message);
+				
 			} catch (BoException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -131,7 +119,26 @@ public class ResetPasswordController extends BaseController {
 			        response);
 			   
 		}
-      
+	
     }
+    private void sendPasswordResetEmail(String toEmailAddress, String message) {
+    	EmailService sendResetEmail = new EmailService();
+		try {
+			sendResetEmail.setSmtp();
+			/* setFrom does not actually matter since it uses the email 
+			 * stored in the smtp table
+			 */
+			sendResetEmail.setFrom("-@gmail.com");
+			//currently send here for testing purposes
+			sendResetEmail.addTo(toEmailAddress);
+			sendResetEmail.setSubject("Winventory Password Reset");
+			sendResetEmail.setMessage(message);
+			sendResetEmail.sendEmail();
+		} catch (EmailException | BoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+  
 
 }

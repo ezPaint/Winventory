@@ -1,12 +1,13 @@
 package com.simoncomputing.app.winventory.controller.user;
 
 import java.io.IOException;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,10 +18,13 @@ import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.authentication.EmailService;
+import com.simoncomputing.app.winventory.authentication.PasswordHasher;
+import com.simoncomputing.app.winventory.bo.AccessTokenBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
 import com.simoncomputing.app.winventory.bo.RoleBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
+import com.simoncomputing.app.winventory.domain.AccessToken;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.domain.Role;
@@ -121,6 +125,11 @@ public class UserInsertController extends BaseController {
             logger.error("BoException when inserting user in UserInsertController");
         }
         
+        // Send email to non-Google users to change their password
+        if (request.getParameter("isGoogle") == null) {
+            this.sendInviteRegular(request, user);
+        }
+        
         // redirect to results 
         response.sendRedirect(request.getContextPath() + "/users/results");
     }
@@ -141,5 +150,75 @@ public class UserInsertController extends BaseController {
 		}
     	
     }
+    
+    private void sendInviteRegular(HttpServletRequest request, User user) {
+    	UUID uuid = UUID.randomUUID();
+    	String token = uuid.toString().replaceAll("-", "");
+    	
+    	//should be changed to https
+        String urlPath = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        String message = "You have been added to the Winventory! \n"
+        		+ "Your Username is: " + user.getUsername() + "\n"
+        		+ "Please reset your password at: "
+        		+ urlPath + "/changepassword" + "?token=" + token + "&user=" + user.getKey().intValue();
+          
+        //insert into database hashed version of token
+		AccessTokenBo accessTokenBo = AccessTokenBo.getInstance();
+		AccessToken accessToken = new AccessToken();
+		
+		//TODO: change access token domain object to match type
+		accessToken.setUserKey(user.getKey().intValue());
+		accessToken.setToken(PasswordHasher.encodePassword(token));
+		
+		//set in how many minutes the token will expire
+		int minutesToExpire = 30;
+		Date date = new Date(System.currentTimeMillis()+minutesToExpire*60*1000);
+		accessToken.setExpiration(date);
+		
+		try {
+			//check if an access token for the user currently exists
+			AccessToken readToken = accessTokenBo.read(user.getKey().intValue());
+			if (readToken != null) {
+				// User already has a token in the AccessToken table
+				// delete the old entry in preparation for the new entry
+				accessTokenBo.delete(readToken.getUserKey());
+			}
+			
+		} catch (BoException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		// Insert the new access token and email the user a link
+		// with the token embedded in the url
+		try {
+			accessTokenBo.create(accessToken);
+			this.sendPasswordResetEmail(user.getEmail(), message);
+			
+		} catch (BoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    }
+    
+    private void sendPasswordResetEmail(String toEmailAddress, String message) {
+		EmailService sendResetEmail = new EmailService();
+		try {
+			sendResetEmail.setSmtp();
+			/* setFrom does not actually matter since it uses the email 
+			 * stored in the smtp table
+			 */
+			sendResetEmail.setFrom("-@gmail.com");
+			//currently send here for testing purposes
+			sendResetEmail.addTo(toEmailAddress);
+			sendResetEmail.setSubject("Your Winventory account has been created");
+			sendResetEmail.setMessage(message);
+			sendResetEmail.sendEmail();
+		} catch (EmailException | BoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

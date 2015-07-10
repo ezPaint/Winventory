@@ -77,9 +77,9 @@ public class Event {
      * TODO make all items with barcodes implement barcodable
      * @return A list of all items with barcodes associated with this event.
      */
-    public List<Barcoded> allAssociations()
+    public List<Barcoder> allAssociations()
     {
-    	ArrayList<Barcoded> items = new ArrayList<Barcoded>();
+    	ArrayList<Barcoder> items = new ArrayList<Barcoder>();
     	throw new UnsupportedOperationException("EventBo.allAssociations() is net let implemented");
     }
     

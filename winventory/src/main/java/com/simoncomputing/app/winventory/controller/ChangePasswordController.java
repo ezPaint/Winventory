@@ -92,6 +92,16 @@ public class ChangePasswordController extends BaseController {
     	String newPassword = request.getParameter("newPassword");
     	Integer userId = (int) request.getSession().getAttribute("resetPasswordUser");
 		
+    	/* This should not be true in normal use cases since 
+    	 * the change password form does not allow the user to
+    	 * submit unless if the input is 8 characters or longer
+    	 */
+    	if (newPassword.length() < 8) {
+    		request.getSession().setAttribute("changePasswordError", "Password was invalid");
+			request.getRequestDispatcher("/WEB-INF/flows/authentication/resetPassword.jsp").forward(request,
+			        response);
+    	}
+    	
 		UserBo userBo = UserBo.getInstance();
 		AccessTokenBo accessTokenBo = AccessTokenBo.getInstance();
 		try {

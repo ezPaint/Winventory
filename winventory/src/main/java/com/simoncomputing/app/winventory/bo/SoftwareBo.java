@@ -373,26 +373,52 @@ public class SoftwareBo {
     }
 
     /**
+     * Searches a given list of Software objects and returns only those objects
+     * that fall within a specified range of dates
      * 
      * @param results
+     *            the list of Software objects to be searched and refined
      * @param dates
-     * @return
+     *            the range of dates returned objects' purchased and/or
+     *            expiration date should fall within
+     * @return the narrowed down list of Software objects
      */
-    public List<Software> searchRange(List<Software> results, ArrayList<String> dates) {
+    public List<Software> searchDateRange(List<Software> results, ArrayList<String> dates) {
+        // will contain the narrowed down list of Software objects
         List<Software> list = new ArrayList<Software>();
+
         List<Software> purchased = new ArrayList<Software>();
         List<Software> expired = new ArrayList<Software>();
 
-        if (dates == null) {
-            // TODO throw application error
-            return null;
-        }
-
         try {
-            purchased = getListByPurchaseRange(Date.valueOf(dates.get(0)),
-                    Date.valueOf(dates.get(1)));
-            expired = getListByExpirationRange(Date.valueOf(dates.get(2)), Date.valueOf(dates.get(3)));
 
+            if (dates.get(2).equals("")&& dates.get(3).equals("")) {
+                // if only purchased dates are entered, expired should contain
+                // all values in purchased
+                purchased = getListByPurchaseRange(Date.valueOf(dates.get(0)),
+                        Date.valueOf(dates.get(1)));
+                expired = purchased;
+                
+            } else if (dates.get(0).equals("") && dates.get(1).equals("")) {
+                // if only expired dates are entered, purchased should contain
+                // all values in expired
+                expired = getListByExpirationRange(Date.valueOf(dates.get(2)),
+                        Date.valueOf(dates.get(3)));
+                purchased = expired;
+                
+            } else {
+                // otherwise, purchased should contain only dates within
+                // purchased range and expired should only contain dates within
+                // the expired range
+                purchased = getListByPurchaseRange(Date.valueOf(dates.get(0)),
+                        Date.valueOf(dates.get(1)));
+                expired = getListByExpirationRange(Date.valueOf(dates.get(2)),
+                        Date.valueOf(dates.get(3)));
+            }
+
+            // iterate over the results list and check if a piece of Software is
+            // also in the purchased and expired lists. If it is, add it to the
+            // narrowed down list, otherwise ignore it.
             for (Software s : results) {
                 for (Software p : purchased) {
                     for (Software e : expired) {

@@ -3,6 +3,7 @@ package com.simoncomputing.app.winventory.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -25,64 +26,96 @@ import com.simoncomputing.app.winventory.util.BoException;
 public class BarcodeController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     static Logger logger = Logger.getLogger(BarcodeController.class);
-	private static UserBo ub = UserBo.getInstance();
-	private static HardwareBo hb = HardwareBo.getInstance();
-	private static LocationBo lb = LocationBo.getInstance();
-
+	private static UserBo ub = UserBo.getInstance();			// User business object
+	private static HardwareBo hb = HardwareBo.getInstance();	// Hardware business object
+	private static LocationBo lb = LocationBo.getInstance();	// Location business object
+	
+	/*
+	 * simply load the jsp on a GET
+	 * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
+	
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+		request.getSession().removeAttribute("user");
+		request.getSession().removeAttribute("hardware");
+		request.getSession().removeAttribute("location");
     	request.getRequestDispatcher("/WEB-INF/flows/barcodes/barcode.jsp").forward(request,
                 response);
     }
 
+    /*
+     * handle barcode/username input
+     * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+     */
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	logger.trace("parameter map is " + request.getParameterMap());
-    	request.getSession().setAttribute("ub", ub);
-    	request.getSession().setAttribute("lb", lb);
-		String barcode = request.getParameter("barcode");
+    	logger.debug("parameter map is " + request.getParameterMap()); // log parameters passed in
+    	Enumeration<String> attrName = request.getAttributeNames();
+    	while(attrName.hasMoreElements()){
+    		logger.debug(attrName.nextElement());
+    	}
+    	request.getSession().setAttribute("ub", ub);		// give userbo to session
+    	request.getSession().setAttribute("lb", lb);		// give locationbo to session
+    	request.getSession().setAttribute("hardware", request.getSession().getAttribute("hardware"));
+    	request.getSession().setAttribute("user", request.getSession().getAttribute("user"));
+    	request.getSession().setAttribute("location", request.getSession().getAttribute("location"));
+		String barcode = request.getParameter("barcode");	// get the barcode given
+		// check hidden inputs for updating database or clearing previous data
 		boolean update = Boolean.parseBoolean(request.getParameter("toSubmit"));
 		boolean clear = Boolean.parseBoolean(request.getParameter("clear"));
-		boolean valid = isValidInput(barcode);
-		if (update) {
-			String[] pkList = request.getParameterValues("removeHw");
+		boolean valid = isValidInput(barcode);	// check if valid input
+		if (update) {	// if you should update the database
+			String[] pkList = request.getParameterValues("removeHw");	// list of pks to dissociate
 			if (pkList==null){
-				pkList=new String[0];
+				pkList=new String[0];	// if no list given, make it an empty list
+				// avoids NullPointerExceptions
 			}
 			@SuppressWarnings("unchecked")
 			ArrayList<Hardware> hwList = (ArrayList<Hardware>) request.getSession().getAttribute("hardware");
-			String modifyCode;
+				// the list of hardware currently being worked with
+			String modifyCode;	// where the barcode for what must be modified will be stored
 			User owner = (User)request.getSession().getAttribute("user");
+				// the user stored on the Session, can be null
 			Location loc = (Location)request.getSession().getAttribute("location");
-			if(owner==null){
-				modifyCode="004"+padZeroes(loc.getKey().toString());
-			} else {
-				modifyCode="001"+padZeroes(owner.getKey().toString());
+				// the location stored on the Session, can be null
+			if(owner==null){	// if working with Location
+				modifyCode="004"+padZeroes(loc.getKey().toString());	// make barcode for Location
+			} else {			// if working with User
+				modifyCode="001"+padZeroes(owner.getKey().toString());	// make barcode for User
 			}
 			modifyCode+="3";	//TODO make valid checksum; random number right now
 			logger.trace("pkList is " + Arrays.asList(pkList));
-    		updateDatabase(pkList, hwList, modifyCode);
+    		updateDatabase(pkList, hwList, modifyCode);	// update the database
     		logger.trace("updating database");
-		} else if (clear){
-			request.getSession().removeAttribute("user");
-			request.getSession().removeAttribute("hardware");
-			request.getSession().removeAttribute("location");
-		} else if (!valid){
+		} else if (clear){	// if want to clear previous input (start a new search)
+			// clear User, Location, and Hardware list from the Session
+			request.removeAttribute("user");
+			request.removeAttribute("hardware");
+			request.removeAttribute("location");
+		} else if (!valid){	// if input is not valid
+			// determine and set correct error message; store barcode
 			request.setAttribute("error", barcodeErrorMessage(barcode));
+			request.getSession().setAttribute("barcode", barcode);
 		} else if(barcode != null){
-			long pk = -1;
-			String first = "-1";
+			long pk = -1;	// store invalid pk before initialized
+			String tableIdentifier = "-1";	// store invalid  table identifier before initialized
 			try{
-				first = parseTableIdentifier(barcode);
-				pk = parsePk(barcode);
-			} catch (NumberFormatException nfe) {
+				tableIdentifier = parseTableIdentifier(barcode);	// get actual table identifier
+				pk = parsePk(barcode);	// get actual pk
+			}
+			/*
+			 * catches here as formality.  Valid input tests for these errors
+			 */
+			catch (NumberFormatException nfe) {
 				logger.error("Could not get a pk from " + barcode);
 			} catch (IllegalArgumentException ie) {
 				logger.error("Could not get a table identifier from " + barcode);
 			}
-			List<Hardware> hardware;
+			List<Hardware> hardware;	// the list of hardware to pass back to view
 			try{
-    			switch(first){
+    			switch(tableIdentifier){	// switch based on table identifier
     			case "1":
     				logger.trace("preloading based on user " + pk);
     				request.getSession().setAttribute("user", ub.read(pk));
@@ -122,15 +155,13 @@ public class BarcodeController extends HttpServlet {
     				break;
     			}
 			} catch (BoException be) {
-				logger.error("Could not get an object from table id:" + first + " with pk " + pk);
+				logger.error("Could not get an object from table id:" + tableIdentifier + " with pk " + pk);
 			}
 		}
 		
 		if (request.getAttribute("error")==null && !clear && request.getSession().getAttribute("user")==null && request.getSession().getAttribute("location")==null){
     		request.getSession().setAttribute("hardware",null);
     		request.setAttribute("error","You must enter an Owner or Location first");
-    	} else {
-    		logger.trace("altering error");
     	}
 		
     	request.getRequestDispatcher("/WEB-INF/flows/barcodes/barcode.jsp").forward(request,
@@ -189,9 +220,10 @@ public class BarcodeController extends HttpServlet {
     	if (isUsername(str))
     		return null;
     	if (!(str.length()==12 || str.length()==13)){
-    		return "Barcode is insufficent length; must be 12 or 13 characters.";
+    		return "Barcode is wrong length; must be 12 or 13 characters.";
     	}
     	String tabId = parseTableIdentifier(str);
+    	logger.trace("tabId parsed when checking errors is" + tabId);
     	Long pk = parsePk(str);
     	try{
 	    	switch(tabId){
