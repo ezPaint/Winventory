@@ -28,6 +28,7 @@ public class HardwareAdvancedSearchController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // gets conditions from db for option form
         ArrayList<RefCondition> conditions = null;
         try {
             conditions = new ArrayList<RefCondition>(RefConditionBo.getInstance().getAll());
@@ -40,6 +41,7 @@ public class HardwareAdvancedSearchController extends BaseController {
             request.setAttribute("conditions", conditions);
         }
 
+        // forward jsp
         request.getRequestDispatcher("/WEB-INF/flows/hardware/advanced-search.jsp").forward(
                 request, response);
 
@@ -65,6 +67,7 @@ public class HardwareAdvancedSearchController extends BaseController {
                 .getParameterValues("serial")));
         String searchOption = request.getParameter("optionsSearch");
         
+        // check if user wants to search stored, owned, or all
         boolean owned = false;
         boolean stored = false;
         if (searchOption.equals("stored")) {
@@ -85,6 +88,7 @@ public class HardwareAdvancedSearchController extends BaseController {
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<ArrayList<String>> searches = new ArrayList<ArrayList<String>>();
 
+        // if fields aren't empty, add to searches array
         if (types != null && types.size() > 0) {
             columns.add("type");
             searches.add(types);
@@ -139,15 +143,18 @@ public class HardwareAdvancedSearchController extends BaseController {
         request.setAttribute("page_header", "Search Results");
         request.setAttribute("error", error);
 
+        // if error stay on search
         if (error != null) {
             request.getRequestDispatcher("/WEB-INF/flows/hardware/advanced-search.jsp").forward(request,
                     response);
+        // no error so forward to results
         } else {
             request.getRequestDispatcher("/WEB-INF/flows/hardware/results.jsp").forward(request,
                     response);
         }
     }
 
+    // removes fields that are empty
     private void cleanFields(ArrayList<String> fields) {
         for (ListIterator<String> iterator = fields.listIterator(); iterator.hasNext();) {
             String field = iterator.next();

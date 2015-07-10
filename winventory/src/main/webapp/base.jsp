@@ -52,7 +52,7 @@
 
 				<!-- Make a button that is the current User's username -->
 				<c:if test="${not empty userInfo.username}">
-					<li><a href="#" target="_top" class="btn btn-link">${userInfo.username}</a></li>
+					<li><a href="${contextPath}/users/view?key=${userInfo.key}" target="_top" class="btn btn-link">${userInfo.username}</a></li>
 				</c:if>
 				<!--Only display admin button if user is admin -->
 				<c:if test="${userInfo.roleId == 1}">

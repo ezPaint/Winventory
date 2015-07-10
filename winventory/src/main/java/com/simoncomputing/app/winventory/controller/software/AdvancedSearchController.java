@@ -154,8 +154,7 @@ public class AdvancedSearchController extends HttpServlet {
         } else {
 
             try {
-//
-                
+
                 if (columns.size() == 0 || searches.size() == 0) {
                     results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
                 } else {
@@ -163,7 +162,7 @@ public class AdvancedSearchController extends HttpServlet {
                             columns, searches));
                 }
 
-                if (!(startPDate == null && endPDate == null && startExDate == null && endExDate == null)) {
+                if (dates.size() > 0) {
                     resultsInRange = new ArrayList<Software>(SoftwareBo.getInstance().searchRange(
                             results, dates));
                 }

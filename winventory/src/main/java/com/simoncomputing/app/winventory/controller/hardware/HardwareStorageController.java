@@ -26,6 +26,7 @@ public class HardwareStorageController extends BaseController {
 
         ArrayList<Hardware> results = null;
         
+        // gets stored hardware from db and forwards
         try {
             results = new ArrayList<Hardware>(HardwareBo.getInstance().getStorage());
         } catch (BoException e) {

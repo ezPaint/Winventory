@@ -16,6 +16,7 @@ public class UserInfoBean extends BaseBean{
 	
 	private static final long serialVersionUID = 1L;
 	
+	private Long key;
 	private String username;
 	private String firstName;
 	private String lastName;
@@ -29,6 +30,14 @@ public class UserInfoBean extends BaseBean{
 	
 	public UserInfoBean() {}
 	
+	public Long getKey() {
+		return key;
+	}
+
+	public void setKey(Long key) {
+		this.key = key;
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -124,6 +133,7 @@ public class UserInfoBean extends BaseBean{
 	 * @param user
 	 */
 	public void bindUser(User user) {
+		this.setKey(user.getKey());
 		this.setUsername(user.getUsername());
 		this.setFirstName(user.getFirstName());
 		this.setLastName(user.getLastName());

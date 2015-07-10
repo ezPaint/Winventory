@@ -29,6 +29,7 @@ public class HardwareViewController extends BaseController {
         
         String key = request.getParameter("key");
 
+        // gets hardware for key
         Hardware hardware = null;
         if (key != null) {
             try {
@@ -41,11 +42,13 @@ public class HardwareViewController extends BaseController {
             }
         }
 
+        // db didn't work out
         if (hardware == null) {
             request.setAttribute("error",
                     "The key is not valid or there is no hardware with that key");
             log.error("The key is not valid or there is no hardware with that key");
         } else {
+            // get owner
             if (hardware.getUserId() != null) {
                 try {
                     User owner = UserBo.getInstance().read((long) hardware.getUserId());
@@ -54,6 +57,7 @@ public class HardwareViewController extends BaseController {
                     request.setAttribute("error", e.getMessage());
                     log.error(e.getMessage());
                 }
+            // get location
             } else if (hardware.getLocationId() != null) {
                 try {
                     Location location = LocationBo.getInstance().read((long) hardware.getLocationId());
@@ -65,11 +69,14 @@ public class HardwareViewController extends BaseController {
             }
         }
 
+        // forward to jsp
         request.setAttribute("hardware", hardware);
         request.getRequestDispatcher("/WEB-INF/flows/hardware/view.jsp").forward(request, response);
 
     }
 
+    // handles delete functionality, everytime a post is sent to this page and the 
+    // user has permission the hardware is deleted
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

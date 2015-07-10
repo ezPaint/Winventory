@@ -26,6 +26,7 @@ public class HardwareOwnedController extends BaseController {
 
         ArrayList<Hardware> results = null;
         
+        // gets inUse from db and forwards
         try {
             results = new ArrayList<Hardware>(HardwareBo.getInstance().getInUse());
         } catch (BoException e) {

@@ -26,6 +26,7 @@ public class HardwareResultsController extends BaseController {
 
         ArrayList<Hardware> results = null;
 
+        // gets all harwdware and forwards 
         try {
             results = new ArrayList<Hardware>(HardwareBo.getInstance().getAll());
         } catch (BoException e) {
@@ -47,6 +48,8 @@ public class HardwareResultsController extends BaseController {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // not currently used, for future use any page could forward an arraylist
+        // of hardware to this page and it will be displayed in table format
         @SuppressWarnings("unchecked")
         ArrayList<Hardware> results = (ArrayList<Hardware>) request.getAttribute("results");
 
