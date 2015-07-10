@@ -38,8 +38,6 @@ public interface SoftwareDao {
 
     public List<Software> getAll() throws DaoException;
 
-    // Hasn't been tested -- theoretical advanced search method
-    // needs to be added to the .xml
     public List<Software> searchAdvanced(@Param("fields") List<String> fields,
             @Param("inputs") ArrayList<ArrayList<String>> inputs) throws DaoException;
 

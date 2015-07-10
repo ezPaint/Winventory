@@ -74,13 +74,10 @@ public class Software {
 
     public boolean equals(Object o) {
         if (o == null) {
-            System.out.println("failed because null");
             return false;
         }
 
         if (!o.getClass().equals(this.getClass())) {
-            System.out.println("failed because class");
-
             return false;
         } else {
             Software other = (Software) o;

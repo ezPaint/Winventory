@@ -25,7 +25,11 @@ import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 
 /**
- * Servlet implementation class UrlCallBackController
+ * Servlet implementation class UrlCallBackController.
+ * 
+ * Handles processing the Google Callback Request. 
+ * 
+ * @author nicholas.phillpott
  */
 @WebServlet(urlPatterns = "/login/googleCallback")
 public class UrlCallBackController extends BaseController {
@@ -39,10 +43,12 @@ public class UrlCallBackController extends BaseController {
 	 */
 	public UrlCallBackController() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
+	 * Reads the Token Google gives for the User and then makes a request for 
+	 * user information using the token. 
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */

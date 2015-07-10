@@ -116,49 +116,49 @@ public class EventToLocationBo {
         return result;
     }
 
-    public List<EventToLocation> getListByEventId( Long key ) throws BoException {
-        SqlSession session = null;
-        List<EventToLocation> list;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToLocationDao mapper = session.getMapper( EventToLocationDao.class );
-            list = mapper.getListByEventId( key );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return list;
-    }
-
-    public List<EventToLocation> getListByLocationId( Long key ) throws BoException {
-        SqlSession session = null;
-        List<EventToLocation> list;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToLocationDao mapper = session.getMapper( EventToLocationDao.class );
-            list = mapper.getListByLocationId( key );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return list;
-    }
+//    public List<EventToLocation> getListByEventId( Long key ) throws BoException {
+//        SqlSession session = null;
+//        List<EventToLocation> list;
+//
+//        try {
+//            session = SessionFactory.getSession();
+//            EventToLocationDao mapper = session.getMapper( EventToLocationDao.class );
+//            list = mapper.getListByEventId( key );
+//            session.commit();
+//
+//        } catch ( Exception e ) {
+//            session.rollback();
+//            throw new BoException( e );
+//
+//        } finally { 
+//            if ( session != null )
+//                session.close();
+//        }
+//
+//        return list;
+//    }
+//
+//    public List<EventToLocation> getListByLocationId( Long key ) throws BoException {
+//        SqlSession session = null;
+//        List<EventToLocation> list;
+//
+//        try {
+//            session = SessionFactory.getSession();
+//            EventToLocationDao mapper = session.getMapper( EventToLocationDao.class );
+//            list = mapper.getListByLocationId( key );
+//            session.commit();
+//
+//        } catch ( Exception e ) {
+//            session.rollback();
+//            throw new BoException( e );
+//
+//        } finally { 
+//            if ( session != null )
+//                session.close();
+//        }
+//
+//        return list;
+//    }
 
     // PROTECTED CODE -->
 

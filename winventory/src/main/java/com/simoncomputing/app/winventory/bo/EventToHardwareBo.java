@@ -1,4 +1,4 @@
-package com.simoncomputing.app.winventory.bo;
+/*package com.simoncomputing.app.winventory.bo;
 
 import java.util.List;
 import java.util.Date;
@@ -162,4 +162,4 @@ public class EventToHardwareBo {
 
     // PROTECTED CODE -->
 
-}
+}*/

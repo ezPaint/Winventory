@@ -1,4 +1,4 @@
-package com.simoncomputing.app.winventory.bo;
+/*package com.simoncomputing.app.winventory.bo;
 
 import java.util.List;
 
@@ -49,4 +49,4 @@ public class TestEventToSoftwareBo {
     }
     // PROTECTED CODE -->
 
-}
+}*/

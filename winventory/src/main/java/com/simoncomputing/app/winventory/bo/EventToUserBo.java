@@ -116,49 +116,49 @@ public class EventToUserBo {
         return result;
     }
 
-    public List<EventToUser> getListByEventId( Long key ) throws BoException {
-        SqlSession session = null;
-        List<EventToUser> list;
+//    public List<EventToUser> getListByEventId( Long key ) throws BoException {
+//        SqlSession session = null;
+//        List<EventToUser> list;
+//
+//        try {
+//            session = SessionFactory.getSession();
+//            EventToUserDao mapper = session.getMapper( EventToUserDao.class );
+//            list = mapper.getListByEventId( key );
+//            session.commit();
+//
+//        } catch ( Exception e ) {
+//            session.rollback();
+//            throw new BoException( e );
+//
+//        } finally { 
+//            if ( session != null )
+//                session.close();
+//        }
+//
+//        return list;
+//    }
 
-        try {
-            session = SessionFactory.getSession();
-            EventToUserDao mapper = session.getMapper( EventToUserDao.class );
-            list = mapper.getListByEventId( key );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return list;
-    }
-
-    public List<EventToUser> getListByUserId( Long key ) throws BoException {
-        SqlSession session = null;
-        List<EventToUser> list;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToUserDao mapper = session.getMapper( EventToUserDao.class );
-            list = mapper.getListByUserId( key );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return list;
-    }
+//    public List<EventToUser> getListByUserId( Long key ) throws BoException {
+//        SqlSession session = null;
+//        List<EventToUser> list;
+//
+//        try {
+//            session = SessionFactory.getSession();
+//            EventToUserDao mapper = session.getMapper( EventToUserDao.class );
+//            list = mapper.getListByUserId( key );
+//            session.commit();
+//
+//        } catch ( Exception e ) {
+//            session.rollback();
+//            throw new BoException( e );
+//
+//        } finally { 
+//            if ( session != null )
+//                session.close();
+//        }
+//
+//        return list;
+//    }
 
     // PROTECTED CODE -->
 

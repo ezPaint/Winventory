@@ -116,49 +116,49 @@ public class EventToSoftwareBo {
         return result;
     }
 
-    public List<EventToSoftware> getListByEventId( Long key ) throws BoException {
-        SqlSession session = null;
-        List<EventToSoftware> list;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
-            list = mapper.getListByEventId( key );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return list;
-    }
-
-    public List<EventToSoftware> getListBySoftwareId( Long key ) throws BoException {
-        SqlSession session = null;
-        List<EventToSoftware> list;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
-            list = mapper.getListBySoftwareId( key );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return list;
-    }
+//    public List<EventToSoftware> getListByEventId( Long key ) throws BoException {
+//        SqlSession session = null;
+//        List<EventToSoftware> list;
+//
+//        try {
+//            session = SessionFactory.getSession();
+//            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
+//            list = mapper.getListByEventId( key );
+//            session.commit();
+//
+//        } catch ( Exception e ) {
+//            session.rollback();
+//            throw new BoException( e );
+//
+//        } finally { 
+//            if ( session != null )
+//                session.close();
+//        }
+//
+//        return list;
+//    }
+//
+//    public List<EventToSoftware> getListBySoftwareId( Long key ) throws BoException {
+//        SqlSession session = null;
+//        List<EventToSoftware> list;
+//
+//        try {
+//            session = SessionFactory.getSession();
+//            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
+//            list = mapper.getListBySoftwareId( key );
+//            session.commit();
+//
+//        } catch ( Exception e ) {
+//            session.rollback();
+//            throw new BoException( e );
+//
+//        } finally { 
+//            if ( session != null )
+//                session.close();
+//        }
+//
+//        return list;
+//    }
 
     // PROTECTED CODE -->
 

@@ -19,6 +19,10 @@ import com.simoncomputing.app.winventory.util.BoException;
 
 /**
  * Servlet implementation class googleplus
+ * 
+ * Builds and sends the Google OAuth Request.
+ * 
+ * @author nicholas.phillpott
  */
 @WebServlet("/login/googleLogin")
 public class googleplus extends BaseController {
@@ -31,19 +35,18 @@ public class googleplus extends BaseController {
      */
     public googleplus() {
         super();
-        // TODO Auto-generated constructor stub
     }
-
-    //"openid profile email " + 
-    //
     
 	/**
+	 * Builds and send a request to Google OAuth to allow the user to sign in.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
 		
+		// Get the Google Client Information
 		GoogleClient gc = null; 
 		try {
 			gc = GoogleClientBo.getInstance().read(1L);
@@ -58,23 +61,29 @@ public class googleplus extends BaseController {
 		String id = gc.getClientId();
 		String client = gc.getClientSecret();
 		
+		// Build and send the request URL for Usr login. 
 		ServiceBuilder builder = new ServiceBuilder();
 		OAuthService service = (OAuthService) builder
 			.provider(Google2Api.class)
 			.apiKey(id)
 			.apiSecret(client)
-			.callback(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/login/googleCallback")
-			.scope("email").debugStream(System.out).build(); // Now build
-																	// the call
+			.callback(request.getScheme() + "://" 
+					+ request.getServerName() + ":" 
+					+ request.getServerPort() 
+					+ request.getContextPath() 
+					+ "/login/googleCallback")
+			.scope("email").debugStream(System.out).build();
 		request.getSession().setAttribute("service", service);
 		response.sendRedirect(service.getAuthorizationUrl(null));
 	}
 
 	/**
+	 * Redirects to logout. To prevent making effective posts to this controller. 
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		this.sendRedirect(request, response, "logout");
 	}
 
 }

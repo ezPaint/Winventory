@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.simoncomputing.app.winventory.dao.EventToLocationDao">
+
+    <resultMap id="EventMapper" type="com.simoncomputing.app.winventory.domain.EventToLocation">
+        <result column ="KEY"                 property = "key" />
+        <result column ="DATE_CREATED"        property = "dateCreated" />
+        <result column ="DESCRIPTION"         property = "description" />
+        <result column ="CATEGORY"            property = "category" />
+    </resultMap>
+
+    <select id="read" parameterType="map" resultMap="EventToLocationMapper">
+        select * from EVENTToLocation
+        where ${where}
+    </select>
+
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.EventToLocation">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select EVENTToLocation_SEQ.nextval from dual
+        </selectKey>
+        insert into EVENTToLocation
+        (
+            KEY , DATE_CREATED , DESCRIPTION , CATEGORY
+        )
+        values
+        (
+            #{key} , #{dateCreated} , #{description} , #{category}
+        )
+    </insert>
+
+
+
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.EventToLocation">
+        update EVENT set
+            KEY                                 = #{key} ,
+            DATE_CREATED                        = #{dateCreated} ,
+            DESCRIPTION                         = #{description} ,
+            CATEGORY                            = #{category}
+        where KEY = #{key}
+    </update>
+
+    <delete id="delete" parameterType="map">
+        delete from EVENTToLocation
+        where ${where}
+    </delete>
+
+
+    <!-- PROTECTED CODE -->
+
+</mapper>

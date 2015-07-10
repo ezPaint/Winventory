@@ -118,8 +118,8 @@ public class AdvancedSearchController extends HttpServlet {
         }
         else{
             labels.add("purchased_date");
-            dates.add("");
-            dates.add("");
+            dates.add(null);
+            dates.add(null);
         }
         
 
@@ -138,8 +138,8 @@ public class AdvancedSearchController extends HttpServlet {
         }
         else{
             labels.add("expired_date");
-            dates.add("");
-            dates.add("");
+            dates.add(null);
+            dates.add(null);
         }
 
         // do sql stuff
@@ -154,7 +154,8 @@ public class AdvancedSearchController extends HttpServlet {
         } else {
 
             try {
-
+//
+                
                 if (columns.size() == 0 || searches.size() == 0) {
                     results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
                 } else {

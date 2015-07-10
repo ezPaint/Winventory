@@ -9,6 +9,15 @@ import com.simoncomputing.app.winventory.bo.SmtpBo;
 import com.simoncomputing.app.winventory.domain.Smtp;
 import com.simoncomputing.app.winventory.util.BoException;
 
+/**
+ * A Utility Class to ease the proccess of sending emails in the code. Uses the SMTP settings
+ * to send an email with the passed in sender, recipient, subject, and message.
+ * 
+ * This class uses Apache's Commons Mail API to send Email.
+ * 
+ * @author nicholas.phillpott
+ *
+ */
 public class EmailService {
 	
 	private Smtp smtp; 
@@ -18,10 +27,19 @@ public class EmailService {
 	private String to; 
 	private Email email;
 	
+	/**
+	 * Make a new EmailService
+	 */
 	public EmailService() {
 		email = new SimpleEmail(); 
 	}
 	
+	/**
+	 * Add a recipient to the Email. Can be Called multiple times on one EmailService. 
+	 * @param to Recipient Address
+	 * @return this
+	 * @throws EmailException
+	 */
 	public EmailService addTo(String to) throws EmailException {
 		email.addTo(to);
 		this.to += " " + to; 
@@ -29,7 +47,8 @@ public class EmailService {
 	}
 	
 	/**
-	 * Sets smtp to the DBs current smtp;
+	 * Sets the SMTP this Email Service will use to that which is currently stored 
+	 * in the DB.
 	 * @throws BoException 
 	 */
 	public void setSmtp() throws BoException {
@@ -46,6 +65,11 @@ public class EmailService {
 		}
 	}
 
+	/**
+	 * Send the email with the desired information. 
+	 * 
+	 * @throws EmailException
+	 */
 	public void sendEmail() throws EmailException {
 		email.setHostName(smtp.getHostName());
 		email.setSmtpPort(smtp.getPort());
@@ -100,7 +124,8 @@ public class EmailService {
 	}
 
 	/**
-	 * Do not use this!!
+	 * You should use the addTo() method but because this is a setter
+	 * I'm keeping it in for now. 
 	 * @param to
 	 * @return
 	 */

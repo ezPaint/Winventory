@@ -18,6 +18,9 @@ import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 
 /**
  * Servlet implementation class LoginServlet
+ * 
+ * Handles the local user login process for the Webapp. 
+ * 
  */
 @WebServlet("/login")
 public class LoginController extends BaseController {
@@ -35,6 +38,8 @@ public class LoginController extends BaseController {
     }
 
     /**
+     * forwards the user to the "login.jsp"
+     * 
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,9 +50,10 @@ public class LoginController extends BaseController {
     }
 
     /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      * This method handles logins for users logging in with a password,
      * as opposed to using the Google login
+     * 
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
@@ -81,6 +87,7 @@ public class LoginController extends BaseController {
                 return;
             }
             
+            // Hash the given password which also checks if it is the required length
             try {
                 // try to encode the password using the password hasher
                 PasswordHasher.encodePassword(password);

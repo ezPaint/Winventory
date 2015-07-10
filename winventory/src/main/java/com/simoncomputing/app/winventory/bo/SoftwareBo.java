@@ -372,6 +372,12 @@ public class SoftwareBo {
         return list;
     }
 
+    /**
+     * 
+     * @param results
+     * @param dates
+     * @return
+     */
     public List<Software> searchRange(List<Software> results, ArrayList<String> dates) {
         List<Software> list = new ArrayList<Software>();
         List<Software> purchased = new ArrayList<Software>();

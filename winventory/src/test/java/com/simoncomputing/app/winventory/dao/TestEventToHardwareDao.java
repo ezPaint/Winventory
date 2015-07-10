@@ -1,4 +1,4 @@
-package com.simoncomputing.app.winventory.dao;
+/*package com.simoncomputing.app.winventory.dao;
 
 import java.util.Random;
 import java.util.List;
@@ -126,4 +126,4 @@ public class TestEventToHardwareDao {
     }
     // PROTECTED CODE -->
 
-}
+}*/

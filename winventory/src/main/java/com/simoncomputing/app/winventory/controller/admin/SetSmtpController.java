@@ -18,6 +18,14 @@ import com.simoncomputing.app.winventory.util.BoException;
 
 /**
  * Servlet implementation class SetSmtpController
+ * 
+ * Handles the "SetSmtp.jsp" page which allows user to make changes to the 
+ * SMTP settings to allow email notifications. 
+ * 
+ * SMTP Features require that the DB start with a SMTP of key "1L" be 
+ * pre-loaded in the DB. 
+ * 
+ * @author nicholas.phillpott
  */
 @WebServlet("/admin/setSmtp")
 public class SetSmtpController extends BaseController {
@@ -30,15 +38,18 @@ public class SetSmtpController extends BaseController {
      */
     public SetSmtpController() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
+	 * Makes sure that the SMTP is initialized in the DB. The SMTP settings require that 
+	 * a SMTP object be preloaded in the DB with the key of "1L". 
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Smtp smtp = null;
 		
+		// Check the DB for an SMTP at key "1L", catch any errors.
+		Smtp smtp = null;
 		try {
 			smtp = SmtpBo.getInstance().read(1L);
 		} catch (BoException e) {
@@ -51,6 +62,8 @@ public class SetSmtpController extends BaseController {
 			this.forward(request, response, "/login");
 			return;
 		}
+		
+		// Add the bean to the session and go to the JSP.
 		SetSmtpBean smtpBean = new SetSmtpBean();
 		smtpBean.bindSmtp(smtp);
 		request.setAttribute("smtpInfo", smtpBean);
@@ -59,18 +72,22 @@ public class SetSmtpController extends BaseController {
 	}
 
 	/**
+	 * Take the updated settings and make them to the DB. 
+	 * 
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SetSmtpBean smtpBean = new SetSmtpBean(request);
 		
+		// Update the DB SMTP record. 
+		SetSmtpBean smtpBean = new SetSmtpBean(request);
 		try {
 			smtpBean.updateSmtp();
 		} 
 		catch (BoException e) {
 			logger.error("Bo Excpetion");
 		}
-
+		
+		// Give the user confirmation that the settings have been updated. 
 		logger.info("SMTP Settings Updated By User: " + this.getUserInfo(request).getUsername() + " New HostName: " + smtpBean.getHostName());
 		request.setAttribute("note", "SMTP Settings Have Been Updated.");
 		request.setAttribute("smtpInfo", smtpBean);
