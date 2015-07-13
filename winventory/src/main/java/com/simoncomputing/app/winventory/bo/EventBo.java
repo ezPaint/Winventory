@@ -190,15 +190,61 @@ public class EventBo {
         return result;
     }
     
-    public List<Event> getHardwareOf(Event event) throws BoException
+    public List<Event> getEventsOf(Software hw) throws BoException
     {
         SqlSession session = null;
         List<Event>  result = null;
 
         try {
             session = SessionFactory.getSession();
+            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
+            result = mapper.getEventsBySoftwareId(hw.getKey());
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return result;
+    }
+    
+    public List<Hardware> getHardwareOf(Event event) throws BoException
+    {
+        SqlSession session = null;
+        List<Hardware>  result = null;
+
+        try {
+            session = SessionFactory.getSession();
             EventToHardwareDao mapper = session.getMapper( EventToHardwareDao.class );
-            result = mapper.getEventsByHardwareId(event.getKey());
+            result = mapper.getHardwareByEventId(event.getKey());
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return result;
+    }
+    
+    public List<Software> getSoftwareOf(Event event) throws BoException
+    {
+        SqlSession session = null;
+        List<Software>  result = null;
+
+        try {
+            session = SessionFactory.getSession();
+            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
+            result = mapper.getSoftwareByEventId(event.getKey());
             session.commit();
 
         } catch ( Exception e ) {

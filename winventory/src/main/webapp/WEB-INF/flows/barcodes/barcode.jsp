@@ -61,6 +61,7 @@ $(document).ready(function() {
         }
     } );
 } );
+
 function finalSubmission(){
 	var hiddenInput = document.getElementById("toSubmit");
 	hiddenInput.value=true;
@@ -136,7 +137,8 @@ function clearBarSession(){
 										<c:otherwise>
 											<td>No Registered Location</td>
 										</c:otherwise>
-									</c:choose>									<td><span style="margin-left:15%" class="glyphicon glyphicon-remove"></span></td>
+									</c:choose>
+									<td><span style="margin-left:15%" class="glyphicon glyphicon-remove"></span></td>
 								</tr>
 							</c:forEach>
 						</tbody>

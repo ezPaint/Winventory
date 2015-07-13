@@ -35,7 +35,7 @@ public class ResultsController extends BaseController {
         try {
             results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
         } catch (BoException e) {
-            log.error(e.getMessage(), e);
+            logError(log, e);
         }
         
         //Show results, if they exist, otherwise table will be empty

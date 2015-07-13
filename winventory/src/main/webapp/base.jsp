@@ -24,17 +24,8 @@
 		<div class="collapse navbar-collapse" id="navbar">
 			<ul class="nav navbar-nav">
 				<!-- Only display labels in navbar if user has read permission for the associate objects -->
-				<%-- <c:if test="${userInfo.hasPermission.readDatabases}"> --%>
-				<li id="databases"><a href="#">Databases</a></li>
-				<%-- </c:if>
-				<c:if test="${userInfo.hasPermission.readServices}"> --%>
-				<li id="services"><a href="#">Services</a></li>
-				<%-- </c:if>
-				<c:if test="${userInfo.hasPermission.readSoftware}"> --%>
+				<%-- c:if test="${userInfo.hasPermission.readSoftware}"> --%>
 				<li id="software"><a href="${contextPath}/software">Software</a></li>
-				<%-- </c:if>
-				<c:if test="${userInfo.hasPermission.readServers}"> --%>
-				<li id="servers"><a href="#">Servers</a></li>
 				<%-- </c:if>
 				<c:if test="${userInfo.hasPermission.readHardware}"> --%>
 				<li id="hardware"><a href="${contextPath}/hardware/results"
@@ -46,6 +37,9 @@
 				<%-- </c:if> --%>
 				<%-- <c:if test="${userInfo.hasPermission.readUser}"> --%>
 				<li id="users"><a href="${contextPath}/users/results" target="_top">Users</a></li>
+				<%-- </c:if> --%>
+				<%-- <c:if test="${userInfo.hasPermission.readLocation}"> --%>
+				<li id="location"><a href="${contextPath}/location/results-location" target="_top">Location</a></li>
 				<%-- </c:if> --%>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

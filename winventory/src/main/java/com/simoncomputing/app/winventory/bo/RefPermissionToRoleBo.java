@@ -9,6 +9,7 @@ import org.apache.ibatis.session.*;
 
 import com.simoncomputing.app.winventory.dao.*;
 import com.simoncomputing.app.winventory.domain.RefPermissionToRole;
+import com.simoncomputing.app.winventory.domain.Role;
 import com.simoncomputing.app.winventory.util.BoException;
 
 public class RefPermissionToRoleBo {
@@ -160,6 +161,55 @@ public class RefPermissionToRoleBo {
         return list;
     }
 
+    
+
     // PROTECTED CODE -->
+    
+    public List<RefPermissionToRole> getAll() throws BoException {
+        SqlSession session = null;
+        List<RefPermissionToRole> list;
+
+        try {
+            session = SessionFactory.getSession();
+            RefPermissionToRoleDao mapper = session.getMapper( RefPermissionToRoleDao.class );
+            list = mapper.getAll();
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return list;
+    }
+    
+    public void insert(Long key, int permKey, int roleKey) throws BoException {
+        SqlSession session = null;
+
+        try {
+            session = SessionFactory.getSession();
+            RefPermissionToRoleDao mapper = session.getMapper( RefPermissionToRoleDao.class );
+            
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("key", key);
+            map.put("permissionId", permKey);
+            map.put("roleId", roleKey);
+            
+            mapper.insert( map );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+    }
 
 }

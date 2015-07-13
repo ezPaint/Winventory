@@ -30,13 +30,15 @@
 					<div class="boom">
 						<h2 class="center">Create Role</h2>
 					</div>
-				
+
 					<div class="padme">
-					<h4>Successfully created new Role: ${Title }</h4>
-					<br>
-					<h5>Associated Permissions:</h5>
-					<br>
-					${permissions }
+						<h4>Successfully created new Role: ${Title}</h4>
+						<br>
+						<h5>Associated Permissions:</h5>
+						<c:forEach var="i" items="${permissions}">
+							<c:out value="${i.code }" />
+							<br>
+						</c:forEach>
 					</div>
 				</div>
 			</div>

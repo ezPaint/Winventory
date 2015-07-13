@@ -42,21 +42,21 @@ public class InsertController extends BaseController {
         try{
             cost = (Double) Double.parseDouble((String) request.getParameter("cost"));
         } catch (Exception e){
-            log.error(e.getMessage(), e);
+            logError(log, e);
         }
         
         Date datePurchased = null;
         try{
             datePurchased = Date.valueOf((String) request.getParameter("purchasedDate"));
         } catch (Exception e){
-            log.error(e.getMessage(), e);
+            logError(log, e);
         }
         
         Date expirationDate = null;
         try{
             expirationDate = Date.valueOf((String) request.getParameter("expirationDate"));
         } catch (Exception e){
-            log.error(e.getMessage(), e);
+            logError(log, e);
         }
         
        //Create Software object
@@ -75,7 +75,7 @@ public class InsertController extends BaseController {
        try {
            softwareBo.create(software);
        } catch (BoException e) {
-            log.error(e.getMessage(), e);
+           logError(log, e);
        }
        
        //Reload results page with new software object added
@@ -83,7 +83,7 @@ public class InsertController extends BaseController {
        try {
            results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
        } catch (BoException e) {
-           log.error(e.getMessage(), e);
+           logError(log, e);
        }
        
        if (results != null) {

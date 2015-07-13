@@ -116,7 +116,24 @@ function addSoftware() {
     document.getElementById("change").innerHTML = addSoftwareHTML;
 }
 
+/**
+ * Validates that a numeric value is entered into a cost field.
+ * @returns {Boolean}
+ */
+function validateCost() {
+	var costA = document.forms["advSearchForm"]["minCost"].value;
+	var costB = document.forms["advSearchForm"]["maxCost"].value;
+	var regex = /^(\d+(\.\d+)?)$/;
+	if ((!costA.match(regex) && costA != "")
+		|| (!costB.match(regex) && costB != "")) {
+		document.getElementById("costValidate").innerHTML = "Please enter a non-negative numeric value!";
+		return false;
+	} else {
+		document.getElementById("costValidate").innerHTML = "";
 
+	}
+	return true;
+}
 /* 
  * Validates dates by checking that the format is correct: YYYY-MM-DD
  * Validates dates by checking that the date is valid (no Feb 31st, for instance).

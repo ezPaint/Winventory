@@ -122,7 +122,7 @@ $(function() {
 							<div class="form-group">
 								<label for="cost" class="col-sm-2 control-label">Cost $</label>
 								<div class="col-sm-9">
-									<input name="cost" type="number" step="any" id="version"
+									<input name="cost" type="number" step="any" min="0" id="version"
 										class="form-control" placeholder="89.99" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="com.simoncomputing.app.winventory.domain.Hardware"%>
-<%@ page import="com.simoncomputing.app.winventory.domain.Barcoder"%>
+<%@ page import="com.simoncomputing.app.winventory.util.Barcoder"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -66,7 +66,7 @@
 						%>
 
 						<div class="col-md-4">
-							<img src="${contextPath}/resources/images/barcode.gif"
+							<img src="${contextPath}/getBarcodeImage?key=${hardware.getKey()}"
 								class="img img-responsive">
 						</div>
 						<div class="col-md-8">
@@ -170,6 +170,8 @@
 						<%
 						    }
 						%>
+						
+						<jsp:include page="/WEB-INF/includes/events.jsp" />
 
 					</div>
 				</div>

@@ -29,7 +29,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 public class BarcodeController extends HttpServlet {
     private static final long serialVersionUID = 1L;
     static Logger logger = Logger.getLogger(BarcodeController.class);
-    static EmailService emailer = new EmailService();
+    static EmailService emailer;
 	private static UserBo ub = UserBo.getInstance();			// User business object
 	private static HardwareBo hb = HardwareBo.getInstance();	// Hardware business object
 	private static LocationBo lb = LocationBo.getInstance();	// Location business object
@@ -58,11 +58,6 @@ public class BarcodeController extends HttpServlet {
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	logger.debug("parameter map is " + request.getParameterMap()); // log parameters passed in
-    	Enumeration<String> attrName = request.getAttributeNames();
-    	while(attrName.hasMoreElements()){
-    		logger.debug(attrName.nextElement());
-    	}
     	request.getSession().setAttribute("ub", ub);		// give userbo to session
     	request.getSession().setAttribute("lb", lb);		// give locationbo to session
 		String barcode = request.getParameter("barcode");	// get the barcode given
@@ -90,7 +85,7 @@ public class BarcodeController extends HttpServlet {
 				modifyCode="001"+padZeroes(owner.getKey().toString());	// make barcode for User
 			}
 			modifyCode+="3";	//TODO make valid checksum; random number right now
-			logger.trace("pkList is " + Arrays.asList(pkList));
+			logger.debug("pkList is " + Arrays.asList(pkList));
 			try {
 				updateDatabase(pkList, hwList, modifyCode);	// update the database
 	    		logger.trace("updating database");
@@ -103,10 +98,12 @@ public class BarcodeController extends HttpServlet {
 			request.removeAttribute("user");
 			request.removeAttribute("hardware");
 			request.removeAttribute("location");
+			logger.trace("clearing barcode page to start new search");
 		} else if (!valid){	// if input is not valid
 			// determine and set correct error message; store barcode
 			request.setAttribute("error", barcodeErrorMessage(barcode));
 			request.getSession().setAttribute("barcode", barcode);
+			logger.trace("Invalid barcode input entered");
 		} else if(barcode != null){
 			long pk = -1;	// store invalid pk before initialized
 			String tableIdentifier = "-1";	// store invalid  table identifier before initialized
@@ -115,12 +112,10 @@ public class BarcodeController extends HttpServlet {
 				pk = parsePk(barcode);	// get actual pk
 			}
 			/*
-			 * catches here as formality.  Valid input tests for these errors
+			 * catch here as formality.  Valid input tests for these errors
 			 */
 			catch (NumberFormatException nfe) {
 				logger.error("Could not get a pk from " + barcode);
-			} catch (IllegalArgumentException ie) {
-				logger.error("Could not get a table identifier from " + barcode);
 			}
 			List<Hardware> hardware;	// the list of hardware to pass back to view
 			try{
@@ -133,10 +128,10 @@ public class BarcodeController extends HttpServlet {
     				request.getSession().setAttribute("hardware", hardware);// put that list on the session
     				break;
     			case "2":	// a Hardware barcode
+    				logger.trace("adding to hardware list in barcode page");
     				@SuppressWarnings("unchecked")
 					ArrayList<Hardware> hwList = (ArrayList<Hardware>) request.getSession().getAttribute("hardware");
     					// get the hardware list from the session
-    				logger.debug("hwList is " + hwList);
     				if (hwList==null){
     					hwList = new ArrayList<Hardware>();	// initialize a list if there is none yet
     				}
@@ -146,8 +141,14 @@ public class BarcodeController extends HttpServlet {
     				else {
     					request.setAttribute("error", "That Hardware is already in the list");
     						// if the hardware is already in the list, provide an error message saying so
+    					logger.trace("attempted to add duplicate hardware in barcode page");
     				}
     				request.getSession().setAttribute("hardware", hwList);
+    				String logStr = "Hardware keys in hwList (barcode page):";
+    				for (Hardware hard: hwList){
+    					logStr+= hard.getKey() + ", ";
+    				}
+    				logger.trace(logStr.substring(0,logStr.length()-2));
     				break;
     			case "4":	// if a Location barcode
     				logger.trace("preloading based on location " + pk);
@@ -155,7 +156,6 @@ public class BarcodeController extends HttpServlet {
     				request.getSession().setAttribute("location", lb.read(pk));	// put correct location on the session
     				hardware = hb.getListByLocationId((int)pk);			// get the appropriate hardware list
     				request.getSession().setAttribute("hardware", hardware);	// put that list on the session
-    				logger.debug(hb.getListByLocationId((int)pk));
     				break;
     			default:	// entered a username
     				logger.trace("preloading based on username " + barcode);
@@ -177,6 +177,7 @@ public class BarcodeController extends HttpServlet {
 		if (request.getAttribute("error")==null && !clear && request.getSession().getAttribute("user")==null && request.getSession().getAttribute("location")==null){
     		request.getSession().setAttribute("hardware",null);
     		request.setAttribute("error","You must enter an Owner or Location first");
+    		logger.error("Attempted to add hardware before a user or location.");
     	}
 		
     	request.getRequestDispatcher("/WEB-INF/flows/barcodes/barcode.jsp").forward(request,
@@ -237,24 +238,40 @@ public class BarcodeController extends HttpServlet {
 				/*
 				 * append to email notifying user of change if user exists and is different (i.e. there IS a change to notify)
 				 */
-				Integer oldId = hw.getUserId();
-				Integer newId = updatePk.intValue();
-				User tmp;
-				String email;
-				if (oldId!=null && !oldId.equals(newId)){
-					tmp = ub.read(oldId.longValue());
-					email = tmp.getEmail();
-					if (recipients.containsKey(email)){
-						String newMessage = recipients.get(email)+"\n"+hw.getKey() + "(no longer yours)\n";
-						recipients.put(email, newMessage);
+				Integer oldId = hw.getUserId();		//id of previous owner,null if none
+				Integer newId = updatePk.intValue();//id of new owner, cannot be null
+				User tmp;							//temporary user object for convenience
+				String email;						//email address to send to
+
+				if(!newId.equals(oldId)){			//if the owner changes
+					if (oldId!=null){				//AND there was a previous owner
+						/*
+						 * get the old user and their email address
+						 * and tell the old owner that the hardware's been removed
+						 * provide an introductory statement in the email message
+						 * if there isn't one already
+						 */
+						
+						tmp = ub.read(oldId.longValue());
+						email = tmp.getEmail();
+						if (recipients.containsKey(email)){
+							String newMessage = recipients.get(email)+"\n"+hw.getKey() + "(no longer yours)\n";
+							recipients.put(email, newMessage);
+						}
+						else{
+							recipients.put(email, "Hello " + tmp.getFirstName() + ",\n "
+									+ "This email is to update you on the ownership of your Hardware"
+									+ " with serial number(s):\n\n" + hw.getKey() + "(no longer yours)\n");
+						}
 					}
-					else{
-						recipients.put(email, "Hello " + tmp.getFirstName() + ",\n "
-								+ "This email is to update you on the ownership of your Hardware"
-								+ " with serial number(s):\n\n" + hw.getKey() + "(no longer yours)\n");
-					}
-				}
-				if(!newId.equals(oldId)){
+					
+					/*
+					 * get the new user and their email address
+					 * and tell them that they've been assigned that hardware
+					 * provide and introductory statement in the email message if there
+					 * isn't one already 
+					 */
+					
 					tmp = ub.read(updatePk);
 					email = tmp.getEmail();
 					if (recipients.containsKey(email)){
@@ -271,6 +288,11 @@ public class BarcodeController extends HttpServlet {
 			}else{	// working with location
 				hw.setLocationId(updatePk.intValue()); // always update locationid
 			}
+			
+			/*
+			 * try updating hardware. log error if unable to 
+			 */
+			
 			try {
 				hb.update(hw);
 			} catch (BoException e) {
@@ -283,13 +305,14 @@ public class BarcodeController extends HttpServlet {
 		for(String s: recipients.keySet()){
 			recipients.put(s, recipients.get(s) + "\n\n\n\nSincerely,\nThe Winventory");
 			try{
+				emailer = new EmailService();
 				emailer.setSmtp();
 				emailer.addTo(s);
-				emailer.setFrom("fivewetmice@gmail.com");
+				emailer.setFrom("The Winventory <" + emailer.getSmtp().getAuthUserName() + ">");
 				emailer.setSubject("Hardware reassignment");
 				emailer.setMessage(recipients.get(s));
 				emailer.sendEmail();
-				logger.trace("sending email to "+ s);
+				logger.trace("sending email to "+ s + " regarding hardware reassignment");
 			} catch (Exception e){
 				e.printStackTrace();
 				logger.error("failed to send email to " + s +" regarding hardware reassignment");
@@ -321,6 +344,9 @@ public class BarcodeController extends HttpServlet {
     	}
     	String tabId = parseTableIdentifier(str);
     	logger.trace("tabId parsed when checking errors is" + tabId);
+    	if (tabId.equals("")){
+    		return "Barcode does not contain a valid table identifier.";
+    	}
     	Long pk = parsePk(str);
     	try{
 	    	switch(tabId){
@@ -413,7 +439,7 @@ public class BarcodeController extends HttpServlet {
     	if (str.length() < 12 || str.length() > 13 || !isNumeric(str)){
     		System.out.println(str.length() + " " + isNumeric(str));
     		logger.debug("Attempted to parse table identifier from " + str);
-    		throw new IllegalArgumentException(str + " is not a recognized barcode");
+    		return "";
     	}
     	else if(str.length()==12){
     		str="0"+str;

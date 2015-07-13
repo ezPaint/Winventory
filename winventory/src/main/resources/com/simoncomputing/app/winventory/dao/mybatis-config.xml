@@ -47,11 +47,11 @@
     <mappers>
         <mapper resource="com/simoncomputing/app/winventory/dao/AccessTokenDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/AddressDao.xml" />
-<!--         <mapper resource="com/simoncomputing/app/winventory/dao/EventDao.xml" />
+		<mapper resource="com/simoncomputing/app/winventory/dao/EventDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/EventToHardwareDao.xml" />
-        <mapper resource="com/simoncomputing/app/winventory/dao/EventToLocationDao.xml" />
+        <!-- <mapper resource="com/simoncomputing/app/winventory/dao/EventToLocationDao.xml" />-->
         <mapper resource="com/simoncomputing/app/winventory/dao/EventToSoftwareDao.xml" />
-        <mapper resource="com/simoncomputing/app/winventory/dao/EventToUserDao.xml" /> -->
+        <!-- <mapper resource="com/simoncomputing/app/winventory/dao/EventToUserDao.xml" />  -->
         <mapper resource="com/simoncomputing/app/winventory/dao/GoogleClientDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/HardwareDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/HardwareToSoftwareDao.xml" />

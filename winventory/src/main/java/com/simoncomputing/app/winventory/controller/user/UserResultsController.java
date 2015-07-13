@@ -59,6 +59,11 @@ public class UserResultsController extends BaseController {
         if (results != null) {
             request.setAttribute("results", results);
         }
+        
+        // check for success message (for redirects from edit/add/delete pages)
+        if (request.getParameter("success") != null) {
+            request.setAttribute("success", request.getParameter("success"));
+        }
 	    
         //forward to users/results.jsp
 		request.getRequestDispatcher("/WEB-INF/flows/users/results.jsp").forward(request, response);

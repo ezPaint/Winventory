@@ -1,7 +1,6 @@
 package com.simoncomputing.app.winventory.bo;
 
 import java.util.List;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -139,5 +138,33 @@ public class LocationBo {
     }
 
     // PROTECTED CODE -->
+    
+    /**
+     * Returns a {@link List} of all {@link Location} objects from the database
+     * 
+     * @return A {@link List} of all {@link Location} objects
+     * @throws BoException
+     */
+    public List<Location> getAll() throws BoException {
+        SqlSession session = null;
+        List<Location> list;
+
+        try {
+            session = SessionFactory.getSession();
+            LocationDao mapper = session.getMapper(LocationDao.class);
+            list = mapper.getAll();
+            session.commit();
+
+        } catch (Exception e) {
+            session.rollback();
+            throw new BoException(e);
+
+        } finally {
+            if (session != null)
+                session.close();
+        }
+
+        return list;
+    }
 
 }

@@ -44,6 +44,8 @@
 <!-- 	type="text/javascript"></script> -->
 <script src='${contextPath}/resources/js/bootstrap.min.js'
 	type="text/javascript"></script>
+<script src='${contextPath}/resources/js/validator.js' type="text/javascript"></script>
+	
 
 <script>
 	function addDiv(container, name, type) {
@@ -86,7 +88,8 @@
                         <h2 class="center">Software Advanced Search</h2>
                     </div>
                     <div class="padme">
-                           <form action="advancedsearch" method="post">
+                           <form name="advSearchForm" action="advancedsearch" method="post" 
+                           onsubmit="return validateCost();">
                            
                            <!-- Name entry fields -->
 							<div id="name_container">
@@ -153,20 +156,6 @@
 							<br>
 							
 							<!-- Cost entry field -->
-<!-- 							<div id="cost_container">
-								<div class="input-group" id="cost_div">
-									<span class="input-group-addon" id="basic-addon1">Cost</span> <input
-										name="cost" type="text" class="form-control"
-										placeholder="$77.00"> <span class="input-group-btn"
-										aria-hidden="true">
-										<button type="button" class="btn btn-default"
-											onClick="addDiv('cost_container', 'cost', 'text'); return false;">
-											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-										</button> <br>
-									</span>
-								</div>
-							</div>
-							<br> -->
 							<div id="cost_container">
 								<div class="input-group double-input" id="cost_div">
 									<span class="input-group-addon" id="basic-addon1">Cost</span> 
@@ -174,14 +163,8 @@
 										placeholder="77.00"> 
 									<input name="maxCost" type="text" class="form-control"
 										placeholder="177.00">
-										<span class="input-group-btn"
-										aria-hidden="true">
-										<!-- <button type="button" class="btn btn-default"
-											onClick="addDiv('cost_container', 'cost', 'text'); return false;">
-											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-										</button> --> <br>
-									</span>
 								</div>
+								<p id="costValidate" style="color:red"></p>
 							</div>
 							<br>
                             
@@ -206,42 +189,7 @@
                                 </div>
                             </div>
                             <br>
-							
-<!-- 							Date Purchased Range entry field -->
-<!-- 						 <div id="idContainer6" class="myClass"> -->
-<!-- 								<div class="input-group double-input"> -->
-<!-- 									<span class="input-group-addon" id="basic-addon1">Date -->
-<!-- 										Purchased Range</span>  -->
-<!-- 										<input name="purchasedDateStart" type="date" -->
-<!-- 										class="form-control" placeholder="YYYY-MM-DD">  -->
-<!-- 										<input -->
-<!-- 										name="purchasedDateEnd" type="date" class="form-control" -->
-<!-- 										placeholder="YYYY-MM-DD"> -->
-<!-- 										<span class="input-group-btn" aria-hidden="true"> -->
-<!--                                         <button class="btn btn-default" -->
-<!--                                             onclick="showHelp()" type="button"> -->
-<!--                                             <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> -->
-<!--                                         </button> </span> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
-<!-- 							<br> -->
-							
 
-<!-- 							Expiration Date Range entry field -->
-							 
-<!-- 							<div id="idContainer7" class="myClass"> -->
-<!-- 								<div class="input-group double-input"> -->
-<!-- 									<span class="input-group-addon" id="basic-addon1">Expiration -->
-<!-- 										Date Range</span> <input name="expirationDateStart" type="date" class="form-control" -->
-<!-- 										placeholder="YYYY-MM-DD"> <input name="expirationDateEnd" -->
-<!-- 										type="date" class="form-control" placeholder="YYYY-MM-DD"> -->
-<!-- 										<span class="input-group-btn" aria-hidden="true"> -->
-<!--                                         <button class="btn btn-default" -->
-<!--                                             onclick="showHelp()" type="button"> -->
-<!--                                             <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> -->
-<!--                                         </button> </span> -->
-<!-- 								</div> -->
-<!-- 							</div> -->
 							<br> <input type="hidden" name="action" value="doInsert">
 							<input type="hidden" name="table" value="property">
 							

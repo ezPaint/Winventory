@@ -56,6 +56,7 @@
 						<h2 class="center">Users</h2>
 					</div>
 					<div class="padme">
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
 						<div id='loader'>
 							<div class='diamond'></div>
 							<div class='diamond'></div>

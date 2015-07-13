@@ -1,5 +1,6 @@
 package com.simoncomputing.app.winventory.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.simoncomputing.app.winventory.domain.Address;
@@ -17,5 +18,7 @@ public interface AddressDao {
 
 
     // PROTECTED CODE -->
+    
+    public List<Address> getAll() throws DaoException;
 
 }

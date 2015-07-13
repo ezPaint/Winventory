@@ -50,7 +50,8 @@
 							<div class="form-group">
 								<label for="type" class="col-sm-2 control-label">Type </label>
 								<div class="col-sm-9 search-field">
-									<input name="type" type="text" id="type" pattern="^[^\'\&quot]*$"
+									<input name="type" type="text" id="type"
+										pattern="^[^\'\&quot]*$"
 										class="form-control search-hardware-type" placeholder="Laptop"
 										required>
 								</div>
@@ -62,8 +63,9 @@
 								<label for="description" class="col-sm-2 control-label">Description
 								</label>
 								<div class="col-sm-9">
-									<input name="description" type="text" id="description" pattern="^[^\'\&quot]*$"
-										class="form-control" placeholder="MacbookPro 13" required>
+									<input name="description" type="text" id="description"
+										pattern="^[^\'\&quot]*$" class="form-control"
+										placeholder="MacbookPro 13" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -72,8 +74,9 @@
 							<div class="form-group">
 								<label for="cost" class="col-sm-2 control-label">Cost </label>
 								<div class="col-sm-9">
-									<input name="cost" type="text" id="cost" type="number" pattern="^[0-9]+(\.[0-9][0-9]?)*$"
-										class="form-control" placeholder="70.00" required>
+									<input name="cost" type="text" id="cost" type="number"
+										pattern="^[0-9]+(\.[0-9][0-9]?)*$" class="form-control"
+										placeholder="70.00" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -128,8 +131,48 @@
 								<label for="date" class="col-sm-2 control-label">Serial
 									No </label>
 								<div class="col-sm-9">
-									<input name="serialNo" type="text" id="serialNo" pattern="^[^\'\&quot]*$"
-										class="form-control" placeholder="1A2SDF6537H" required>
+									<input name="serialNo" type="text" id="serialNo"
+										pattern="^[^\'\&quot]*$" class="form-control"
+										placeholder="1A2SDF6537H" required>
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-9 col-sm-offset-2">
+									<div class="radio">
+										<label> <input type="radio" name="insertWith"
+											value="user" checked> Assign to user
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="date" class="col-sm-2 control-label">Username
+								</label>
+								<div class="col-sm-9">
+									<input name="username" type="text" class="form-control"
+										placeholder="joe.shmo">
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-9 col-sm-offset-2">
+									<div class="radio">
+										<label> <input type="radio" name="insertWith"
+											value="location"> Place in storage
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="date" class="col-sm-2 control-label"> Location ID </label>
+								<div class="col-sm-9">
+									<input name="serialNo" type="number" class="form-control"
+										placeholder="12">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.h2.engine.Session;
-import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.authentication.PasswordHasher;
@@ -28,6 +26,7 @@ import java.util.Date;
 public class ChangePasswordController extends BaseController {
 	
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(ChangePasswordController.class);
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -47,16 +46,19 @@ public class ChangePasswordController extends BaseController {
     	
 		try {
 			AccessToken accessToken = accessTokenBo.read(userId);
+			//user does not have an associated access token
 			if (accessToken == null) {
-				//user does not have an associated access token
 				request.getSession().setAttribute("changePasswordError", "The token is not valid. Please request a new token");
 				request.getRequestDispatcher("/WEB-INF/flows/authentication/resetPassword.jsp").forward(request,
 				        response);
 			}
+			//user has an associated access token
 			else {
+				//token not yet expired
 				if (accessToken.getExpiration().before(new Date())) {
 					String hashedToken = accessToken.getToken();
-					//user and token are correct
+					
+					//hashing the token matches the hashed token stored in the DB
 					if (PasswordHasher.checkPassword(token, hashedToken)) {
 						request.getSession().removeAttribute("changePasswordError");
 						request.getSession().setAttribute("resetPasswordUser", userId);
@@ -70,8 +72,8 @@ public class ChangePasswordController extends BaseController {
 						        response);
 					}
 				}
+				//token already expired
 				else {
-					//token already expired
 					request.getSession().setAttribute("changePasswordError", "The token has expired. Please request a new token");
 					request.getRequestDispatcher("/WEB-INF/flows/authentication/resetPassword.jsp").forward(request,
 					        response);
@@ -79,8 +81,7 @@ public class ChangePasswordController extends BaseController {
 				
 			}
 		} catch (BoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("BoException in ChangePasswordController when reading the access token");
 		}
 		   
     }
@@ -105,15 +106,16 @@ public class ChangePasswordController extends BaseController {
 		UserBo userBo = UserBo.getInstance();
 		AccessTokenBo accessTokenBo = AccessTokenBo.getInstance();
 		try {
+			//get the current user and update the password
 			User currentUser = userBo.read(userId.longValue());
 			currentUser.setPassword(PasswordHasher.encodePassword(newPassword));
 			userBo.update(currentUser);
+			//delete the token from ACCESS_TOKEN so the URL cannot be used again
 			accessTokenBo.delete(userId);
 			request.getRequestDispatcher("/WEB-INF/flows/authentication/resetSucess.jsp").forward(request,
 			        response);
 		} catch (BoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("BoException in ChangePasswordController when updating the user's password");
 		}
       
     }

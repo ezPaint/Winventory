@@ -51,5 +51,9 @@
 
 
     <!-- PROTECTED CODE -->
+    
+    <select id="getAll" resultMap="LocationMapper">
+		select * from LOCATION;
+	</select>
 
 </mapper>

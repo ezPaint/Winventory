@@ -130,11 +130,15 @@
 	</select>
 
 	<select id="getDefaultResults" parameterType="int" resultMap="SoftwareMapper">
-		SELECT * FROM SOFTWARE LIMIT #{size}		<!-- find where to get size -->
+		SELECT * FROM SOFTWARE LIMIT #{size}
 	</select>
 	
 	<select id="getAll" resultMap="SoftwareMapper">
 		SELECT * FROM SOFTWARE;
+	</select>
+	
+	<select id="deleteAll" resultMap="SoftwareMapper">
+	     DELETE FROM SOFTWARE
 	</select>
 
 </mapper>

@@ -19,5 +19,7 @@ public interface LocationDao {
     public List<Location> getListByAddressId( Integer key ) throws DaoException;
 
     // PROTECTED CODE -->
+    
+    public List<Location> getAll() throws DaoException;
 
 }

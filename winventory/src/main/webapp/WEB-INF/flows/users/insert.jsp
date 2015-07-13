@@ -46,17 +46,19 @@
 					<div class="padme">
 						<br>
 						<c:if test="${not empty errors}">
-                    	<div class="alert alert-danger" role="alert">
-                    		<h3 class="error-header">Could not add user:</h3>
-  							<span class="sr-only">Errors:</span>
-  							<c:forEach items="${errors}" var="error">
-  								<p class="error-msg">
-  									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-  									${error}
-  								</p>
-  							</c:forEach>
-						</div>
-                    </c:if>
+	                    	<div class="alert alert-danger" role="alert">
+	                    		<h3 class="error-header">Could not add user:</h3>
+	  							<span class="sr-only">Errors:</span>
+	  							<c:forEach items="${errors}" var="error">
+	  								<p class="error-msg">
+	  									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  									${error}
+	  								</p>
+	  							</c:forEach>
+							</div>
+                    	</c:if>
+                    	
+                    	<jsp:include page="/WEB-INF/includes/error.jsp" />
 						
 						<form class="form-horizontal" action="insert"
 							data-toggle="validator" role="form" method="post">

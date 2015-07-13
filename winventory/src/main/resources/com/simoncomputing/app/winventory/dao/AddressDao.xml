@@ -5,6 +5,7 @@
 
     <resultMap id="AddressMapper" type="com.simoncomputing.app.winventory.domain.Address">
         <result column ="KEY"                 property = "key" />
+        <result column ="NAME"                property = "name" />
         <result column ="STREET1"             property = "street1" />
         <result column ="STREET2"             property = "street2" />
         <result column ="CITY"                property = "city" />
@@ -23,13 +24,13 @@
         </selectKey>
         insert into ADDRESS
         (
-            KEY , STREET1 , STREET2 , CITY , STATE , 
-            ZIPCODE
+            KEY , NAME , STREET1 , STREET2 , CITY , 
+            STATE , ZIPCODE
         )
         values
         (
-            #{key} , #{street1} , #{street2} , #{city} , #{state} , 
-            #{zipcode}
+            #{key} , #{name} , #{street1} , #{street2} , #{city} , 
+            #{state} , #{zipcode}
         )
     </insert>
 
@@ -38,6 +39,7 @@
     <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Address">
         update ADDRESS set
             KEY                                 = #{key} ,
+            NAME                                = #{name} ,
             STREET1                             = #{street1} ,
             STREET2                             = #{street2} ,
             CITY                                = #{city} ,
@@ -53,5 +55,9 @@
 
 
     <!-- PROTECTED CODE -->
+    
+    <select id="getAll" resultMap="AddressMapper">
+		select * from Address;
+	</select>
 
 </mapper>

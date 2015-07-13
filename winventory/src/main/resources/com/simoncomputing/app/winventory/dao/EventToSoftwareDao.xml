@@ -2,50 +2,58 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simoncomputing.app.winventory.dao.EventToSoftwareDao">
-
-    <resultMap id="EventMapper" type="com.simoncomputing.app.winventory.domain.EventToSoftware">
+    <!-- PROTECTED CODE -->
+    
+    <resultMap id="EventMapper" type="com.simoncomputing.app.winventory.domain.Event">
         <result column ="KEY"                 property = "key" />
         <result column ="DATE_CREATED"        property = "dateCreated" />
         <result column ="DESCRIPTION"         property = "description" />
         <result column ="CATEGORY"            property = "category" />
     </resultMap>
-
-    <select id="read" parameterType="map" resultMap="EventToSoftwareMapper">
-        select * from EVENTToSoftware
-        where ${where}
-    </select>
-
-    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.EventToSoftware">
-        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
-            select EVENTToSoftware_SEQ.nextval from dual
-        </selectKey>
-        insert into EVENTToSoftware
+    
+    <resultMap id="SoftwareMapper" type="com.simoncomputing.app.winventory.domain.Software">
+        <result column ="KEY"                 property = "key" />
+        <result column ="TYPE"                property = "type" />
+        <result column ="DESCRIPTION"         property = "description" />
+        <result column ="COST"                property = "cost" />
+        <result column ="SERIAL_NO"           property = "serialNo" />
+        <result column ="CONDITION"           property = "condition" />
+        <result column ="LOCATION_ID"         property = "locationId" />
+        <result column ="USER_ID"             property = "userId" />
+        <result column ="PURCHASE_DATE"       property = "purchaseDate" />
+    </resultMap>
+    
+    
+	<!-- Gets all of the Events associated with a Software -->
+	<select id='getEventsBySoftwareId' resultMap='EventMapper'>
+		SELECT * FROM Event e
+   		INNER JOIN Event_To_Software map ON e.key = map.event_id
+		WHERE map.Software_id = #{param1}
+	</select>
+	
+	
+	
+	<select id='getSoftwareByEventId' resultMap='SoftwareMapper'>
+		SELECT * FROM Software h
+   		INNER JOIN Event_To_Software map ON h.key = map.Software_id
+		WHERE map.event_id = #{param1}
+	</select>
+	
+	<insert id="link" parameterType="map">
+        insert into EVENT_TO_Software
         (
-            KEY , DATE_CREATED , DESCRIPTION , CATEGORY
+            EVENT_ID , Software_ID
         )
         values
         (
-            #{key} , #{dateCreated} , #{description} , #{category}
+            #{param1} , #{param2}
         )
     </insert>
+    
 
-
-
-    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.EventToSoftware">
-        update EVENT set
-            KEY                                 = #{key} ,
-            DATE_CREATED                        = #{dateCreated} ,
-            DESCRIPTION                         = #{description} ,
-            CATEGORY                            = #{category}
-        where KEY = #{key}
-    </update>
-
-    <delete id="delete" parameterType="map">
-        delete from EVENTToSoftware
-        where ${where}
+    <delete id="unlink" parameterType="map">
+        delete from EVENT_TO_Software
+        where SoftwareId=#{param2} AND eventId=#{param1};
     </delete>
-
-
-    <!-- PROTECTED CODE -->
-
+    
 </mapper>

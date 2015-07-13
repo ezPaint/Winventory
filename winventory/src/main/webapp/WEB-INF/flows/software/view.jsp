@@ -164,6 +164,9 @@
 						<%
 						    }
 						%>
+						<%@ page import="com.simoncomputing.app.winventory.domain.Software"%>
+						<jsp:include page="/WEB-INF/includes/events.jsp" />
+						
 					</div>
 				</div>
 			</div>

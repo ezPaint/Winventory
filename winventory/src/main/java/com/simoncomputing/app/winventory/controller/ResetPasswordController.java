@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.h2.engine.Session;
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
@@ -20,8 +19,6 @@ import com.simoncomputing.app.winventory.domain.AccessToken;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.UUID;
 
@@ -32,6 +29,7 @@ import java.util.UUID;
 public class ResetPasswordController extends BaseController {
 	
 	private static final long serialVersionUID = 1L;
+	private static Logger logger = Logger.getLogger(ResetPasswordController.class);
 	
     /**
      * @see HttpServlet#HttpServlet()
@@ -60,20 +58,22 @@ public class ResetPasswordController extends BaseController {
 		User resetUser = userBo.getUserByEmail(email);
 		
 		//user does not exist
-		if (resetUser == null) {
-			//user does not have an associated access token
-			request.getSession().setAttribute("changePasswordError", "Invalid email address");
+		if (resetUser == null || resetUser.getPassword().equals("googleUser")) {
+			//user does not have an account or is a Google user
+			request.getSession().setAttribute("changePasswordError", "Cannot reset password for this email address");
 			request.getRequestDispatcher("/WEB-INF/flows/authentication/resetPassword.jsp").forward(request,
 			        response);
 		}
 		//user was found
 		else {
 
+			//use UUID to generate a random token that is essentially 
+			//guaranteed to be free from collisions
 	    	UUID uuid = UUID.randomUUID();
 	    	String token = uuid.toString().replaceAll("-", "");
 	    	
 	    	//should be changed to https
-	        String urlPath = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+	        String urlPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 	        String message = "Please reset your password at: " +
 	        		urlPath + "/changepassword" + "?token=" + token + "&user=" + resetUser.getKey().intValue();
 	          
@@ -83,6 +83,7 @@ public class ResetPasswordController extends BaseController {
 			
 			//TODO: change access token domain object to match type
 			accessToken.setUserKey(resetUser.getKey().intValue());
+			//store the hashed version of the token into the table
 			accessToken.setToken(PasswordHasher.encodePassword(token));
 			
 			//set in how many minutes the token will expire
@@ -100,8 +101,7 @@ public class ResetPasswordController extends BaseController {
 				}
 				
 			} catch (BoException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				 logger.error("BoException in ResetPasswordController when checking if user already requested access token");
 			}
 			
 			// Insert the new access token and email the user a link
@@ -111,8 +111,7 @@ public class ResetPasswordController extends BaseController {
 				this.sendPasswordResetEmail(resetUser.getEmail(), message);
 				
 			} catch (BoException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				 logger.error("BoException in ResetPasswordController when creating a new access token");
 			}
 			request.getSession().removeAttribute("changePasswordError");
 			request.getRequestDispatcher("/WEB-INF/flows/authentication/login.jsp").forward(request,
@@ -129,14 +128,12 @@ public class ResetPasswordController extends BaseController {
 			 * stored in the smtp table
 			 */
 			sendResetEmail.setFrom("-@gmail.com");
-			//currently send here for testing purposes
 			sendResetEmail.addTo(toEmailAddress);
 			sendResetEmail.setSubject("Winventory Password Reset");
 			sendResetEmail.setMessage(message);
 			sendResetEmail.sendEmail();
 		} catch (EmailException | BoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 logger.error("BoException in ResetPasswordController when sending password reset email");	
 		}
 	}
   

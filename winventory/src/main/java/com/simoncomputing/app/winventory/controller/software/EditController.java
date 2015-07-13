@@ -44,7 +44,7 @@ public class EditController extends BaseController {
                 Long long_key = Long.parseLong(key);
                 software = SoftwareBo.getInstance().read(long_key);
             } catch (BoException e) {
-                log.error(e.getMessage(), e);
+                logError(log, e);
             }
         }
         request.setAttribute("key", key);
@@ -80,21 +80,21 @@ public class EditController extends BaseController {
                 cost = (Double) Double.parseDouble((String) request.getParameter("cost"));
             }
             catch (Exception e) {
-                log.error(e.getMessage(), e);
+                logError(log, e);
             }
             
             Date datePurchased = null;
             try {
                 datePurchased = Date.valueOf((String) request.getParameter("purchasedDate"));
             } catch (Exception e) {
-                log.error(e.getMessage(), e);
+                logError(log, e);
             }
             
             Date expirationDate = null;
             try {
                 expirationDate = Date.valueOf((String) request.getParameter("expirationDate"));
             } catch (Exception e) {
-                log.error(e.getMessage(), e);
+                logError(log, e);
             }
             
             // Alter Software object's data
@@ -110,7 +110,7 @@ public class EditController extends BaseController {
             //Update software object in database
             bo.update(software);
         } catch (BoException e) {
-            log.error(e.getMessage(), e);
+            logError(log, e);
         }
         
         // Reload results page with new software object added
@@ -118,7 +118,7 @@ public class EditController extends BaseController {
         try {
             results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
         } catch (BoException e) {
-            log.error(e.getMessage(), e);
+            logError(log, e);
         }
         
         if (results != null) {

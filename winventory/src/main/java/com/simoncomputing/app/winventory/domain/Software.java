@@ -71,7 +71,13 @@ public class Software {
         expirationDate = value;
     }
     // PROTECTED CODE -->
-
+    /**
+     * Two Software objects are equal if they have the same:
+     *    key
+     *    name
+     *    expiration date
+     *    purchased date
+     */
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -82,10 +88,18 @@ public class Software {
         } else {
             Software other = (Software) o;
 
-            return (this.key == other.key && this.name.equals(other.name)
-                    && this.purchasedDate.equals(other.purchasedDate) && this.expirationDate
+            return (this.key.equals(other.key) && this.name.equals(other.name) && 
+                this.purchasedDate.equals(other.purchasedDate) && this.expirationDate
                         .equals(other.expirationDate));
         }
 
+    }
+    
+    /**
+     * Checks if two software objects have the same purchased and expiration dates.
+     */
+    public boolean compareDates(Software s){
+        return (this.getPurchasedDate().equals(s.getPurchasedDate())
+            && this.getExpirationDate().equals(s.getExpirationDate()));
     }
 }

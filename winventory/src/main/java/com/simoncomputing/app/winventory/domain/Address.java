@@ -7,6 +7,7 @@ package com.simoncomputing.app.winventory.domain;
 public class Address {
 
     private Long      key;
+    private String    name;
     private String    street1;
     private String    street2;
     private String    city;
@@ -15,6 +16,8 @@ public class Address {
 
     public Long      getKey() { return key; }
     public void      setKey( Long value ) { key = value; }
+    public String    getName() { return name; }
+    public void      setName( String value ) { name = value; }
     public String    getStreet1() { return street1; }
     public void      setStreet1( String value ) { street1 = value; }
     public String    getStreet2() { return street2; }

@@ -69,6 +69,7 @@ public class TestAddressDao {
     public static Address createAddress() {
         Address address = new Address();
 
+        address.setName( randomString( "name", 50 ) );
         address.setStreet1( randomString( "street1", 50 ) );
         address.setStreet2( randomString( "street2", 50 ) );
         address.setCity( randomString( "city", 50 ) );
@@ -80,6 +81,7 @@ public class TestAddressDao {
 
     public static void compareRecords( Address address, Address readRecord ) {
 
+        assertEquals( address.getName(), readRecord.getName() );
         assertEquals( address.getStreet1(), readRecord.getStreet1() );
         assertEquals( address.getStreet2(), readRecord.getStreet2() );
         assertEquals( address.getCity(), readRecord.getCity() );
@@ -90,6 +92,7 @@ public class TestAddressDao {
 
     public static void modifyRecord( Address address ) {
 
+        address.setName( randomString( "name", 50 ) );
         address.setStreet1( randomString( "street1", 50 ) );
         address.setStreet2( randomString( "street2", 50 ) );
         address.setCity( randomString( "city", 50 ) );

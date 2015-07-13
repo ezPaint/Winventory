@@ -5,6 +5,8 @@
 
 <div class="col-md-2">
 	<div class="list-group">
+		<a id="results" href="${contextPath}/admin/condition" class="list-group-item"> <span
+			class="glyphicon glyphicon-cog" aria-hidden="true"> Conditions</span></a>
 		<a id="results" href="${contextPath}/admin/setSmtp" class="list-group-item"> <span
 			class="glyphicon glyphicon-envelope" aria-hidden="true"> SMTP</span></a>
 		<a id="results" href="${contextPath}/admin/setGoogleClient" class="list-group-item"> <span

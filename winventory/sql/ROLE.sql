@@ -10,8 +10,6 @@ CREATE TABLE ROLE (
     TITLE              VARCHAR2(30),
     CONSTRAINT ROLE_PK PRIMARY KEY ( KEY ));
 
-CREATE SEQUENCE ROLE_SEQ;
-
 
 -- Sample Select Statement
 

@@ -1,7 +1,7 @@
 package com.simoncomputing.app.winventory.bo;
 
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.*;
@@ -116,5 +116,33 @@ public class AddressBo {
     }
 
     // PROTECTED CODE -->
+    
+    /**
+     * Returns a {@link List} of all {@link Address} objects from the database
+     * 
+     * @return A {@link List} of all {@link Address} objects
+     * @throws BoException
+     */
+    public List<Address> getAll() throws BoException {
+        SqlSession session = null;
+        List<Address> list;
+
+        try {
+            session = SessionFactory.getSession();
+            AddressDao mapper = session.getMapper(AddressDao.class);
+            list = mapper.getAll();
+            session.commit();
+
+        } catch (Exception e) {
+            session.rollback();
+            throw new BoException(e);
+
+        } finally {
+            if (session != null)
+                session.close();
+        }
+
+        return list;
+    }
 
 }

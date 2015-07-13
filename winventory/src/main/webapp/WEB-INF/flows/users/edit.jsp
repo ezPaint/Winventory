@@ -45,6 +45,20 @@
 					</div>
 					<br>
 					<div class="padme">
+					
+					
+						<c:if test="${not empty errors}">
+	                    	<div class="alert alert-danger" role="alert">
+	                    		<h3 class="error-header">Could not add user:</h3>
+	  							<span class="sr-only">Errors:</span>
+	  							<c:forEach items="${errors}" var="error">
+	  								<p class="error-msg">
+	  									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	  									${error}
+	  								</p>
+	  							</c:forEach>
+							</div>
+                    	</c:if>
 
 						<%@ page
 							import="com.simoncomputing.app.winventory.domain.User"%>
@@ -66,7 +80,7 @@
 								<div class="col-sm-9 search-field">
 									<input name="key" type="text" id="key" pattern="^[^\'\&quot]*$"
 										class="form-control search-hardware-type"
-										value="<%=user.getKey()%>" disabled>
+										value="<%=user.getKey()%>" readonly>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

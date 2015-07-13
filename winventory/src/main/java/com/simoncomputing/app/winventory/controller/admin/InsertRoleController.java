@@ -1,6 +1,7 @@
 package com.simoncomputing.app.winventory.controller.admin;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -24,7 +25,7 @@ public class InsertRoleController extends BaseController {
 
     private static final long serialVersionUID = 1L;
     private static final String insertRoleJsp = "/WEB-INF/flows/admin/insertRole.jsp";
-    // private static Logger logger = Logger.getLogger(AdminController.class);
+    private static Logger logger = Logger.getLogger(InsertRoleController.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -33,59 +34,93 @@ public class InsertRoleController extends BaseController {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // get role title
-        String title = request.getParameter("roleTitle");
-
-        // generate role key?
-
         // create new role
         Role newRole = new Role();
-        newRole.setTitle(title);
 
-        // insert into role table
         try {
+            // generate role key
+            int key = RoleBo.getInstance().getAll().size() + 1;
+            newRole.setKey((long) key);
+
+            // get role title
+            String title = request.getParameter("roleTitle");
+            newRole.setTitle(title);
+
+            logger.info("creating new role with title" + title + "now.");
+
+            // insert into role table
             RoleBo.getInstance().create(newRole);
 
-            // check if admin is selected -- how do you get the value from a radio button?
-            if (request.getParameter("adminPerms").equals("adminPerms")) {
+
+            // generate key for ref_permission_to_role table
+            long listKey = (long) (RefPermissionToRoleBo.getInstance().getAll().size() + 1);
+
+            
+            // check if admin radio button is selected
+            if (request.getParameter("adminPerms") != null) {
 
                 // if it is get all permissions from ref_permission
-                List<RefPermission> permissions = RefPermissionBo.getInstance().getAll();
+                List<RefPermission> permsToAdd = RefPermissionBo.getInstance().getAll();
 
-                // associate permissions with new role id in ref_permission_to_role
-                for(RefPermission permission : permissions){
+                // get role id to associate permissions with
+                String roleId = newRole.getKey() + "";
+
+                // iterate over list of permissions and add each to role
+                for (RefPermission permission : permsToAdd) {
+
                     RefPermissionToRole permToRole = new RefPermissionToRole();
-                    
-                    String permId = permission.getKey() + "";
+                    permToRole.setKey(listKey);
+
+                    //get permission id to associate 
+                    String permId = (permission.getKey()) + "";
                     permToRole.setPermissionId(Integer.parseInt(permId));
                     
-                    String roleId = newRole.getKey() + "";
-                    permToRole.setPermissionId(Integer.parseInt(roleId));
+                    permToRole.setRoleId(Integer.parseInt(roleId));
+
+                    logger.info("binding permission: #" + permission.getKey() + ", "
+                            + permission.getCode() + " to role " + roleId);
                     
-                    RefPermissionToRoleBo.getInstance().create(permToRole);
-                    
+                    // insert new reference into ref_permission_to_role table
+                    RefPermissionToRoleBo.getInstance().insert(listKey,Integer.parseInt(permId),Integer.parseInt(roleId));
+
+                    listKey++;
                 }
-                
+
+                request.setAttribute("Title", newRole.getTitle());
+                request.setAttribute("permissions", permsToAdd);
+
+            } else {
+                // otherwise
+                // get each form group
+                // filter out unchecked permissions
+                // add "read" to each category that has checked permissions
+                // get associated permission ids from ref_permissions
+                // associate permissions with new role id in ref_perm_to_role
+
+                List<RefPermission> permissions = new ArrayList<RefPermission>();
+                RefPermission ref = new RefPermission();
+                ref.setCode("permission");
+                permissions.add(ref);
+
+                RefPermissionToRoleBo.getInstance().create(new RefPermissionToRole());
+
                 request.setAttribute("Title", newRole.getTitle());
                 request.setAttribute("permissions", permissions);
-                
+
             }
-            
-            request.setAttribute("Title", "failed");
-            request.setAttribute("permissions", "none");
-            
-            // otherwise
-            // get each form group
-            // filter out unchecked permissions
-            // add "read" to each category that has checked permissions
-            // get associated permission ids from ref_permissions
-            // associate permissions with new role id in ref_perm_to_role
 
         } catch (BoException e) {
-            // TODO Auto-generated catch block
+
+            List<RefPermission> permissions = new ArrayList<RefPermission>();
+            RefPermission ref = new RefPermission();
+            ref.setCode("none");
+            permissions.add(ref);
+
+            request.setAttribute("Title", "failed");
+            request.setAttribute("permissions", permissions);
             e.printStackTrace();
         }
-        
+
         this.forward(request, response, "/WEB-INF/flows/admin/insertSuccess.jsp");
 
     }

@@ -48,7 +48,8 @@
 		<div class="row">
 			<jsp:include page="userBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
+			<jsp:include page="/WEB-INF/includes/error.jsp" />
+				
 
 				<div class="main">
 					<div class="boom">
@@ -56,6 +57,10 @@
 					</div>
 
 					<div class="padme" style="margin-bottom: 200px;">
+					
+					<!-- Include the success message (only shows if success != null -->
+					<jsp:include page="/WEB-INF/includes/success.jsp" />
+				
 						<%@ page
 							import="com.simoncomputing.app.winventory.domain.User"%>
 						<%@ page import="java.util.ArrayList"%>
@@ -67,13 +72,14 @@
 						%>
 
 
-						<div class="media">
-							<div class="media-left">
+						<!-- <div class="media"> -->
+							<div class="col-md-4">
 								<img class="profile-img-big"
 									src="${contextPath}/resources/images/SC-Logo-Black-On-White.png">
 							</div>
-							<div class="media-body">
-								<ul class="list-group">
+							
+							<div class="col-md-8">
+								<ul class="list-group" style="word-wrap: break-word;">
 								
 									<li class="list-group-item row">
 										<div class="col-md-3">
@@ -170,7 +176,7 @@
 									</li>
 								</ul>
 							</div>
-						</div>
+						<!-- </div> -->
 						<div>
 							<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
 							<a class="btn btn-default" href="edit?key=<%=user.getKey()%>"

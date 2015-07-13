@@ -1,6 +1,7 @@
 package com.simoncomputing.app.winventory.controller.hardware;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,10 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.LocationBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
+import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.User;
@@ -42,6 +45,9 @@ public class HardwareViewController extends BaseController {
         // with the key value (assuming there is a key parameter in the request)
         Hardware hardware = null;
         Long long_key = null;
+        
+        List<Event> events = null;
+        
         if (key != null) {
             // Cast the key to the correct type
             long_key = Long.parseLong(key);
@@ -87,11 +93,24 @@ public class HardwareViewController extends BaseController {
                     log.error(e.getMessage());
                 }
             }
+            
+            //Use Bo to get all events associated with this hardware
+            EventBo eb = EventBo.getInstance();
+        	try {
+				events = eb.getEventsOf(hardware);
+			} catch (BoException e) {
+				// TODO Auto-generated catch block
+				request.setAttribute("error", e.getMessage());
+                log.error(e.getMessage());
+			}
         }
 
         // Set the hardware as an attribute for the request
         request.setAttribute("hardware", hardware);
-
+        
+        //Set the list of events as an attribute
+        request.setAttribute("events", events);
+        
         // Forward the request to the "hardware/view" page
         request.getRequestDispatcher("/WEB-INF/flows/hardware/view.jsp").forward(request, response);
 

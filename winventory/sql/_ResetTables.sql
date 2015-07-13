@@ -300,7 +300,6 @@ ALTER TABLE USER ADD CONSTRAINT FK_USER_ROLE_ID FOREIGN KEY (ROLE_ID) REFERENCES
 -- REF_PERMISSION KEY CONVENTION :
 -- First digit denotes label (1 = Hardware, 2 = Software, etc.)
 -- Second digit denotes action (0 = create, 1 = read, 2 = update, 3 = delete)
-
 INSERT INTO REF_PERMISSION VALUES (10,'createHardware', 'createHardware');
 INSERT INTO REF_PERMISSION VALUES (11,'readHardware', 'readHardware');
 INSERT INTO REF_PERMISSION VALUES (12,'updateHardware', 'updateHardware');
@@ -319,6 +318,14 @@ INSERT INTO REF_PERMISSION VALUES (40,'createUser', 'createUser');
 INSERT INTO REF_PERMISSION VALUES (41,'readUser', 'readUser');
 INSERT INTO REF_PERMISSION VALUES (42,'updateUser', 'updateUser');
 INSERT INTO REF_PERMISSION VALUES (43,'deleteUser', 'deleteUser');
+
+-- read/update/delete for user to enact on self, i.e. their own user but no others
+INSERT INTO REF_PERMISSION(KEY, CODE, DESCRIPTION) VALUES (51, 'readSelf', 'readSelf');
+INSERT INTO REF_PERMISSION(KEY, CODE, DESCRIPTION) VALUES (52, 'updateSelf', 'updateSelf');
+INSERT INTO REF_PERMISSION(KEY, CODE, DESCRIPTION) VALUES (53, 'deleteSelf', 'deleteSelf');
+
+-- permission to activate/deactivate existing users --
+INSERT INTO REF_PERMISSION(KEY, CODE, DESCRIPTION) VALUES (54, 'updateUserIsActive', 'permission to activate/deactivate existing users');
 
 
 INSERT INTO ROLE VALUES (1,'admin');
@@ -341,6 +348,9 @@ INSERT INTO REF_PERMISSION_TO_ROLE VALUES (12,40,1);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (13,41,1);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (14,42,1);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (15,43,1);
+INSERT INTO REF_PERMISSION_TO_ROLE VALUES (33,51,1);
+INSERT INTO REF_PERMISSION_TO_ROLE VALUES (34,52,1);
+INSERT INTO REF_PERMISSION_TO_ROLE VALUES (35,53,1);
 
 -- Add permissions to inventory manager role -- 
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (16,10,2);
@@ -356,22 +366,25 @@ INSERT INTO REF_PERMISSION_TO_ROLE VALUES (25,31,2);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (26,33,2);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (27,41,2);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (28,42,2);
+INSERT INTO REF_PERMISSION_TO_ROLE VALUES (36,51,2);
 
 -- Add permissions to basic user role --
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (29,11,3);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (30,21,3);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (31,41,3);
 INSERT INTO REF_PERMISSION_TO_ROLE VALUES (32,42,3);
+INSERT INTO REF_PERMISSION_TO_ROLE VALUES (37,51,3);
 
 -- Adds user, Username:'username1' Password:'password' --
 INSERT INTO USER VALUES ( 10, 'username1', 'SHA-256$20000$UTF-8$uegf5hijubj9samgsbd4klhguc$014cfb0d05b9504a7d6e51a4ecc0480d4e0e9c9642feb6738142b3b1c960947a', 'first', 'last','mail@mail.com', '5555559999', '5555557777', true, 1);
 INSERT INTO USER VALUES ( 11, 'nicholas.phillpott', 'SHA-256$20000$UTF-8$uegf5hijubj9samgsbd4klhguc$014cfb0d05b9504a7d6e51a4ecc0480d4e0e9c9642feb6738142b3b1c960947a', 'Nicholas', 'Phillpott','nicholas.phillpott@simoncomputing.com', '7575556765', '7575556543', true, 2);
+INSERT INTO USER VALUES ( 14, 'elizabeth.villaflor', 'SHA-256$20000$UTF-8$uegf5hijubj9samgsbd4klhguc$014cfb0d05b9504a7d6e51a4ecc0480d4e0e9c9642feb6738142b3b1c960947a', 'first', 'last','email@email.com', '5555559999', '5555557777', true, 3);
+INSERT INTO USER Values(123, 'bjg3wk', 'googleUser', 'Brendan', 'Goggin', 'bjg3wk@virginia.edu', '1234567890', '1234567890', true, 1);
+INSERT INTO USER Values(1234, 'nickwp54', 'googleUser', 'Nicholas', 'Phillpott', 'nickwp54@vt.edu', '1234567890', '1234567890', true, 1);
 
 INSERT INTO REF_CONDITION  VALUES ('good', 'good');
 
--- Adds google login info to USER --
-INSERT INTO USER Values(123, 'bjg3wk', 'googleUser', 'Brendan', 'Goggin', 'bjg3wk@virginia.edu', '1234567890', '1234567890', true, 1);
-INSERT INTO USER Values(1234, 'nickwp54', 'googleUser', 'Nicholas', 'Phillpott', 'nickwp54@vt.edu', '1234567890', '1234567890', true, 1);
+INSERT INTO GOOGLE_CLIENT VALUES (1,  'id', 'secret');
 
 
 INSERT INTO SMTP Values(1, 'smtp.host.com', 465, 'username', 'password', true);

@@ -76,6 +76,10 @@ public class UserViewController extends BaseController {
             request.setAttribute("results", results);
         }
         
+        // check for success message (for redirects from edit/add/delete pages)
+        if (request.getParameter("success") != null) {
+            request.setAttribute("success", request.getParameter("success"));
+        }
         
         // forward to the users/view jsp
         request.getRequestDispatcher("/WEB-INF/flows/users/view.jsp").forward(request, response);

@@ -61,7 +61,7 @@ public class User {
     private static Logger logger = Logger.getLogger(User.class);
     
     /**
-     * Binds a post request containing the adduser/edituser form
+     * Binds a post request containing the adduser form
      * to the user, so the user will be ready for adding/updating to the db.
      * @param request
      * @return errors an arraylist of error messages
@@ -146,6 +146,49 @@ public class User {
     }
     
     /**
+     * Binds a post request containing the edituser form
+     * to the user, so the user will be ready for adding/updating to the db.
+     * This differs from bind() because the edit form does not contain
+     * user key, username, isActive, or email. Those cannot be edited through the edit-user form.
+     * @param request
+     * @return errors an arraylist of error messages
+     */
+    public ArrayList<String> bindEditForm(HttpServletRequest request) {
+        // FORM VALIDATION
+        
+        // ArrayList of errors to display for form validation problems
+        ArrayList<String> errors = new ArrayList<String>();
+        
+        // if no errors, set the values
+        
+        // Set first and last name, phone numbers, and is active
+        this.setFirstName(request.getParameter("firstName"));
+        this.setLastName(request.getParameter("lastName"));
+        this.setCellPhone(request.getParameter("cellPhone"));
+        this.setWorkPhone(request.getParameter("workPhone"));
+        
+        // Set role, given role title:
+        // Start by getting all roles
+        ArrayList<Role> roles = new ArrayList<Role>();
+        try {
+            roles = (ArrayList<Role>) RoleBo.getInstance().getAll();
+        } catch (BoException e) {
+            logger.error("BoException in UserInsertController when trying to get roles");
+        }
+        
+        // find the role id for the specified role title, and set user's role id to that
+        String roleTitle = request.getParameter("roleTitle");
+        for (Role r : roles) {
+            if (r.getTitle().equals(roleTitle)) {
+                this.setRoleId( r.getKey().intValue() );
+            }
+        }
+        
+        // Done, return the empty errors ArrayList
+        return errors;
+    }
+    
+    /**
      * Saves the user to the db, and ensures unique username and email.
      * Also ensures username does not start with a number (barcode problems).
      * if empty arraylist is returned, the user was saved. else, not saved.
@@ -186,7 +229,7 @@ public class User {
     public void sendEmailInvite(HttpServletRequest request) throws Exception {
         
         // Set password for google user
-        if (this.getPassword().equals("isGoogle")) {
+        if (this.getPassword().equals("googleUser")) {
             logger.info("Sending login-with-google email invite to: " + this.getEmail());
             this.sendInviteGoogle(request);
         }
@@ -218,7 +261,7 @@ public class User {
         String token = uuid.toString().replaceAll("-", "");
         
         //should be changed to https
-        String urlPath = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        String urlPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         String message = "You have been added to the Winventory! \n"
                 + "Your Username is: " + this.getUsername() + "\n"
                 + "Please reset your password at: "

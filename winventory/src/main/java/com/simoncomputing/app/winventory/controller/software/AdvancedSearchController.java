@@ -6,17 +6,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import com.simoncomputing.app.winventory.bo.SoftwareBo;
+import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.util.BoException;
-
 import org.apache.log4j.Logger;
 
 /**
@@ -26,15 +24,14 @@ import org.apache.log4j.Logger;
  *
  */
 @WebServlet("/software/advancedsearch")
-public class AdvancedSearchController extends HttpServlet {
+public class AdvancedSearchController extends BaseController {
     private static final long serialVersionUID = 1L;
     private static Logger log = Logger.getLogger(AdvancedSearchController.class);
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/WEB-INF/flows/software/advanced-search.jsp").forward(
-                request, response);
+        forward(request, response, "/WEB-INF/flows/software/advanced-search.jsp");
     }
     /**
      * Retrieves searches, removes blank fields, populate arraylists for database search
@@ -61,7 +58,6 @@ public class AdvancedSearchController extends HttpServlet {
         costs.add(minCost);
         if (maxCost != null)
         costs.add(maxCost);
-        
         
         ArrayList<String> keys = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("licenseKey")));
@@ -145,7 +141,7 @@ public class AdvancedSearchController extends HttpServlet {
                 }
             } catch (BoException e) {
                 error = e.getLocalizedMessage();
-                log.error(e.getMessage(), e);
+                logError(log, e);
             }
 
         }
@@ -161,11 +157,9 @@ public class AdvancedSearchController extends HttpServlet {
 
         // only redirect to results page if no error occurred
         if (error != null) {
-            request.getRequestDispatcher("/WEB-INF/flows/software/advanced-search.jsp").forward(
-                    request, response);
+            forward(request, response, "/WEB-INF/flows/software/advanced-search.jsp");
         } else {
-            request.getRequestDispatcher("/WEB-INF/flows/software/results.jsp").forward(request,
-                    response);
+            forward(request, response, "/WEB-INF/flows/software/results.jsp");
         }
 
     }

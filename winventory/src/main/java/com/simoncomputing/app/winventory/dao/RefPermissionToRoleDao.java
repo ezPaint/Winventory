@@ -19,6 +19,8 @@ public interface RefPermissionToRoleDao {
     public List<RefPermissionToRole> getListByPermissionId( Integer key ) throws DaoException;
     public List<RefPermissionToRole> getListByRoleId( Integer key ) throws DaoException;
 
-    // PROTECTED CODE -->
 
+    // PROTECTED CODE -->
+    public List<RefPermissionToRole> getAll();
+    public void insert(Map<String,Object> map);
 }

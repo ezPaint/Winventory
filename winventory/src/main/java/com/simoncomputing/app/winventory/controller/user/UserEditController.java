@@ -20,6 +20,7 @@ import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.domain.Role;
 import com.simoncomputing.app.winventory.domain.User;
+import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -41,32 +42,40 @@ public class UserEditController extends BaseController {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 * displays the edit user page/form
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+	        throws ServletException, IOException {
+	    
+	    long key = -1; // the key of the requested user
+	    User user; // the requested user 
+	    UserInfoBean currentUser; // the currently logged in user
+	    
+	    boolean reject = false;
+	    
+	    // if key not present/valid, redirect to users list
+	    try {
+	        key = Long.parseLong(request.getParameter("key"));
+	        user = UserBo.getInstance().read(key);
+	        currentUser = this.getUserInfo(request);
+	    } catch (Exception e) {
+	        logger.info("Invalid key for HTTP GET /users/edit. Redirecting to list users page.");
+	        response.sendRedirect(request.getContextPath() + "/users/results");
+	        return;
+	    }
+	    
+	    // if the user does not exist:
+	    if (user == null) {
+	        response.sendRedirect(request.getContextPath() + "/users/results");
+	        return;
+	    }
+	    
+	    
 	    
 	    // if the user is rejected, the redirect is sent in the require permission method.
-        if (this.requirePermission(request, response, "updateUser")) {
+        if (this.requirePermission(request, response, "updateUser")
+            || (this.requirePermission(request, response, "updateSelf") && key == currentUser.getKey())) {
             return;
         }
 	    
-	    // the key in the url that specifies the user
-	    String key = request.getParameter("key");
-	    
-	    // try to get the user by key
-        User user = null;
-        if (key != null) {
-            try {
-                Long long_key = Long.parseLong(key);
-                user = UserBo.getInstance().read(long_key);
-            } catch (BoException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        // user not found or invalid key
-        if (user == null) {
-            request.setAttribute("error", "User not found.");
-            logger.error("The key is not valid or there is no hardware with that key: " + key);
-        }
         
         // try to get the list of all roles
         ArrayList<Role> roles = null;
@@ -94,6 +103,54 @@ public class UserEditController extends BaseController {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    
+	    long key = -1; // the key of the requested user
+        User user; // the requested user 
+        UserInfoBean currentUser; // the currently logged in user
+        
+        boolean reject = false;
+        
+        // if key not present/valid, redirect to users list
+        try {
+            key = Long.parseLong(request.getParameter("key"));
+            user = UserBo.getInstance().read(key);
+            currentUser = this.getUserInfo(request);
+        } catch (Exception e) {
+            logger.info("Invalid key for HTTP GET /users/edit. Redirecting to list users page.");
+            response.sendRedirect(request.getContextPath() + "/users/results");
+            return;
+        }
+        
+        // if the user does not exist:
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/users/results");
+            return;
+        }
+        
+        // if the user is rejected, the redirect is sent in the require permission method.
+        if (this.requirePermission(request, response, "updateUser")
+            || (this.requirePermission(request, response, "updateSelf") && key == currentUser.getKey())) {
+            return;
+        }
+        
+        // form errors to be displayed on form page
+        ArrayList<String> errors = new ArrayList<String>();
+        
+        // bind the form values to the user
+        errors = user.bindEditForm(request);
+        
+        // try to update the user
+        try {
+            UserBo.getInstance().update(user);
+        } catch (BoException e) {
+            logger.error("BoException in UserEditController. This is unexpected behavior. "
+                    + "Username of the user which should have been edited:" + user.getUsername());
+            errors.add("There was an error processing your request. Please check your values and try again. "
+                    + "If the error persists, please contact and administrator.");
+            response.sendRedirect(request.getContextPath() + "/users/edit?key=" + key );
+            return;
+        }
+        
+        response.sendRedirect(request.getContextPath() + "/users/view?key=" + key + "&success=true");
 
 	}
 

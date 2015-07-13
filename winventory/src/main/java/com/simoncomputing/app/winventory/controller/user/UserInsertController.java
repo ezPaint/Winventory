@@ -136,7 +136,7 @@ public class UserInsertController extends BaseController {
         }
         
         // if no errors, redirect to results 
-        response.sendRedirect(request.getContextPath() + "/users/results");
+        response.sendRedirect(request.getContextPath() + "/users/results?success=true");
     }
 
 }

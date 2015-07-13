@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.simoncomputing.app.winventory.util.Barcoder;
+
 
 
 /**

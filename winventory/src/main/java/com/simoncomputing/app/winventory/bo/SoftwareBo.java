@@ -411,10 +411,9 @@ public class SoftwareBo {
     public List<Software> searchAdvanced(ArrayList<String> columns,
             ArrayList<ArrayList<String>> searches) throws BoException {
         SqlSession session = null;
-        List<Software> list = null; //TODO: check what to initialize to
+        List<Software> list = null; 
 
         if (columns.equals("") || searches == null) {
-            // TODO throw application error
             return null;
         }
 
@@ -468,8 +467,9 @@ public class SoftwareBo {
      * @param minCost
      * @param maxCost
      * @return List of Software objects from database (Software table)
+     * @throws BoException 
      */
-    public List<Software> searchCostRange(List<Software> results, String minCost, String maxCost) {
+    public List<Software> searchCostRange(List<Software> results, String minCost, String maxCost) throws BoException {
     	List<Software> costs = new ArrayList<Software>(); 
     	List<Software> returnedResults = new ArrayList<Software>();    	
     	try {
@@ -483,8 +483,8 @@ public class SoftwareBo {
     			}
     		}
     		
-    	} catch (BoException e){ //TODO: use logger
-    		e.printStackTrace();
+    	} catch (BoException e){ 
+            throw new BoException( e );
     	}
     	
     	return costs;
@@ -500,8 +500,10 @@ public class SoftwareBo {
      *            the range of dates returned objects' purchased and/or
      *            expiration date should fall within
      * @return the narrowed down list of Software objects
+     * @throws BoException 
      */
-    public List<Software> searchDateRange(List<Software> results, ArrayList<String> dates) {
+    public List<Software> searchDateRange(List<Software> results, ArrayList<String> dates) throws BoException {
+        //Holds software objects between date ranges
         List<Software> list = new ArrayList<Software>();
 
         if (dates.get(0).equals("") && dates.get(1).equals("") && dates.get(2).equals("")
@@ -516,16 +518,14 @@ public class SoftwareBo {
             if (dates.get(2).equals("") && dates.get(3).equals("")) {
                 // if only purchased dates are entered, expired should contain
                 // all values in purchased
-                purchased = getListByPurchaseRange(Date.valueOf(dates.get(0)),
+                list = getListByPurchaseRange(Date.valueOf(dates.get(0)),
                         Date.valueOf(dates.get(1)));
-                expired = purchased;
 
             } else if (dates.get(0).equals("") && dates.get(1).equals("")) {
                 // if only expired dates are entered, purchased should contain
                 // all values in expired
-                expired = getListByExpirationRange(Date.valueOf(dates.get(2)),
+                list = getListByExpirationRange(Date.valueOf(dates.get(2)),
                         Date.valueOf(dates.get(3)));
-                purchased = expired;
 
             } else {
                 // otherwise, purchased should contain only dates within
@@ -535,26 +535,42 @@ public class SoftwareBo {
                         Date.valueOf(dates.get(1)));
                 expired = getListByExpirationRange(Date.valueOf(dates.get(2)),
                         Date.valueOf(dates.get(3)));
-            }
-
-            // iterate over the results list and check if a piece of Software is
-            // also in the purchased and expired lists. If it is, add it to the
-            // narrowed down list, otherwise ignore it.
-            for (Software s : results) {
-                for (Software p : purchased) {
-                    for (Software e : expired) {
-                        if (s.equals(p) && s.equals(e) && p.equals(e)) {
-                            list.add(e);
-                        }
+                
+                //Calculate the intersection of 'purchased' and 'expired'
+                for (Software p : purchased){
+                    for (Software e : expired){
+                        if (p.compareDates(e)) list.add(p);
                     }
                 }
             }
+
         } catch (BoException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw new BoException( e );
         }
 
         return list;
+    }
+    
+    /**
+     * Deletes all data (rows) from SOFTWARE
+     * @throws BoException
+     */
+    public void deleteAll() throws BoException {
+        SqlSession session = null;
 
+        try {
+            session = SessionFactory.getSession();
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            mapper.deleteAll();
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
     }
 }
