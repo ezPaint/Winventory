@@ -36,7 +36,9 @@ public class AdvancedSearchController extends HttpServlet {
         request.getRequestDispatcher("/WEB-INF/flows/software/advanced-search.jsp").forward(
                 request, response);
     }
-
+    /**
+     * Retrieves searches, removes blank fields, populate arraylists for database search
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String error = null;
@@ -48,40 +50,22 @@ public class AdvancedSearchController extends HttpServlet {
                 .getParameterValues("serialNo")));
         ArrayList<String> versions = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("version")));
-        ArrayList<String> costs = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("cost")));
+        
+        
+//        ArrayList<String> costs = new ArrayList<String>(Arrays.asList(request
+//                .getParameterValues("cost")));
+        String minCost = request.getParameter("minCost");
+        String maxCost = request.getParameter("maxCost");
+        ArrayList<String> costs = new ArrayList<String>();
+        if (minCost != null)
+        costs.add(minCost);
+        if (maxCost != null)
+        costs.add(maxCost);
+        
+        
         ArrayList<String> keys = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("licenseKey")));
-        // ----------------------------------------------------------------------------------------
-        //Grab purchased date range from Date Range Picker (in format YYYY-MM-DD - YYYY-MM-DD)
-        ArrayList<String> purchasedDates = new ArrayList<String>(Arrays.asList(request
-            .getParameterValues("purchasedDate")));
-        String[] purchasedRange = purchasedDates.get(0).split(" - "); //split start and end dates
-        String purchasedStart = purchasedRange[0]; //Starting date (in form YYYY-MM-DD)
-        String purchasedEnd = purchasedRange[1];   //Ending date (in form YYYY-MM-DD)
-        //Get all software objects between purchase range from database
-        List<Software> softwares = null;
-        try {
-            softwares = SoftwareBo.getInstance().getListByPurchaseRange(Date.valueOf(purchasedStart), Date.valueOf(purchasedEnd));
-        } catch (BoException e) {
-            log.error(e.getMessage(), e);
-        }
-        
-        //Grab expiration date range from Date Range Picker (in format YYYY-MM-DD - YYYY-MM-DD)
-        ArrayList<String> expirationDates = new ArrayList<String>(Arrays.asList(request
-            .getParameterValues("expirationDate")));
-        String[] expirationRange = expirationDates.get(0).split(" - "); //split start and end dates
-        String expirationStart = expirationRange[0];   //Starting date (in form YYYY-MM-DD)
-        String expirationEnd = expirationRange[1];     //Ending date (in form YYYY-MM-DD)
-      //Get all software objects between expiration range from database
-        List<Software> softwares2 = null;
-        try {
-            softwares2 = SoftwareBo.getInstance().getListByExpirationRange(Date.valueOf(expirationStart), Date.valueOf(expirationEnd));
-        } catch (BoException e) {
-            log.error(e.getMessage(), e);
-        }
-        // ----------------------------------------------------------------------------------------
-        
+       
         // remove blank fields
         cleanFields(names);
         cleanFields(serials);
@@ -91,8 +75,8 @@ public class AdvancedSearchController extends HttpServlet {
 
         // passed as parameters to the dao
         // columns contains the list of columns in the database to search
-        // searchs contains the actual search terms to match to when selecting
-        // records
+        // searches contains the actual search terms to match to when selecting records
+
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<ArrayList<String>> searches = new ArrayList<ArrayList<String>>();
 
@@ -114,14 +98,13 @@ public class AdvancedSearchController extends HttpServlet {
             searches.add(versions);
         }
 
-        if (costs != null && costs.size() > 0) {
-            columns.add("cost");
-            searches.add(costs);
-        }
+        if ( costs.size() == 1) {
+        	costs.add(costs.get(0));
+        } 
 
         if (keys != null && keys.size() > 0) {
             columns.add("license_Key");
-            searches.add(names);
+            searches.add(keys);
         }
 
         // get date search terms
@@ -129,7 +112,8 @@ public class AdvancedSearchController extends HttpServlet {
 
         // do sql stuff
         ArrayList<Software> results = null;
-        ArrayList<Software> resultsInRange = null;
+        ArrayList<Software> resultsBase = null;
+        ArrayList<Software> resultsInDateRange = null;
 
         // check that at least one search term was given
         if (names.size() == 0 && serials.size() == 0 && versions.size() == 0 && costs.size() == 0
@@ -138,29 +122,36 @@ public class AdvancedSearchController extends HttpServlet {
         } else {
 
             try {
-
                 if (columns.size() == 0 || searches.size() == 0) {
                     // if only date search terms were provided, search all
                     // software by date
                     results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
+                    resultsBase = new ArrayList<Software>(SoftwareBo.getInstance().getAll()); //TODO: could just copy the arraylist over; which is faster?
                 } else {
                     results = new ArrayList<Software>(SoftwareBo.getInstance().searchAdvanced(
                             columns, searches));
+                    resultsBase = new ArrayList<Software>(SoftwareBo.getInstance().searchAdvanced(
+                            columns, searches));
                 }
-
+                // From previous results (either getAll or searchAdvanced, narrow down searches to cost range
+                if(costs.size() > 0) {
+                	results.clear();
+                	results = new ArrayList<Software>(SoftwareBo.getInstance().searchCostRange(resultsBase, costs.get(0), costs.get(1)));
+                }
+                // If date range was entered
                 if (dateInfo.size() > 0) {
-                    resultsInRange = new ArrayList<Software>(SoftwareBo.getInstance()
+                    resultsInDateRange = new ArrayList<Software>(SoftwareBo.getInstance()
                             .searchDateRange(results, dateInfo));
                 }
             } catch (BoException e) {
                 error = e.getLocalizedMessage();
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
             }
 
         }
-
-        if (resultsInRange != null) {
-            request.setAttribute("results", resultsInRange);
+        
+        if (resultsInDateRange != null) {
+        	request.setAttribute("results", resultsInDateRange);
         } else if (results != null) {
             request.setAttribute("results", results);
         }
@@ -178,7 +169,6 @@ public class AdvancedSearchController extends HttpServlet {
         }
 
     }
-
     /**
      * Helper method to remove blank fields from form results.
      * 
@@ -205,11 +195,35 @@ public class AdvancedSearchController extends HttpServlet {
     private ArrayList<String> getDateInfo(HttpServletRequest request) {
         // will contain the date search terms
         ArrayList<String> dates = new ArrayList<String>();
+        String startPDate = "";
+        String endPDate = "";
+        String startExDate = "";
+        String endExDate = "";
 
-        String startPDate = request.getParameter("purchasedDateStart");
-        String endPDate = request.getParameter("purchasedDateEnd");
-        String startExDate = request.getParameter("expirationDateStart");
-        String endExDate = request.getParameter("expirationDateEnd");
+        // get search terms from form
+        ArrayList<String> purchasedDates = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("purchasedDate")));
+        // split start and end dates
+        String[] purchasedRange = purchasedDates.get(0).split(" - ");
+        if (purchasedRange.length == 2) {
+            startPDate = purchasedRange[0];
+            endPDate = purchasedRange[1];
+        } else if (purchasedRange.length == 1) {
+            startPDate = purchasedRange[0];
+            endPDate = purchasedRange[0];
+        }
+
+        ArrayList<String> expirationDates = new ArrayList<String>(Arrays.asList(request
+                .getParameterValues("expirationDate")));
+        // split start and end dates
+        String[] expirationRange = expirationDates.get(0).split(" - ");
+        if (expirationRange.length == 2) {
+            startExDate = expirationRange[0];
+            endExDate = expirationRange[1];
+        } else if (expirationRange.length == 1) {
+            startExDate = expirationRange[0];
+            endExDate = expirationRange[0];
+        }
 
         // determine if there are any date search terms,
         // if not return empty list
@@ -225,6 +239,7 @@ public class AdvancedSearchController extends HttpServlet {
         dates.add("");
         dates.add("");
 
+        // set date ranges
         if (!startPDate.equals("") && !endPDate.equals("")) {
             dates.set(0, startPDate);
             dates.add(1, endPDate);

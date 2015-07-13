@@ -46,7 +46,7 @@
                         <h3 class="login-title">Welcome Back</h3>
                     </div>
                 	<img class="profile-img" src="${contextPath}/resources/images/SC-Logo-Black-On-White.png"
-                    alt="">
+                    alt=""/>
                     <c:if test="${not empty error}">
                     	<div class="alert alert-danger" role="alert">
   							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -83,8 +83,11 @@
 						<div class="col-xs-2"><h4>or</h4></div>
 						<div class="col-xs-5"> <hr> </div>
 					</div>
-					<form action="login/googleLogin" method="get">
-                    	<input class="btn btn-lg btn-block btn-google" type="submit" value="Login with Google+">
+					<br><br><br><br>
+					<form action="${contextPath }/login/googleLogin" method="get" class="form-login">
+						<div class="form-horizontal">
+                    	<input class="btn btn-lg btn-google btn-block " type="submit" value="Login with Google+">
+                    	</div>
                     </form>
                 </div>
             </div>

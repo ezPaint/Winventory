@@ -30,41 +30,42 @@
 					<div class="boom">
 						<h2 class="center">Admin Dashboard</h2>
 					</div>
-				</div>
-			</div>
 
-			<div class="panel panel-default">
-				<div class="col-md-4">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">General Information</h3>
-						</div>
-						<div class="panel-body">${totHw} pieces of Hardware on record</div>
-						<div class="panel-body">${numSw} pieces of Applications on record</div>
-						<div class="panel-body">${numUsers} Users on record</div>
-					</div>
-				</div>
-				
-				<div class="col-md-4">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h3 class="panel-title">Reports</h3>
-						</div>
-						
-						<!-- TODO: figure out how to calculate values for progress bars -->
-						<!-- Current progress bar values are random and hard-coded in -->
-						<div class="panel-body">
-							Hardware in Use
-							<div class="progress">
-								<div class="progress-bar" role="progressbar"
-									aria-valuemin="0" aria-valuemax="100"
-									style="width: 87%;"></div>
+					<div class="padme">
+
+						<div class="col-md-6">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">General Information</h3>
+								</div>
+								<div class="panel-body">${totHw} pieces of Hardware on
+									record</div>
+								<div class="panel-body">${numSw} pieces of Software on
+									record</div>
+								<div class="panel-body">${numUsers} Users on record</div>
 							</div>
-							Applications in Use
-							<div class="progress">
-								<div class="progress-bar" role="progressbar"
-									aria-valuenow="{numSw}" aria-valuemin="0" aria-valuemax="100"
-									style="width: 70%;">
+						</div>
+
+						<div class="col-md-6">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h3 class="panel-title">Reports</h3>
+								</div>
+
+								<!-- TODO: figure out how to calculate values for progress bars -->
+								<!-- Current progress bar values are random and hard-coded in -->
+								<div class="panel-body">
+									Hardware in Use
+									<div class="progress">
+										<div class="progress-bar" role="progressbar" aria-valuemin="0"
+											aria-valuemax="100" style="width: 87%;"></div>
+									</div>
+									Software in Use
+									<div class="progress">
+										<div class="progress-bar" role="progressbar"
+											aria-valuenow="{numSw}" aria-valuemin="0" aria-valuemax="100"
+											style="width: 70%;"></div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -72,7 +73,6 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
 	<jsp:include page="/WEB-INF/includes/footer.jsp" />
 </body>

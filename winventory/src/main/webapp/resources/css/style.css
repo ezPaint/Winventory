@@ -318,3 +318,15 @@ body {
  	font-size: 15px;
  }
  
+ /* designed for an h3 */
+ .error-header {
+ 	margin-top: 20px;
+ 	margin-bottom: 30px;
+ }
+ 
+ /* designed for a <p> element */
+ .error-msg {
+ 	padding-left: 40px;
+ 	padding-bottom: 10px;
+ }
+ 

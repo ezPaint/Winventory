@@ -35,10 +35,10 @@ public interface SoftwareDao {
             throws DaoException;
     public List<Software> getListByExpirationRange(@Param("start") Date start,
             @Param("end") Date end) throws DaoException;
+    
+    public List<Software> getListByCostRange(@Param("minCost") String minCost, @Param("maxCost") String maxCost) throws DaoException;
 
     public List<Software> getAll() throws DaoException;
-
-    public List<Software> searchAdvanced(@Param("fields") List<String> fields,
-            @Param("inputs") ArrayList<ArrayList<String>> inputs) throws DaoException;
-
+    
+    public List<Software> searchAdvanced( @Param("fields") List<String> fields, @Param("inputs") ArrayList<ArrayList<String>> inputs ) throws DaoException; 
 }

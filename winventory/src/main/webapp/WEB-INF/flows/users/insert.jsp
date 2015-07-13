@@ -42,9 +42,21 @@
 					<div class="boom">
 						<h2 class="center">Add User</h2>
 					</div>
+					
 					<div class="padme">
 						<br>
-						
+						<c:if test="${not empty errors}">
+                    	<div class="alert alert-danger" role="alert">
+                    		<h3 class="error-header">Could not add user:</h3>
+  							<span class="sr-only">Errors:</span>
+  							<c:forEach items="${errors}" var="error">
+  								<p class="error-msg">
+  									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  									${error}
+  								</p>
+  							</c:forEach>
+						</div>
+                    </c:if>
 						
 						<form class="form-horizontal" action="insert"
 							data-toggle="validator" role="form" method="post">
@@ -138,7 +150,7 @@
 								
 							</div>
 							<div class="form-group">
-								<label for="isActive" class="col-sm-2 control-label">Is Active User?
+								<label for="isActive" class="col-sm-2 control-label">Activate user?
 									</label>
 								<div class="col-sm-9">
 									<input name="isActive" type="checkbox" id="isActive"

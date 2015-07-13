@@ -19,60 +19,74 @@ import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.util.BoException;
 
-@WebServlet("/hardware/advanced-search")
 /**
- * 
- * @author mack.hasz
- *
+ * Controller for the Advanced Search page
  */
+@WebServlet("/hardware/advanced-search")
 public class HardwareAdvancedSearchController extends BaseController {
+
     private static final long serialVersionUID = 1L;
 
     private Logger log = Logger.getLogger(HardwareAdvancedSearchController.class);
 
+    /**
+     * Runs when the "hardware/advanced-search" page is accessed by a link or
+     * through the url
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+                    throws ServletException, IOException {
 
-        // gets conditions from db for option form
+        // Create an ArrayList of all the valid Ref_Conditions, which will be
+        // used to prevent the user from entering
+        // or choosing a non-valid condition
         ArrayList<RefCondition> conditions = null;
         try {
+            // Use a BO to attempt to grab all valid conditions from the
+            // database
             conditions = new ArrayList<RefCondition>(RefConditionBo.getInstance().getAll());
         } catch (BoException e) {
             String error = logError(log, e);
             request.setAttribute("error", "Error code: " + error);
         }
 
+        // Set the conditions as an attribute for the request
         if (conditions != null) {
             request.setAttribute("conditions", conditions);
         }
 
-        // forward jsp
+        // Forward the request to the "hardware/advanced-search" page
         request.getRequestDispatcher("/WEB-INF/flows/hardware/advanced-search.jsp").forward(
-                request, response);
+                        request, response);
 
     }
 
+    /**
+     * Runs when the Search buttton on the "hardware/advanced-search" page is
+     * clicked
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+                    throws ServletException, IOException {
 
         String error = null;
 
-        // get fields
+        // Get all of the fields from the request (ArrayLists for everything
+        // except the search option)
         ArrayList<String> types = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("type")));
+                        .getParameterValues("type")));
         ArrayList<String> descriptions = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("description")));
+                        .getParameterValues("description")));
         ArrayList<String> costs = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("cost")));
+                        .getParameterValues("cost")));
         ArrayList<String> dates = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("date")));
+                        .getParameterValues("date")));
         ArrayList<String> conditions = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("condition")));
+                        .getParameterValues("condition")));
         ArrayList<String> serials = new ArrayList<String>(Arrays.asList(request
-                .getParameterValues("serial")));
+                        .getParameterValues("serial")));
         String searchOption = request.getParameter("optionsSearch");
-        
-        // check if user wants to search stored, owned, or all
+
+        // Check whether the User wants to search stored, owned, or all, and set
+        // appropriate booleans
         boolean owned = false;
         boolean stored = false;
         if (searchOption.equals("stored")) {
@@ -82,7 +96,7 @@ public class HardwareAdvancedSearchController extends BaseController {
             owned = true;
         }
 
-        // remove blank fields
+        // Remove blank fields from all of the ArrayLists
         cleanFields(types);
         cleanFields(descriptions);
         cleanFields(costs);
@@ -90,76 +104,72 @@ public class HardwareAdvancedSearchController extends BaseController {
         cleanFields(conditions);
         cleanFields(serials);
 
+        // If a field isn't empty, add its type to the "columns" ArrayList and
+        // the relevant list to the "searches" ArrayList
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<ArrayList<String>> searches = new ArrayList<ArrayList<String>>();
-
-        // if fields aren't empty, add to searches array
         if (types != null && types.size() > 0) {
             columns.add("type");
             searches.add(types);
         }
-
         if (descriptions != null && descriptions.size() > 0) {
             columns.add("description");
             searches.add(descriptions);
         }
-
         if (costs != null && costs.size() > 0) {
             columns.add("cost");
             searches.add(costs);
         }
-
         if (dates != null && dates.size() > 0) {
             columns.add("purchase_date");
             searches.add(dates);
         }
-
         if (conditions != null && conditions.size() > 0) {
             columns.add("condition");
             searches.add(conditions);
         }
-
         if (serials != null && serials.size() > 0) {
             columns.add("serial_no");
             searches.add(serials);
         }
 
-        // do sql stuff
+        // Attempt to get all relevant Hardware items from the advanced search
+        // using a BO, so long as all of the fields are not empty
         ArrayList<Hardware> results = null;
         if (types.size() == 0 && descriptions.size() == 0 && costs.size() == 0 && dates.size() == 0
-                && conditions.size() == 0 && serials.size() == 0) {
-            error = "Nothing was entered.";
+                        && conditions.size() == 0 && serials.size() == 0) {
+            error = logError(log, new NullPointerException());
+            request.setAttribute("error", "Error code: " + error);
         } else {
-
             try {
                 results = new ArrayList<Hardware>(HardwareBo.getInstance().searchAdvanced(columns,
-                        searches, stored, owned));
+                                searches, stored, owned));
             } catch (BoException e) {
-                error = "An error occured with error code: " + logError(log, e);
-                request.setAttribute("error", error);
+                error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
             }
-            
+
         }
 
+        // Set the attributes for the request
         if (results != null) {
             request.setAttribute("results", results);
         }
-
         request.setAttribute("page_header", "Search Results");
         request.setAttribute("error", error);
 
-        // if error stay on search
+        // If there was an error, stay on the advanced search page
         if (error != null) {
-            request.getRequestDispatcher("/WEB-INF/flows/hardware/advanced-search.jsp").forward(request,
-                    response);
-        // no error so forward to results
+            request.getRequestDispatcher("/WEB-INF/flows/hardware/advanced-search.jsp").forward(
+                            request, response);
+            // Forward the request to the "hardware/results" page
         } else {
             request.getRequestDispatcher("/WEB-INF/flows/hardware/results.jsp").forward(request,
-                    response);
+                            response);
         }
     }
 
-    // removes fields that are empty
+    // Helper method which removes fields that are empty
     private void cleanFields(ArrayList<String> fields) {
         for (ListIterator<String> iterator = fields.listIterator(); iterator.hasNext();) {
             String field = iterator.next();

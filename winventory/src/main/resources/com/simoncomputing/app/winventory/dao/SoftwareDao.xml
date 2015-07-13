@@ -17,8 +17,7 @@
 	</resultMap>
 
 	<select id="read" parameterType="map" resultMap="SoftwareMapper">
-		select * from
-		SOFTWARE
+		select * from SOFTWARE
 		where ${where}
 	</select>
 
@@ -33,10 +32,8 @@
 		)
 		values
 		(
-		#{key} ,
-		#{name} , #{serialNo} , #{version} , #{licenseKey} ,
-		#{description} ,
-		#{cost} , #{purchasedDate} , #{expirationDate}
+		#{key} , #{name} , #{serialNo} , #{version} , #{licenseKey} ,
+		#{description} , #{cost} , #{purchasedDate} , #{expirationDate}
 		)
 	</insert>
 
@@ -56,76 +53,67 @@
 	<select id="getListByPurchasedDate" parameterType="date"
 		resultMap="SoftwareMapper">
 		select * from SOFTWARE
-		where PURCHASED_DATE =
-		#{purchasedDate}
+		where PURCHASED_DATE = #{purchasedDate}
 	</select>
 	<select id="getListByExpirationDate" parameterType="date"
 		resultMap="SoftwareMapper">
 		select * from SOFTWARE
-		where EXPIRATION_DATE =
-		#{expirationDate}
+		where EXPIRATION_DATE = #{expirationDate}
 	</select>
 
 
 	<update id="update" parameterType="com.simoncomputing.app.winventory.domain.Software">
 		update SOFTWARE set
-		KEY =
-		#{key} ,
+		KEY = #{key} ,
 		NAME = #{name} ,
 		SERIAL_NO = #{serialNo} ,
-		VERSION = #{version}
-		,
+		VERSION = #{version} ,
 		LICENSE_KEY = #{licenseKey} ,
 		DESCRIPTION = #{description} ,
-		COST =
-		#{cost} ,
+		COST = #{cost} ,
 		PURCHASED_DATE = #{purchasedDate} ,
-		EXPIRATION_DATE =
-		#{expirationDate}
+		EXPIRATION_DATE = #{expirationDate}
 		where KEY = #{key}
 	</update>
 
 	<delete id="delete" parameterType="map">
 		delete from SOFTWARE
-		where
-		${where}
+		where ${where}
 	</delete>
 
 
 	<!-- PROTECTED CODE -->
 
 	<select id="getListByPurchaseRange" resultMap="SoftwareMapper">
-		select * from
-		SOFTWARE
-		where PURCHASED_DATE BETWEEN #{start, jdbcType=DATE} AND
-		#{end,
+		select * from SOFTWARE
+		where PURCHASED_DATE BETWEEN #{start, jdbcType=DATE} AND #{end,
 		jdbcType=DATE};
 	</select>
 
 	<select id="getListByExpirationRange" resultMap="SoftwareMapper">
-		select * from
-		SOFTWARE
-		where EXPIRATION_DATE BETWEEN #{start, jdbcType=DATE} AND
-		#{end,
+		select * from SOFTWARE
+		where EXPIRATION_DATE BETWEEN #{start, jdbcType=DATE} AND #{end,
 		jdbcType=DATE};
 	</select>
 
+	<select id="getListByCostRange" resultMap="SoftwareMapper">
+	select * FROM SOFTWARE
+	where COST BETWEEN #{minCost} AND #{maxCost};
+	</select>
 
-	<select id="searchAdvanced" parameterType="map" resultMap="SoftwareMapper">
-		SELECT *
+    <select id="searchAdvanced" parameterType="map" resultMap="SoftwareMapper">
+ 		SELECT *
 		FROM SOFTWARE
 		WHERE
 		<foreach item="field" index="i" collection="fields" open="("
 			separator="AND" close=")">
-
 			<foreach item="input" index="s" collection="inputs.get(i)"
 				open="(" separator="OR" close=")">
 				UPPER(${field}) LIKE '%${input}%'
 			</foreach>
-
 		</foreach>
-
-	</select>
+ 			
+    </select>
 
 	<select id="search" parameterType="string" resultMap="SoftwareMapper">
 		select *
@@ -135,8 +123,7 @@
 		LIKE '%${value}%' OR
 		UPPER(version) LIKE '%${value}%' OR
 		UPPER(license_Key) LIKE '%${value}%' OR
-		UPPER(cost) LIKE '%${value}%'
-		OR
+		UPPER(cost) LIKE '%${value}%' OR
 		UPPER(purchased_date) LIKE '%${value}%' OR
 		UPPER(expiration_date)
 		LIKE '%${value}%';
@@ -145,9 +132,9 @@
 	<select id="getDefaultResults" parameterType="int" resultMap="SoftwareMapper">
 		SELECT * FROM SOFTWARE LIMIT #{size}		<!-- find where to get size -->
 	</select>
-
+	
 	<select id="getAll" resultMap="SoftwareMapper">
 		SELECT * FROM SOFTWARE;
 	</select>
-	
+
 </mapper>

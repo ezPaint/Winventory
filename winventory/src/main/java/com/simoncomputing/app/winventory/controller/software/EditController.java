@@ -33,7 +33,7 @@ public class EditController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     
-        // Use key to access software object to be edited
+        // Use software key to access software object to be edited
         String key = request.getParameter("key");
         this.key = key;
         
@@ -44,7 +44,7 @@ public class EditController extends BaseController {
                 Long long_key = Long.parseLong(key);
                 software = SoftwareBo.getInstance().read(long_key);
             } catch (BoException e) {
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
             }
         }
         request.setAttribute("key", key);
@@ -62,6 +62,8 @@ public class EditController extends BaseController {
         SoftwareBo bo = SoftwareBo.getInstance();
         Long key = Long.valueOf(this.key);
         Software software;
+        
+        //Attempt to update software object
         try {
             software = bo.read(key);
             
@@ -72,27 +74,27 @@ public class EditController extends BaseController {
             String licenseKey = (String) request.getParameter("licenseKey");
             String description = (String) request.getParameter("description");
             
-            // For non-string values, attempt to convert to desired type.
+            // For non-string values, attempt to convert to desired type (Date or double).
             Double cost = null;
             try {
                 cost = (Double) Double.parseDouble((String) request.getParameter("cost"));
             }
             catch (Exception e) {
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
             }
             
             Date datePurchased = null;
             try {
                 datePurchased = Date.valueOf((String) request.getParameter("purchasedDate"));
             } catch (Exception e) {
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
             }
             
             Date expirationDate = null;
             try {
                 expirationDate = Date.valueOf((String) request.getParameter("expirationDate"));
             } catch (Exception e) {
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
             }
             
             // Alter Software object's data
@@ -108,7 +110,7 @@ public class EditController extends BaseController {
             //Update software object in database
             bo.update(software);
         } catch (BoException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         
         // Reload results page with new software object added
@@ -116,7 +118,7 @@ public class EditController extends BaseController {
         try {
             results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
         } catch (BoException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         
         if (results != null) {

@@ -55,7 +55,7 @@ public class googleplus extends BaseController {
 		}
 		if (gc == null) {
 			logger.error("Google CLient is Null Error");
-			this.sendRedirect(request, response, "/login");
+			this.sendRedirect(request, response, request.getContextPath() + "/login");
 			return;
 		}
 		String id = gc.getClientId();

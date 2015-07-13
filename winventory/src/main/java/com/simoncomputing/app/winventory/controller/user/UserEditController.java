@@ -15,6 +15,7 @@ import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
 import com.simoncomputing.app.winventory.bo.RoleBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
+import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.domain.Role;
@@ -25,7 +26,7 @@ import com.simoncomputing.app.winventory.util.BoException;
  * Servlet implementation class UserEditController
  */
 @WebServlet("/users/edit")
-public class UserEditController extends HttpServlet {
+public class UserEditController extends BaseController {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(UserEditController.class);
        
@@ -41,6 +42,11 @@ public class UserEditController extends HttpServlet {
 	 * displays the edit user page/form
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    
+	    // if the user is rejected, the redirect is sent in the require permission method.
+        if (this.requirePermission(request, response, "updateUser")) {
+            return;
+        }
 	    
 	    // the key in the url that specifies the user
 	    String key = request.getParameter("key");
@@ -87,6 +93,7 @@ public class UserEditController extends HttpServlet {
 	 * handle the edit-user form
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    
 
 	}
 

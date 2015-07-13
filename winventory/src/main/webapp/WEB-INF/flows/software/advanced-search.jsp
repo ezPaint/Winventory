@@ -91,7 +91,7 @@
                            <!-- Name entry fields -->
 							<div id="name_container">
 								<div class="input-group" id="name_div">
-									<span class="input-group-addon" id="basic-addon1">Type</span> <input
+									<span class="input-group-addon" id="basic-addon1">Name</span> <input
 										name="name" type="text" class="form-control"
 										placeholder="Microsoft Word"> <span class="input-group-btn"
 										aria-hidden="true">
@@ -153,7 +153,7 @@
 							<br>
 							
 							<!-- Cost entry field -->
-							<div id="cost_container">
+<!-- 							<div id="cost_container">
 								<div class="input-group" id="cost_div">
 									<span class="input-group-addon" id="basic-addon1">Cost</span> <input
 										name="cost" type="text" class="form-control"
@@ -163,6 +163,23 @@
 											onClick="addDiv('cost_container', 'cost', 'text'); return false;">
 											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 										</button> <br>
+									</span>
+								</div>
+							</div>
+							<br> -->
+							<div id="cost_container">
+								<div class="input-group double-input" id="cost_div">
+									<span class="input-group-addon" id="basic-addon1">Cost</span> 
+									<input name="minCost" type="text" class="form-control"
+										placeholder="77.00"> 
+									<input name="maxCost" type="text" class="form-control"
+										placeholder="177.00">
+										<span class="input-group-btn"
+										aria-hidden="true">
+										<!-- <button type="button" class="btn btn-default"
+											onClick="addDiv('cost_container', 'cost', 'text'); return false;">
+											<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+										</button> --> <br>
 									</span>
 								</div>
 							</div>

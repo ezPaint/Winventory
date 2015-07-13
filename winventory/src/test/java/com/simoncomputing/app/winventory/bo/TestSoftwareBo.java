@@ -1,9 +1,11 @@
 package com.simoncomputing.app.winventory.bo;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+
 import org.junit.*;
 
 import com.simoncomputing.app.winventory.domain.*;
@@ -23,142 +25,216 @@ public class TestSoftwareBo {
         SoftwareBo softwareBo = SoftwareBo.getInstance();
 
         Software software = TestSoftwareDao.createSoftware();
-        int count = softwareBo.create( software );
-        assertEquals( 1, count );
+        int count = softwareBo.create(software);
+        assertEquals(1, count);
 
-        Software readRecord = softwareBo.read( software.getKey() );
-        assertNotNull( readRecord.getKey() );
+        Software readRecord = softwareBo.read(software.getKey());
+        assertNotNull(readRecord.getKey());
 
-        TestSoftwareDao.compareRecords( software, readRecord );
+        TestSoftwareDao.compareRecords(software, readRecord);
 
-        List<Software> list1= softwareBo.getListByName( software.getName() ) ; 
-        assertEquals( 1 , list1.size() );
+        List<Software> list1 = softwareBo.getListByName(software.getName());
+        assertEquals(1, list1.size());
 
-        List<Software> list2= softwareBo.getListBySerialNo( software.getSerialNo() ) ; 
-        assertEquals( 1 , list2.size() );
+        List<Software> list2 = softwareBo.getListBySerialNo(software.getSerialNo());
+        assertEquals(1, list2.size());
 
-        List<Software> list3= softwareBo.getListByLicenseKey( software.getLicenseKey() ) ; 
-        assertEquals( 1 , list3.size() );
+        List<Software> list3 = softwareBo.getListByLicenseKey(software.getLicenseKey());
+        assertEquals(1, list3.size());
 
-        List<Software> list4= softwareBo.getListByPurchasedDate( software.getPurchasedDate() ) ; 
-        assertEquals( 1 , list4.size() );
+        List<Software> list4 = softwareBo.getListByPurchasedDate(software.getPurchasedDate());
+        assertEquals(1, list4.size());
 
-        List<Software> list5= softwareBo.getListByExpirationDate( software.getExpirationDate() ) ; 
-        assertEquals( 1 , list5.size() );
+        List<Software> list5 = softwareBo.getListByExpirationDate(software.getExpirationDate());
+        assertEquals(1, list5.size());
 
-        TestSoftwareDao.modifyRecord( software );
-        count = softwareBo.update( software );
-        assertEquals( 1, count );
+        TestSoftwareDao.modifyRecord(software);
+        count = softwareBo.update(software);
+        assertEquals(1, count);
 
-        count = softwareBo.delete( software.getKey());
-        assertEquals( 1, count );
+        count = softwareBo.delete(software.getKey());
+        assertEquals(1, count);
 
-        readRecord = softwareBo.read( software.getKey());
-        assertNull( readRecord );
+        readRecord = softwareBo.read(software.getKey());
+        assertNull(readRecord);
 
     }
     // PROTECTED CODE -->
-    private static long KEY = 25L;
-    
+
     /**
-     * Test for ensuring a software object is added to the database.
-     * Software object being added has all fields filled.
+     * Tests that searching by a full date range works correctly
+     * 
+     * @throws BoException
      */
     @Test
-    public void testAddFull(){
-        //Software object to test with
-        Software microsoft = new Software();
-        microsoft.setCost(49.99);
-        microsoft.setDescription("Home and Student version");
-        microsoft.setExpirationDate(Date.valueOf("2016-12-31"));
-        microsoft.setLicenseKey("JSDN1203948209");
-        microsoft.setName("Microsoft Office");
-        microsoft.setPurchasedDate(Date.valueOf("2015-03-12"));
-        microsoft.setSerialNo("2393-2342-5464-2634-6349");
-        microsoft.setVersion("2013");
-        
-        //Attempt to access the database
-        SoftwareBo softwareBo = SoftwareBo.getInstance();
-        try {
-            softwareBo.create(microsoft);
-        } catch (BoException e) {
-            fail();
-        }
-        
-        //Attempt to retrieve software object.
-        //Make sure to update KEY so that you're accessing the correct token!
-        Software retrieved = null;
-        try {
-            retrieved = softwareBo.read(KEY);
-            KEY++;
-            System.out.println(KEY);
-        } catch (BoException e) {
-            fail();
-        }
-        assertNotNull(retrieved);
+    public void testFullDateRange() throws BoException {
+        // Create sample Software objects to test with
+        Software s1 = TestSoftwareDao.createSoftware();
+        s1.setName("s1");
+        s1.setPurchasedDate(Date.valueOf("2015-07-10"));
+        s1.setExpirationDate(Date.valueOf("2016-07-10"));
+
+        Software s2 = TestSoftwareDao.createSoftware();
+        s2.setName("s2");
+        s2.setPurchasedDate(Date.valueOf("2015-07-01"));
+        s2.setExpirationDate(Date.valueOf("2016-08-01"));
+
+        SoftwareBo.getInstance().create(s1);
+        SoftwareBo.getInstance().create(s2);
+
+        // Create list of Software objects to search from
+        ArrayList<Software> searches = new ArrayList<Software>();
+        searches.add(s1);
+        searches.add(s2);
+
+        // Create Date range to search by
+        ArrayList<String> dates = new ArrayList<String>();
+        dates.add("2015-07-01");
+        dates.add("2015-07-31");
+        dates.add("2016-07-01");
+        dates.add("2016-07-31");
+
+        List<Software> results = SoftwareBo.getInstance().searchDateRange(searches, dates);
+
+        assertNotNull(results);
+        assertTrue(results.size() == 1);
+
+        assertEquals("s1", results.get(0).getName());
+        assertEquals(Date.valueOf("2015-07-10"), results.get(0).getPurchasedDate());
+        assertEquals(Date.valueOf("2016-07-10"), results.get(0).getExpirationDate());
+
     }
-    
+
     /**
-     * Test for ensuring a software object is added to the database.
-     * Software object being added has all fields are empty.
+     * Tests that searching by just a purchased range works correctly
+     * 
+     * @throws BoException
      */
     @Test
-    public void testAddEmpty(){
-        //Software object to test with
-        Software microsoft = new Software();
-        
-        //Attempt to access the database
-        SoftwareBo softwareBo = SoftwareBo.getInstance();
-        try {
-            softwareBo.create(microsoft);
-        } catch (BoException e) {
-            fail();
-        }
-        
-        //Attempt to retrieve software object.
-        //Make sure to update KEY so that you're accessing the correct token!
-        Software retrieved = null;
-        try {
-            retrieved = softwareBo.read(KEY);
-            KEY++;
-            System.out.println(KEY);
-        } catch (BoException e) {
-            fail();
-        }
-        assertNotNull(retrieved);
+    public void testPurchasedRange() throws BoException {
+        // Create sample Software objects to test with
+        Software s1 = TestSoftwareDao.createSoftware();
+        s1.setName("s1");
+        s1.setPurchasedDate(Date.valueOf("2015-07-10"));
+        s1.setExpirationDate(Date.valueOf("2016-07-10"));
+
+        Software s2 = TestSoftwareDao.createSoftware();
+        s2.setName("s2");
+        s2.setPurchasedDate(Date.valueOf("2015-07-01"));
+        s2.setExpirationDate(Date.valueOf("2016-08-01"));
+
+        SoftwareBo.getInstance().create(s1);
+        SoftwareBo.getInstance().create(s2);
+
+        // Create list of Software objects to search from
+        ArrayList<Software> searches = new ArrayList<Software>();
+        searches.add(s1);
+        searches.add(s2);
+
+        // Create Date range to search by
+        ArrayList<String> dates = new ArrayList<String>();
+        dates.add("2015-06-01");
+        dates.add("2015-07-31");
+        dates.add("");
+        dates.add("");
+
+        List<Software> results = SoftwareBo.getInstance().searchDateRange(searches, dates);
+
+        assertNotNull(results);
+        assertTrue(results.size() == 2);
+
+        assertEquals("s1", results.get(0).getName());
+        assertEquals(Date.valueOf("2015-07-10"), results.get(0).getPurchasedDate());
+        assertEquals(Date.valueOf("2016-07-10"), results.get(0).getExpirationDate());
+
+        assertEquals("s2", results.get(1).getName());
+        assertEquals(Date.valueOf("2015-07-01"), results.get(1).getPurchasedDate());
+        assertEquals(Date.valueOf("2016-08-01"), results.get(1).getExpirationDate());
     }
-    
+
     /**
-     * Test for ensuring a software object is added to the database.
-     * Software object being added has some fields filled.
+     * Tests that searching by just an expiration range works correctly
+     * 
+     * @throws BoException
      */
     @Test
-    public void testAddHalf(){
-        //Software object to test with
-        Software microsoft = new Software();
-        microsoft.setCost(49.99);
-        microsoft.setLicenseKey("JSDN1203948209");
-        microsoft.setName("Microsoft Office");
-        microsoft.setPurchasedDate(Date.valueOf("2015-03-12"));
-        
-        //Attempt to access the database
-        SoftwareBo softwareBo = SoftwareBo.getInstance();
-        try {
-            softwareBo.create(microsoft);
-        } catch (BoException e) {
-            fail();
-        }
-        
-        //Attempt to retrieve software object.
-        //Make sure to update KEY so that you're accessing the correct token!
-        Software retrieved = null;
-        try {
-            retrieved = softwareBo.read(KEY);
-            KEY++;
-            System.out.println(KEY);
-        } catch (BoException e) {
-            fail();
-        }
-        assertNotNull(retrieved);
+    public void testExpirationRange() throws BoException {
+        // Create sample Software objects to test with
+        Software s1 = TestSoftwareDao.createSoftware();
+        s1.setName("s1");
+        s1.setPurchasedDate(Date.valueOf("2015-07-10"));
+        s1.setExpirationDate(Date.valueOf("2016-07-10"));
+
+        Software s2 = TestSoftwareDao.createSoftware();
+        s2.setName("s2");
+        s2.setPurchasedDate(Date.valueOf("2015-07-01"));
+        s2.setExpirationDate(Date.valueOf("2016-08-01"));
+
+        SoftwareBo.getInstance().create(s1);
+        SoftwareBo.getInstance().create(s2);
+
+        // Create list of Software objects to search from
+        ArrayList<Software> searches = new ArrayList<Software>();
+        searches.add(s1);
+        searches.add(s2);
+
+        // Create Date range to search by
+        ArrayList<String> dates = new ArrayList<String>();
+        dates.add("");
+        dates.add("");
+        dates.add("2016-07-01");
+        dates.add("2016-08-31");
+
+        List<Software> results = SoftwareBo.getInstance().searchDateRange(searches, dates);
+
+        assertNotNull(results);
+        assertTrue(results.size() == 2);
+
+        assertEquals("s1", results.get(0).getName());
+        assertEquals(Date.valueOf("2015-07-10"), results.get(0).getPurchasedDate());
+        assertEquals(Date.valueOf("2016-07-10"), results.get(0).getExpirationDate());
+
+        assertEquals("s2", results.get(1).getName());
+        assertEquals(Date.valueOf("2015-07-01"), results.get(1).getPurchasedDate());
+        assertEquals(Date.valueOf("2016-08-01"), results.get(1).getExpirationDate());
     }
+
+    /**
+     * Tests that providing no date range works correctly
+     * @throws BoException 
+     */
+    @Test
+    public void testEmptyRange() throws BoException {
+        // Create sample Software objects to test with
+        Software s1 = TestSoftwareDao.createSoftware();
+        s1.setName("s1");
+        s1.setPurchasedDate(Date.valueOf("2015-07-10"));
+        s1.setExpirationDate(Date.valueOf("2016-07-10"));
+
+        Software s2 = TestSoftwareDao.createSoftware();
+        s2.setName("s2");
+        s2.setPurchasedDate(Date.valueOf("2015-07-01"));
+        s2.setExpirationDate(Date.valueOf("2016-08-01"));
+
+        SoftwareBo.getInstance().create(s1);
+        SoftwareBo.getInstance().create(s2);
+
+        // Create list of Software objects to search from
+        ArrayList<Software> searches = new ArrayList<Software>();
+        searches.add(s1);
+        searches.add(s2);
+
+        // Create Date range to search by
+        ArrayList<String> dates = new ArrayList<String>();
+        dates.add("");
+        dates.add("");
+        dates.add("");
+        dates.add("");
+
+        List<Software> results = SoftwareBo.getInstance().searchDateRange(searches, dates);
+
+        assertNotNull(results);
+        assertTrue(results.size() == 0);
+    }
+
 }

@@ -1,5 +1,19 @@
 package com.simoncomputing.app.winventory.domain;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import org.apache.commons.lang.NumberUtils;
+
+import com.lowagie.text.Image;
+import com.lowagie.text.pdf.Barcode;
+import com.lowagie.text.pdf.BarcodeEAN;
+
 /**
  * Adding this as an implementation to other classes wound up being too difficult to combine with 
  * batgen stuff. Instead this final class is going to be used to generate barcodes amongst other 
@@ -51,13 +65,14 @@ public final class Barcoder {
 	}
 	
 	private static int buildCheckSum(String code) {
+		
 		int result = 0;
-		String[] chars = code.split("");
+		char[] chars = code.toCharArray();
 		int evenSum = 0; 
 		int oddSum = 0;
 		for(int i = 0; i < code.length()-1; i = i + 2) {
-			evenSum += Integer.parseInt(chars[i]); 
-			oddSum += Integer.parseInt(chars[i+1]);
+			evenSum += Character.getNumericValue(chars[i]); 
+			oddSum += Character.getNumericValue(chars[i+1]);
 			
 		}
 		result = 10-((3*oddSum)+evenSum)%10;
@@ -77,5 +92,18 @@ public final class Barcoder {
     	}
     	return appRet+str;
     }
+	
+	public static java.awt.Image buildBarcodeImage(String str) throws IOException {
+		if(str.length() == 13 && NumberUtils.isDigits(str))
+		{
+			BarcodeEAN ean = new BarcodeEAN();
+			ean.setCodeType(Barcode.EAN13);
+			ean.setCode(str);
+			java.awt.Image bi =  ean.createAwtImage(Color.black, Color.white);
+			File output = new File("saved.png");
+			ImageIO.write((RenderedImage) bi, "png", output);
+		}
+		return null;
+	}
 	
 }

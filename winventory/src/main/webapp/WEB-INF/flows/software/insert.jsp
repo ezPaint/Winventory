@@ -9,15 +9,28 @@
 <meta charset="UTF-8">
 <title>Applications Inventory</title>
 
+<!-- Include Required Prerequisites for Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="${contextPath}/resources/js/moment.min.js"></script>
 
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+<script type="text/javascript">
+$(function() {
+    $('input[name="purchasedDate"]').daterangepicker({
+    	format: 'YYYY-MM-DD',
+        singleDatePicker: true,
+        showDropdowns: true
+    }); 
+    $('input[name="expirationDate"]').daterangepicker({
+    	format: 'YYYY-MM-DD',
+        singleDatePicker: true,
+        showDropdowns: true
+    }); 
 
-
-
-
-
-
-
-
+});
+</script>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>

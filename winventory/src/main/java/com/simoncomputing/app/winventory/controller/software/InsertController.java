@@ -30,33 +30,33 @@ public class InsertController extends BaseController {
     }
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Retrieve info that the user entered
+        //Retrieve software's info that the user entered
         String serialNo = (String) request.getParameter("serialNo");
         String name = (String) request.getParameter("name");
         String version = (String) request.getParameter("version");
         String licenseKey = (String) request.getParameter("licenseKey");
         String description = (String) request.getParameter("description");
                
-        //For non-string values, attempt to convert to desired type. 
+        //For non-string values, attempt to convert to desired type (Date or double). 
         Double cost = null;
         try{
             cost = (Double) Double.parseDouble((String) request.getParameter("cost"));
         } catch (Exception e){
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         
         Date datePurchased = null;
         try{
             datePurchased = Date.valueOf((String) request.getParameter("purchasedDate"));
         } catch (Exception e){
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         
         Date expirationDate = null;
         try{
             expirationDate = Date.valueOf((String) request.getParameter("expirationDate"));
         } catch (Exception e){
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         
        //Create Software object
@@ -70,12 +70,12 @@ public class InsertController extends BaseController {
        software.setExpirationDate(expirationDate);
        software.setDescription(description);
         
-       //Add Software Object to database and inform user of success/failure
+       //Add Software Object to database
        SoftwareBo softwareBo = SoftwareBo.getInstance();
        try {
            softwareBo.create(software);
        } catch (BoException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
        }
        
        //Reload results page with new software object added
@@ -83,7 +83,7 @@ public class InsertController extends BaseController {
        try {
            results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
        } catch (BoException e) {
-           log.error(e.getMessage());
+           log.error(e.getMessage(), e);
        }
        
        if (results != null) {

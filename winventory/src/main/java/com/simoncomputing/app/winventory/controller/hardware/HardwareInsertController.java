@@ -44,9 +44,8 @@ public class HardwareInsertController extends BaseController {
             // Use a BO to attempt to grab all valid conditions from the database
             conditions = new ArrayList<RefCondition>(RefConditionBo.getInstance().getAll());
         } catch (BoException e) {
-            // If the conditions are not found, log the error and report the problem to the user
-            request.setAttribute("error", e.getMessage());
-            log.error(e.getMessage());
+            String error = logError(log, e);
+            request.setAttribute("error", "Error code: " + error);
         }
         
         // Set the conditions as an attribute for the request
@@ -76,8 +75,8 @@ public class HardwareInsertController extends BaseController {
         try {
             h.setPurchaseDate(format.parse(request.getParameter("date")));
         } catch (ParseException e) {
-            request.setAttribute("error", e.getMessage());
-            log.error(e.getMessage());
+            String error = logError(log, e);
+            request.setAttribute("error", "Error code: " + error);
         }
         h.setSerialNo(request.getParameter("serialNo"));
         h.setUserId(null);
@@ -87,9 +86,8 @@ public class HardwareInsertController extends BaseController {
         try {
             bo.create(h);
         } catch (BoException e) { 
-            // If something went wrong, log the error and report the problem to the user
-            request.setAttribute("error", e.getMessage());
-            log.error(e.getMessage());
+            String error = logError(log, e);
+            request.setAttribute("error", "Error code: " + error);
         }
         
         // Create an ArrayList of all the valid Ref_Conditions, which will be used to prevent the user from entering
@@ -99,9 +97,8 @@ public class HardwareInsertController extends BaseController {
             // Use a BO to attempt to grab all valid conditions from the database
             conditions = new ArrayList<RefCondition>(RefConditionBo.getInstance().getAll());
         } catch (BoException e) {
-            // If the conditions are not found, log the error and report the problem to the user
-            request.setAttribute("error", e.getMessage());
-            log.error(e.getMessage());
+            String error = logError(log, e);
+            request.setAttribute("error", "Error code: " + error);
         }
         
         // Reset the conditions as an attribute for the request

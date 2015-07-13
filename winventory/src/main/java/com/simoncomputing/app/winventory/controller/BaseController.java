@@ -129,7 +129,7 @@ public class BaseController extends HttpServlet {
     public String logError(Logger errorLog , Exception e) {
         String errorCode = "";
         
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HH");
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmss");
         Calendar cal = Calendar.getInstance();
         errorCode += dateFormat.format(cal.getTime());
 

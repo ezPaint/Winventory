@@ -1,5 +1,6 @@
 package com.simoncomputing.app.winventory.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import com.simoncomputing.app.winventory.domain.RefPermission;
@@ -15,7 +16,11 @@ public interface RefPermissionDao {
 
     public RefPermission read( Map<String, Object> map ) throws DaoException;
 
+    
+
 
     // PROTECTED CODE -->
+    
+    public List<RefPermission> getAll();
 
 }

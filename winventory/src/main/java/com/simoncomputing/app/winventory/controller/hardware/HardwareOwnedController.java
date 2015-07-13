@@ -15,18 +15,25 @@ import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.util.BoException;
 
+/**
+ * Controller for the Results ("Hardware In Use") page
+ */
 @WebServlet("/hardware/owned")
 public class HardwareOwnedController extends BaseController {
+
     private static final long serialVersionUID = 1L;
 
-    private Logger log = Logger.getLogger(HardwareOwnedController.class); 
-    
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    private Logger log = Logger.getLogger(HardwareOwnedController.class);
 
+    /**
+     * Runs when the "hardware/owned" page is accessed by a general link or
+     * through the url
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+                    throws ServletException, IOException {
+
+        // Attempt to get all hardware in use from database using a BO
         ArrayList<Hardware> results = null;
-        
-        // gets inUse from db and forwards
         try {
             results = new ArrayList<Hardware>(HardwareBo.getInstance().getInUse());
         } catch (BoException e) {
@@ -34,19 +41,24 @@ public class HardwareOwnedController extends BaseController {
             log.error(e.getMessage());
         }
 
+        // Set the results as an attribute for the page
         if (results != null) {
             request.setAttribute("results", results);
         }
-        
-        request.setAttribute("page_header", "Hardware in Use");
 
+        // Sets the page header to "Hardware in Use"
+        request.setAttribute("page_header", "Hardware In Use");
+
+        // Forward the request to the "hardware/results" page
         request.getRequestDispatcher("/WEB-INF/flows/hardware/results.jsp").forward(request,
-                response);
-
+                        response);
     }
 
+    /**
+     * Not currently used
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+                    throws ServletException, IOException {
 
     }
 }

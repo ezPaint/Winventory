@@ -5,10 +5,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -18,13 +18,10 @@ import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.authentication.EmailService;
-import com.simoncomputing.app.winventory.authentication.PasswordHasher;
-import com.simoncomputing.app.winventory.bo.AccessTokenBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
 import com.simoncomputing.app.winventory.bo.RoleBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
-import com.simoncomputing.app.winventory.domain.AccessToken;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.domain.Role;
@@ -78,147 +75,68 @@ public class UserInsertController extends BaseController {
             return;
         }
         
-
         // the new user to be added
         User user = new User();
         
+        // form errors
+        ArrayList<String> errors = new ArrayList<String>();
+        
         // bind the form values to the user
-        user.setUsername(request.getParameter("username"));
-        user.setEmail(request.getParameter("email"));
-        // Google User
-        if (request.getParameter("isGoogle") != null) {
-            user.setPassword("googleUser");
-            logger.info("Sending Email to: " + user.getEmail());
-            this.sendInviteGoogle(request, user);
-        }
-        // Login User
-        else {
-            user.setPassword("UnsetPassword");
-        }
-        user.setFirstName(request.getParameter("firstName"));
-        user.setLastName(request.getParameter("lastName"));
-        user.setCellPhone(request.getParameter("cellPhone"));
-        user.setWorkPhone(request.getParameter("workPhone"));
-        user.setIsActive(request.getParameter("isActive") != null);
+        errors = user.bind(request);
         
-        // the preset roles
-        ArrayList<Role> roles = new ArrayList<Role>();
-        try {
-            roles = (ArrayList<Role>) RoleBo.getInstance().getAll();
-        } catch (BoException e) {
-            logger.error("BoException in UserInsertController when trying to get roles");
-        }
-        
-        // find the role id for the specified role title
-        String roleTitle = request.getParameter("roleTitle");
-        for (Role r : roles) {
-            if (r.getTitle().equals(roleTitle)) {
-                user.setRoleId( r.getKey().intValue() );
+        // Create the new user in the db, if no errors exist
+        if (errors.size() == 0) {
+            // save the user, collect the errors if any
+            ArrayList<String> saveErrors = user.create();
+            errors.addAll(saveErrors);
+            
+            // if there are no save errors, then the user is saved into db
+            if (saveErrors.size() == 0) {
+                try {
+                    user.sendEmailInvite(request);
+                }
+                catch (Exception e) {
+                    errors.add("Must be logged in to send this email invite.");
+                    logger.error("Anonymous user (no user logged in) tried to send email invite."); 
+                    this.logError(logger, e);
+                }
             }
         }
         
-        // Create the new user in the db
-        UserBo bo = UserBo.getInstance();
-        try {
-            bo.create(user);
-        } catch (BoException e) { 
-            logger.error("BoException when inserting user in UserInsertController");
+        
+        // if errors, return to add user page and display errors
+        if (errors.size() > 0) {
+            // attach errors to the request
+            request.setAttribute("errors", errors);
+            
+            // attach the entered values to the request
+            request.setAttribute("username", request.getAttribute("username"));
+            request.setAttribute("email", request.getAttribute("email"));
+            request.setAttribute("isGoogle", request.getAttribute("isGoogle"));
+            request.setAttribute("firstName", request.getAttribute("firstName"));
+            request.setAttribute("lastName", request.getAttribute("lastName"));
+            request.setAttribute("cellPhone", request.getAttribute("cellPhone"));
+            request.setAttribute("workPhone", request.getAttribute("workPhone"));
+            request.setAttribute("isActive", request.getAttribute("isActive"));
+            
+            // attach the role dropdown values to the request
+            ArrayList<Role> roles = new ArrayList<Role>();
+            try {
+                roles = (ArrayList<Role>) RoleBo.getInstance().getAll();
+            } catch (BoException e) {
+                logger.error("BoException in UserInsertController when trying to get roles");
+            }
+            if (roles != null) {
+                request.setAttribute("roles", roles);
+            }
+            
+            // forward to jsp and return from method
+            request.getRequestDispatcher("/WEB-INF/flows/users/insert.jsp").forward(request, response);
+            return;
         }
         
-        // Send email to non-Google users to change their password
-        if (request.getParameter("isGoogle") == null) {
-            this.sendInviteRegular(request, user);
-        }
-        
-        // redirect to results 
+        // if no errors, redirect to results 
         response.sendRedirect(request.getContextPath() + "/users/results");
     }
-    
-    private void sendInviteGoogle(HttpServletRequest request, User user) {
-    	EmailService emailer = new EmailService();
-    	try {
-    		emailer.setSmtp();
-			emailer.addTo(user.getEmail());
-			emailer.setFrom(this.getUserInfo(request).getEmail());
-			emailer.setSubject("Welcome To Winventory");
-			emailer.setMessage(
-					"You have been added to the Winventory!\n"
-					+ "Your Username is: " + user.getUsername());
-			emailer.sendEmail();
-		} catch (Exception e) {
-			logger.info("Email Failed to Send to: " + user.getEmail());
-		}
-    	
-    }
-    
-    private void sendInviteRegular(HttpServletRequest request, User user) {
-    	UUID uuid = UUID.randomUUID();
-    	String token = uuid.toString().replaceAll("-", "");
-    	
-    	//should be changed to https
-        String urlPath = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-        String message = "You have been added to the Winventory! \n"
-        		+ "Your Username is: " + user.getUsername() + "\n"
-        		+ "Please reset your password at: "
-        		+ urlPath + "/changepassword" + "?token=" + token + "&user=" + user.getKey().intValue();
-          
-        //insert into database hashed version of token
-		AccessTokenBo accessTokenBo = AccessTokenBo.getInstance();
-		AccessToken accessToken = new AccessToken();
-		
-		//TODO: change access token domain object to match type
-		accessToken.setUserKey(user.getKey().intValue());
-		accessToken.setToken(PasswordHasher.encodePassword(token));
-		
-		//set in how many minutes the token will expire
-		int minutesToExpire = 30;
-		Date date = new Date(System.currentTimeMillis()+minutesToExpire*60*1000);
-		accessToken.setExpiration(date);
-		
-		try {
-			//check if an access token for the user currently exists
-			AccessToken readToken = accessTokenBo.read(user.getKey().intValue());
-			if (readToken != null) {
-				// User already has a token in the AccessToken table
-				// delete the old entry in preparation for the new entry
-				accessTokenBo.delete(readToken.getUserKey());
-			}
-			
-		} catch (BoException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		// Insert the new access token and email the user a link
-		// with the token embedded in the url
-		try {
-			accessTokenBo.create(accessToken);
-			this.sendPasswordResetEmail(user.getEmail(), message);
-			
-		} catch (BoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-    }
-    
-    private void sendPasswordResetEmail(String toEmailAddress, String message) {
-		EmailService sendResetEmail = new EmailService();
-		try {
-			sendResetEmail.setSmtp();
-			/* setFrom does not actually matter since it uses the email 
-			 * stored in the smtp table
-			 */
-			sendResetEmail.setFrom("-@gmail.com");
-			//currently send here for testing purposes
-			sendResetEmail.addTo(toEmailAddress);
-			sendResetEmail.setSubject("Your Winventory account has been created");
-			sendResetEmail.setMessage(message);
-			sendResetEmail.sendEmail();
-		} catch (EmailException | BoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 }

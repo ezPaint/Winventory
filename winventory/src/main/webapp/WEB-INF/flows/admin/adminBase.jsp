@@ -21,11 +21,15 @@
 		<c:if test="${userInfo.hasPermission.createSoftware}">
 			<a id="insert" href="${contextPath }/software/insert" class="list-group-item"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true"> Add
-					Application</span></a>
+					Software</span></a>
 		</c:if>
 		<c:if test="${userInfo.hasPermission.createUser}">
 			<a id="insert" href="${contextPath }/users/insert" class="list-group-item"> <span
 				class="glyphicon glyphicon-plus" aria-hidden="true"> Add User</span></a>
+		</c:if>
+		<c:if test="${userInfo.roleId == 1}">
+			<a id="insert" href="${contextPath }/admin/insert-role" class="list-group-item"> <span
+				class="glyphicon glyphicon-plus" aria-hidden="true"> Add Role</span></a>
 		</c:if>
 		<!-- <a id="advanced-search" href="advanced-search" class="list-group-item">
 			<span class="glyphicon glyphicon-search" aria-hidden="true">

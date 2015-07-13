@@ -35,10 +35,10 @@ public class ResultsController extends BaseController {
         try {
             results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
         } catch (BoException e) {
-            // TODO
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         }
         
+        //Show results, if they exist, otherwise table will be empty
         if (results != null) {
             request.setAttribute("results", results);
         }

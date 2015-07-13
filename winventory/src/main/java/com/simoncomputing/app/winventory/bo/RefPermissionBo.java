@@ -2,6 +2,7 @@ package com.simoncomputing.app.winventory.bo;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.*;
@@ -117,4 +118,25 @@ public class RefPermissionBo {
 
     // PROTECTED CODE -->
 
+    public List<RefPermission> getAll() throws BoException {
+        SqlSession session = null;
+        List<RefPermission> result;
+
+        try {
+            session = SessionFactory.getSession();
+            RefPermissionDao mapper = session.getMapper( RefPermissionDao.class );
+            result = mapper.getAll();
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return result;
+    }
 }

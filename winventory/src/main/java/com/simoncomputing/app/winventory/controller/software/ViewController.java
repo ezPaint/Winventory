@@ -24,8 +24,8 @@ public class ViewController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //Retrieve the key of the software object selected by the user to view and retrieve the
-        //corresponding software object.
+        //Use the key the user clicked on to retrieve the corresponding software object from
+        //the database
         String key = request.getParameter("key");
 
         Software software = null;
@@ -34,7 +34,7 @@ public class ViewController extends BaseController {
                 Long long_key = Long.parseLong(key);
                 software = SoftwareBo.getInstance().read(long_key); //get software obj from database
             } catch (BoException e) {
-                log.error(e.getMessage());
+                log.error(e.getMessage(), e);
             }
         }
         request.setAttribute("key", key);

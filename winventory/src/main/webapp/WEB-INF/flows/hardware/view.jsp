@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="com.simoncomputing.app.winventory.domain.Hardware"%>
+<%@ page import="com.simoncomputing.app.winventory.domain.Barcoder"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <!DOCTYPE html>
@@ -114,7 +115,7 @@
 										<b>Key</b>
 									</div>
 									<div class="col-md-8">
-										<p><%=hardware.getKey()%></p>
+										<p><%=hardware.getKey() %></p>
 									</div>
 								</li>
 								<li class="list-group-item row">

@@ -2,7 +2,6 @@ package com.simoncomputing.app.winventory.bo;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,209 +19,239 @@ public class SoftwareBo {
 
     public static SoftwareBo getInstance() {
         return instance;
-    }
+    } 
 
     private SoftwareBo() {
-    }
+    } 
 
-    public int create(Software value) throws BoException {
+    public int create( Software value ) throws BoException {
         SqlSession session = null;
         int result = 0;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            result = mapper.create(value);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            result = mapper.create( value );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return result;
     }
 
-    public int update(Software value) throws BoException {
+    public int update( Software value ) throws BoException {
         SqlSession session = null;
         int result = 0;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            result = mapper.update(value);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            result = mapper.update( value );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return result;
     }
 
-    public int delete(Long key) throws BoException {
+    public int delete( Long key ) throws BoException {
         SqlSession session = null;
         int result = 0;
         String where = "KEY='" + key + "' ";
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("where", where);
+        map.put( "where", where );
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            result = mapper.delete(map);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            result = mapper.delete( map );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return result;
     }
 
-    public Software read(Long key) throws BoException {
+    public Software read( Long key ) throws BoException {
         SqlSession session = null;
         Software result;
         String where = "KEY='" + key + "' ";
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("where", where);
+        map.put( "where", where );
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            result = mapper.read(map);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            result = mapper.read( map );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return result;
     }
 
-    public List<Software> getListByName(String key) throws BoException {
+    /**
+     * Get a list of software objects that have the same name.
+     * @param name Name of the software object 
+     * @return A list of software objects with the same name
+     * @throws BoException
+     */
+    public List<Software> getListByName( String name ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.getListByName(key);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListByName( name );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return list;
     }
 
-    public List<Software> getListBySerialNo(String key) throws BoException {
+    /**
+     * Get a list of software objects that share the same serial number
+     * @param serialNo
+     * @return
+     * @throws BoException
+     */
+    public List<Software> getListBySerialNo( String serialNo ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.getListBySerialNo(key);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListBySerialNo( serialNo );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return list;
     }
 
-    public List<Software> getListByLicenseKey(String key) throws BoException {
+    /**
+     * Get a list of software objects that share the same license key
+     * @param licenseKey
+     * @return
+     * @throws BoException
+     */
+    public List<Software> getListByLicenseKey( String licenseKey ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.getListByLicenseKey(key);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListByLicenseKey( licenseKey );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return list;
     }
 
-    public List<Software> getListByPurchasedDate(Date key) throws BoException {
+    /**
+     * Get a list of software objects that share the same purchased date
+     * @param date
+     * @return
+     * @throws BoException
+     */
+    public List<Software> getListByPurchasedDate( Date date ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.getListByPurchasedDate(key);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListByPurchasedDate( date );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return list;
     }
 
-    public List<Software> getListByExpirationDate(Date key) throws BoException {
+    /**
+     * Get a list of software objects that share the same expiration date.
+     * @param date
+     * @return
+     * @throws BoException
+     */
+    public List<Software> getListByExpirationDate( Date date ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.getListByExpirationDate(key);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListByExpirationDate( date );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
@@ -230,97 +259,159 @@ public class SoftwareBo {
     }
 
     // PROTECTED CODE -->
-
-    public List<Software> getListByPurchaseRange(Date start, Date end) throws BoException {
+    /**
+     * Get a list of software objects between (inclusive) the dates start and end.
+     * @param start
+     * @param end
+     * @return
+     * @throws BoException
+     */
+    public List<Software> getListByPurchaseRange( Date start, Date end ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.getListByPurchaseRange(start, end);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListByPurchaseRange( start, end );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
-        } finally {
-            if (session != null)
+            throw new BoException( e );
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return list;
     }
-    public List<Software> search(String searchText) throws BoException {
+    
+    /**
+     * Retrieves all software objects from database (Software table) matching search term.
+     * @param searchText
+     * @return List of all software objects matching search term.
+     * @throws BoException
+     */
+    public List<Software> search( String searchText ) throws BoException {
+    	SqlSession session = null;
+    	List<Software> list;
+    	
+    	try {
+    		session = SessionFactory.getSession();
+    		SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+    		list = mapper.search( searchText );
+    		session.commit();
+    		
+    	} catch ( Exception e ) {
+    		session.rollback();
+    		throw new BoException( e );
+    		
+    	} finally {
+    		if ( session != null )
+    			session.close();
+    	}
+    	
+    	return list;
+    }
+    
+    /**
+     * Retrieves max size software objects from database (Software table).
+     * @param size
+     * @return List of software objects to populate results page for empty search bar.
+     * @throws BoException
+     */
+    public List<Software> getDefaultResults( int size ) throws BoException {
+    	SqlSession session = null;
+    	List<Software> list;
+    	
+    	try {
+    		session = SessionFactory.getSession();
+    		SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+    		list = mapper.getDefaultResults( size );
+    		session.commit();
+    		
+    	} catch ( Exception e ) {
+    		session.rollback();
+    		throw new BoException( e );
+    		
+    	} finally {
+    		if ( session != null )
+    			session.close();
+    	}
+    	
+    	return list;
+    }
+
+    /**
+     * Retrieve a list of software objects with an expiration date between 'start' and 'end'
+     * @param start
+     * @param end
+     * @return
+     * @throws BoException
+     */
+    public List<Software> getListByExpirationRange( Date start, Date end ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.search(searchText);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListByExpirationRange( start, end );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return list;
     }
-
-    public List<Software> getDefaultResults(int size) throws BoException {
-        SqlSession session = null;
+    
+    /**
+     * Get a list of software objects within a cost range
+     * @param minCost
+     * @param maxCost
+     * @return
+     * @throws BoException
+     */
+    public List<Software> getListByCostRange( String minCost, String maxCost ) throws BoException {
+    	SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.getDefaultResults(size);
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListByCostRange( minCost, maxCost );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return list;
     }
-
-    public List<Software> getListByExpirationRange(Date start, Date end) throws BoException {
-        SqlSession session = null;
-        List<Software> list;
-
-        try {
-            session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.getListByExpirationRange(start, end);
-            session.commit();
-
-        } catch (Exception e) {
-            session.rollback();
-            throw new BoException(e);
-
-        } finally {
-            if (session != null)
-                session.close();
-        }
-
-        return list;
-    }
-
+    
+    /**
+     * Retrieves all software objects from the database (Software table) matching search terms.
+     * @param columns
+     * @param searches
+     * @return List of all software objects matching search terms.
+     * @throws BoException
+     */
     public List<Software> searchAdvanced(ArrayList<String> columns,
             ArrayList<ArrayList<String>> searches) throws BoException {
         SqlSession session = null;
-        List<Software> list;
+        List<Software> list = null; //TODO: check what to initialize to
 
         if (columns.equals("") || searches == null) {
             // TODO throw application error
@@ -330,7 +421,7 @@ public class SoftwareBo {
         try {
             session = SessionFactory.getSession();
             SoftwareDao mapper = session.getMapper(SoftwareDao.class);
-            list = mapper.searchAdvanced(columns, searches);
+            list = mapper.searchAdvanced(columns, searches);            
             session.commit();
         } catch (Exception e) {
             session.rollback();
@@ -343,10 +434,9 @@ public class SoftwareBo {
 
         return list;
     }
-
+    
     /**
      * Retrieves all software objects from the database (Software table).
-     * 
      * @return List of all software objects.
      * @throws BoException
      */
@@ -373,6 +463,34 @@ public class SoftwareBo {
     }
 
     /**
+     * Retrieves a list of Software objects narrowed down to cost range
+     * @param results
+     * @param minCost
+     * @param maxCost
+     * @return List of Software objects from database (Software table)
+     */
+    public List<Software> searchCostRange(List<Software> results, String minCost, String maxCost) {
+    	List<Software> costs = new ArrayList<Software>(); 
+    	List<Software> returnedResults = new ArrayList<Software>();    	
+    	try {
+    		if (minCost != null && maxCost != null)
+    		costs = getListByCostRange(minCost, maxCost);
+    		
+    		for (Software s : results) {
+    			for ( Software c : costs ) {
+    				if (s.equals(c))
+    					returnedResults.add(s);
+    			}
+    		}
+    		
+    	} catch (BoException e){ //TODO: use logger
+    		e.printStackTrace();
+    	}
+    	
+    	return costs;
+    }
+    
+    /**
      * Searches a given list of Software objects and returns only those objects
      * that fall within a specified range of dates
      * 
@@ -384,28 +502,31 @@ public class SoftwareBo {
      * @return the narrowed down list of Software objects
      */
     public List<Software> searchDateRange(List<Software> results, ArrayList<String> dates) {
-        // will contain the narrowed down list of Software objects
         List<Software> list = new ArrayList<Software>();
+
+        if (dates.get(0).equals("") && dates.get(1).equals("") && dates.get(2).equals("")
+                && dates.get(3).equals("")) {
+            return list;
+        }
 
         List<Software> purchased = new ArrayList<Software>();
         List<Software> expired = new ArrayList<Software>();
 
         try {
-
-            if (dates.get(2).equals("")&& dates.get(3).equals("")) {
+            if (dates.get(2).equals("") && dates.get(3).equals("")) {
                 // if only purchased dates are entered, expired should contain
                 // all values in purchased
                 purchased = getListByPurchaseRange(Date.valueOf(dates.get(0)),
                         Date.valueOf(dates.get(1)));
                 expired = purchased;
-                
+
             } else if (dates.get(0).equals("") && dates.get(1).equals("")) {
                 // if only expired dates are entered, purchased should contain
                 // all values in expired
                 expired = getListByExpirationRange(Date.valueOf(dates.get(2)),
                         Date.valueOf(dates.get(3)));
                 purchased = expired;
-                
+
             } else {
                 // otherwise, purchased should contain only dates within
                 // purchased range and expired should only contain dates within
