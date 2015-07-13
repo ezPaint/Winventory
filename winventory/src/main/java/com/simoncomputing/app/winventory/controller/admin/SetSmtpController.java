@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.simoncomputing.app.winventory.authentication.EmailService;
 import com.simoncomputing.app.winventory.bo.SmtpBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Smtp;
@@ -78,21 +79,63 @@ public class SetSmtpController extends BaseController {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// Update the DB SMTP record. 
-		SetSmtpBean smtpBean = new SetSmtpBean(request);
-		try {
-			smtpBean.updateSmtp();
-		} 
-		catch (BoException e) {
-			logger.error("Bo Excpetion");
+		// Test Email
+		if (request.getParameter("testEmail") != null) {
+			if (request.getParameter("testaddress") == null) {
+				request.setAttribute("failed", "Please Enter Test Address.");
+			}
+			else {
+		    	EmailService emailer = new EmailService();
+		    	try {
+		   			emailer.setSmtp();
+		 			emailer.addTo(request.getParameter("testaddress"));
+		 			emailer.setFrom(this.getUserInfo(request).getEmail());
+		 			emailer.setSubject("TEST_EMAIL");
+		 			emailer.setMessage("This is a Test Email to verify the SMTP settings for:\n " +
+		 					request.getScheme() + "://" 
+							+ request.getServerName() + ":" 
+							+ request.getServerPort() 
+							+ request.getContextPath() );
+		 			emailer.sendEmail();
+				} catch (Exception e) {
+					request.setAttribute("failed", "Test Email Failed");
+		 			logger.info("Test Email on /setSMTP page has failed");
+		 			this.doGet(request, response);
+		 			return;
+		 		}
+		    	
+				request.setAttribute("sent", "Test Email Sent To: " + request.getParameter("testaddress"));
+	 			logger.info("Test Email on /setSMTP page has been sent to: "  + request.getParameter("testaddress"));
+	 			this.doGet(request, response);
+	 			return;
+		    	
+				
+				
+			}
+			
+			this.doGet(request, response);
+			return;
 		}
 		
-		// Give the user confirmation that the settings have been updated. 
-		logger.info("SMTP Settings Updated By User: " + this.getUserInfo(request).getUsername() + " New HostName: " + smtpBean.getHostName());
-		request.setAttribute("note", "SMTP Settings Have Been Updated.");
-		request.setAttribute("smtpInfo", smtpBean);
-		this.forward(request, response, "/WEB-INF/flows/admin/SetSmtp.jsp");
-		return;		
+		// Update the SMTP Settings
+		else {
+	
+			// Update the DB SMTP record. 
+			SetSmtpBean smtpBean = new SetSmtpBean(request);
+			try {
+				smtpBean.updateSmtp();
+			} 
+			catch (BoException e) {
+				logger.error("Bo Excpetion");
+			}
+			
+			// Give the user confirmation that the settings have been updated. 
+			logger.info("SMTP Settings Updated By User: " + this.getUserInfo(request).getUsername() + " New HostName: " + smtpBean.getHostName());
+			request.setAttribute("note", "SMTP Settings Have Been Updated.");
+			request.setAttribute("smtpInfo", smtpBean);
+			this.forward(request, response, "/WEB-INF/flows/admin/SetSmtp.jsp");
+			return;		
+		}
 	}
 
 }

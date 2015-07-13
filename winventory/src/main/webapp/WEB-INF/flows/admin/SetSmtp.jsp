@@ -109,7 +109,49 @@
 							</div>
 							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2">
-									<button type="submit" class="btn btn-default">Apply</button>
+									<button type="submit" name="setSmtp" value="setSmtp" class="btn btn-default">Apply</button>
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</form>
+					</div>	
+					<div class="boom">
+						<h2 class="center">Send Test Email</h2>
+					</div>
+					<br>
+					<div class ="padme">
+						<c:if test="${not empty sent}">
+							<div class="alert alert-success" role="alert">
+								<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+								<c:out value="${sent}"/>
+							</div>
+						</c:if>
+								
+						<c:if test="${not empty failed}">
+							<div class="alert alert-danger" role="alert">
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+								<c:out value="${failed}"/>
+							</div>
+						</c:if>
+					<br>
+						
+						<form class="form-horizontal" action="setSmtp" role="form" method="post">
+							<div class="form-group">
+								<label for="testaddress" class="col-sm-2 control-label">Test Address</label>
+								<div class="col-sm-9 search-field">
+									<input name="testaddress" type="text" id="type" class="form-control" required>
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-10 col-sm-offset-2">
+									<button type="submit" name="testEmail" value="testEmail" class="btn btn-default">
+									Test Email
+									</button>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

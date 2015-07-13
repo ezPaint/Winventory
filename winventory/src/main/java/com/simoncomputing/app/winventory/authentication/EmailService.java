@@ -16,17 +16,17 @@ import com.simoncomputing.app.winventory.util.BoException;
  * server. You can set the settings for this on the web site 
  * and it will reflect in your DB.
  * 
- *   	EmailService emailer = new EmailService();
- *   	try {
- *   		emailer.setSmtp();
- *			emailer.addTo(user.getEmail());
- *			emailer.setFrom(this.getUserInfo(request).getEmail());
- *			emailer.setSubject("You're Subject");
- *			emailer.setMessage("You're Message");
- *			emailer.sendEmail();
- *		} catch (Exception e) {
- *			logger.info("Email Failed to Send to: " + user.getEmail());
- *		}
+    	EmailService emailer = new EmailService();
+    	try {
+   			emailer.setSmtp();
+ 			emailer.addTo(user.getEmail());
+ 			emailer.setFrom(this.getUserInfo(request).getEmail());
+ 			emailer.setSubject("You're Subject");
+ 			emailer.setMessage("You're Message");
+ 			emailer.sendEmail();
+		} catch (Exception e) {
+ 			logger.info("Email Failed to Send to: " + user.getEmail());
+ 		}
  */
 
 
@@ -53,6 +53,8 @@ public class EmailService {
 	 */
 	public EmailService() {
 		email = new SimpleEmail(); 
+		email.setSocketConnectionTimeout(10000);
+		email.setSocketTimeout(10000);
 	}
 	
 	/**

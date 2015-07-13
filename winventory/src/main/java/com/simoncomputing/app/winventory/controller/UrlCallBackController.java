@@ -66,10 +66,10 @@ public class UrlCallBackController extends BaseController {
 			return;
 		}
 		
-		// OK the user have consented so lets find out about the user
+		// OK the user has consented so lets find out about the user
 		OAuthService service = (OAuthService) session.getAttribute("service");
 		
-		// Get the all important authorization code
+		// Get the authorization code
 		String code = request.getParameter("code");
 		
 		// Construct the access token
