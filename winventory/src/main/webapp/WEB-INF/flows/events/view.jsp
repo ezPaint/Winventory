@@ -35,7 +35,7 @@
 					</div>
 					<div class="padme">
 					
-					    <!-- Get the information of the software object selected by the user to view. -->
+					 
 						<%@ page
 							import="com.simoncomputing.app.winventory.domain.Event"%>
 						<%@ page import="java.util.ArrayList"%>

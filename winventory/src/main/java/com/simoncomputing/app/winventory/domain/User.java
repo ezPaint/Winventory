@@ -1,5 +1,4 @@
 package com.simoncomputing.app.winventory.domain;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
@@ -20,10 +19,11 @@ import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 import com.simoncomputing.app.winventory.util.BoException;
 
 
+
 /**
 * The User Table.
 */
-public class User {
+public class User implements Item {
 
     private Long      key;
     private String    username;
@@ -334,9 +334,11 @@ public class User {
             emailer.addTo(this.getEmail());
             emailer.setFrom(userInfo.getEmail());
             emailer.setSubject("Welcome To Winventory");
+            String urlPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
             emailer.setMessage(
                     "You have been added to the Winventory!\n"
-                    + "Your Username is: " + this.getUsername());
+                    + "Your Username is: " + this.getUsername() + "\n" 
+                    + "Link: " + urlPath);
             emailer.sendEmail();
         } catch (Exception e) {
             logger.info("Email Failed to Send to: " + this.getEmail());
@@ -365,6 +367,20 @@ public class User {
             sendResetEmail.sendEmail();
         } catch (EmailException | BoException e) {
             logger.error("email or bo exception in User.sendPasswordResetEmail");
+        }
+    }
+    
+    /**
+     * Gets the user's roleTitle, not just roleId
+     * @return roleTitle the associated role title
+     */
+    public String getRoleTitle() {
+        try {
+            String roleTitle = RoleBo.getInstance().read(this.getRoleId().longValue()).getTitle();
+            return roleTitle;
+        } catch (BoException e) {
+            logger.error("BoException when getting roleTitle for user " + this.getUsername());
+            return null;
         }
     }
 

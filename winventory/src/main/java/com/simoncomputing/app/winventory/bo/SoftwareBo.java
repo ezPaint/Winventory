@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.*;
 
 import com.simoncomputing.app.winventory.dao.SessionFactory;
 import com.simoncomputing.app.winventory.dao.SoftwareDao;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.util.BoException;
+import com.simoncomputing.app.winventory.dao.*;
 
 public class SoftwareBo {
 
@@ -118,20 +120,14 @@ public class SoftwareBo {
         return result;
     }
 
-    /**
-     * Get a list of software objects that have the same name.
-     * @param name Name of the software object 
-     * @return A list of software objects with the same name
-     * @throws BoException
-     */
-    public List<Software> getListByName( String name ) throws BoException {
+    public List<Software> getListByName( String key ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
             SoftwareDao mapper = session.getMapper( SoftwareDao.class );
-            list = mapper.getListByName( name );
+            list = mapper.getListByName( key );
             session.commit();
 
         } catch ( Exception e ) {
@@ -146,20 +142,14 @@ public class SoftwareBo {
         return list;
     }
 
-    /**
-     * Get a list of software objects that share the same serial number
-     * @param serialNo
-     * @return
-     * @throws BoException
-     */
-    public List<Software> getListBySerialNo( String serialNo ) throws BoException {
+    public List<Software> getListBySerialNo( String key ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
             SoftwareDao mapper = session.getMapper( SoftwareDao.class );
-            list = mapper.getListBySerialNo( serialNo );
+            list = mapper.getListBySerialNo( key );
             session.commit();
 
         } catch ( Exception e ) {
@@ -174,20 +164,14 @@ public class SoftwareBo {
         return list;
     }
 
-    /**
-     * Get a list of software objects that share the same license key
-     * @param licenseKey
-     * @return
-     * @throws BoException
-     */
-    public List<Software> getListByLicenseKey( String licenseKey ) throws BoException {
+    public List<Software> getListByLicenseKey( String key ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
             SoftwareDao mapper = session.getMapper( SoftwareDao.class );
-            list = mapper.getListByLicenseKey( licenseKey );
+            list = mapper.getListByLicenseKey( key );
             session.commit();
 
         } catch ( Exception e ) {
@@ -202,20 +186,14 @@ public class SoftwareBo {
         return list;
     }
 
-    /**
-     * Get a list of software objects that share the same purchased date
-     * @param date
-     * @return
-     * @throws BoException
-     */
-    public List<Software> getListByPurchasedDate( Date date ) throws BoException {
+    public List<Software> getListByPurchasedDate( Date key ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
             SoftwareDao mapper = session.getMapper( SoftwareDao.class );
-            list = mapper.getListByPurchasedDate( date );
+            list = mapper.getListByPurchasedDate( key );
             session.commit();
 
         } catch ( Exception e ) {
@@ -230,20 +208,14 @@ public class SoftwareBo {
         return list;
     }
 
-    /**
-     * Get a list of software objects that share the same expiration date.
-     * @param date
-     * @return
-     * @throws BoException
-     */
-    public List<Software> getListByExpirationDate( Date date ) throws BoException {
+    public List<Software> getListByExpirationDate( Date key ) throws BoException {
         SqlSession session = null;
         List<Software> list;
 
         try {
             session = SessionFactory.getSession();
             SoftwareDao mapper = session.getMapper( SoftwareDao.class );
-            list = mapper.getListByExpirationDate( date );
+            list = mapper.getListByExpirationDate( key );
             session.commit();
 
         } catch ( Exception e ) {
@@ -478,8 +450,10 @@ public class SoftwareBo {
     		
     		for (Software s : results) {
     			for ( Software c : costs ) {
-    				if (s.equals(c))
+    				if (s.equals(c)) {
     					returnedResults.add(s);
+    					break;
+    				}
     			}
     		}
     		
@@ -513,7 +487,8 @@ public class SoftwareBo {
 
         List<Software> purchased = new ArrayList<Software>();
         List<Software> expired = new ArrayList<Software>();
-
+        List<Software> ret = new ArrayList<Software>();
+        
         try {
             if (dates.get(2).equals("") && dates.get(3).equals("")) {
                 // if only purchased dates are entered, expired should contain
@@ -539,7 +514,19 @@ public class SoftwareBo {
                 //Calculate the intersection of 'purchased' and 'expired'
                 for (Software p : purchased){
                     for (Software e : expired){
-                        if (p.compareDates(e)) list.add(p);
+                        if (p.compareDates(e)) {
+                            list.add(p);
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            for (Software p : results){
+                for (Software e : list){
+                    if (p.equals(e)) {
+                        ret.add(e);
+                        break;
                     }
                 }
             }
@@ -548,7 +535,7 @@ public class SoftwareBo {
             throw new BoException( e );
         }
 
-        return list;
+        return ret;
     }
     
     /**

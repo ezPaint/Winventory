@@ -16,7 +16,7 @@ import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
- * Controller for the Results ("All Hardware") page
+ * Controller for the Results ("All Locations") page
  */
 @WebServlet("/location/results-location")
 public class LocationResultsController extends BaseController {
@@ -26,13 +26,13 @@ public class LocationResultsController extends BaseController {
     private Logger log = Logger.getLogger(LocationResultsController.class);
 
     /**
-     * Runs when the "hardware/results" page is accessed by a general link or
-     * through the url
+     * Runs when the "location/results-location" page is accessed by a general
+     * link or through the url
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
 
-        // Attempt to get all hardware from database using a BO
+        // Attempt to get all Locations from database using a BO
         ArrayList<Location> results = null;
         try {
             results = new ArrayList<Location>(LocationBo.getInstance().getAll());
@@ -46,18 +46,17 @@ public class LocationResultsController extends BaseController {
             request.setAttribute("results", results);
         }
 
-        // Sets the page header to "All Hardware"
+        // Sets the page header to "All Locations"
         request.setAttribute("page_header", "All Locations");
 
-        // Forward the request to the "hardware/results" page
-        request.getRequestDispatcher("/WEB-INF/flows/locations/results-location.jsp").forward(request,
-                        response);
+        // Forward the request to the "location/results-location" page
+        request.getRequestDispatcher("/WEB-INF/flows/locations/results-location.jsp").forward(
+                        request, response);
 
     }
 
     /**
-     * Not currently used, for future use any page could forward an ArrayList of
-     * Hardware to this page and it will be displayed in table format
+     * Not currently used
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
@@ -71,8 +70,8 @@ public class LocationResultsController extends BaseController {
 
         request.setAttribute("page_header", "Results");
 
-        request.getRequestDispatcher("/WEB-INF/flows/locations/results-location.jsp").forward(request,
-                        response);
+        request.getRequestDispatcher("/WEB-INF/flows/locations/results-location.jsp").forward(
+                        request, response);
     }
 
 }

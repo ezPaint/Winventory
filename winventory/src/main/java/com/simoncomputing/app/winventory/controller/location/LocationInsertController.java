@@ -11,12 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.AddressBo;
-import com.simoncomputing.app.winventory.bo.LocationBo;
-import com.simoncomputing.app.winventory.bo.RoleBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Address;
 import com.simoncomputing.app.winventory.domain.Location;
-import com.simoncomputing.app.winventory.domain.Role;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -25,7 +22,7 @@ import com.simoncomputing.app.winventory.util.BoException;
  */
 
 
-@WebServlet("/locations/insert")
+@WebServlet("/location/insert-location")
 public class LocationInsertController extends BaseController {
     private static final long serialVersionUID = 1L;
     private static Logger logger = Logger.getLogger(LocationInsertController.class);
@@ -39,7 +36,6 @@ public class LocationInsertController extends BaseController {
             return;
         }*/
         
-    	
     	
     	 ArrayList<Address> addresses = new ArrayList<Address>();
          try {
@@ -62,6 +58,29 @@ public class LocationInsertController extends BaseController {
         /*if (this.requirePermission(request, response, "createUser")) {
             return;
         }*/
+    	
+    	Location location = new Location();
+    	
+    	// form errors
+        ArrayList<String> errors = new ArrayList<String>();
+        errors = location.bindInsertForm(request);
+        
+        // Create the new location in the db, if no errors exist
+        if (errors.size() == 0) {
+            location.create();
+        }
+    	
+        // if errors, return to add location page and display errors
+        if (errors.size() > 0) {
+            // attach errors to the request
+            request.setAttribute("errors", errors);
+            
+            // forward to jsp and return from method
+            request.getRequestDispatcher("/WEB-INF/flows/locations/insert-location.jsp").forward(request, response);
+            return;
+        }
+        
+    	response.sendRedirect(request.getContextPath() + "/location/results-location");
        
     }
 

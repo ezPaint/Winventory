@@ -38,7 +38,27 @@
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
+				<c:choose>
+					<c:when test="${success}">
+					</c:when>
+					<c:otherwise>
+						<c:if test="${not empty errors}">
+							<div class="alert alert-danger" role="alert">
+								<h3 class="error-header">Could not insert hardware</h3>
+								<span class="sr-only">Errors</span>
+								<c:forEach items="${errors}" var="error">
+									<p class="error-msg">
+										<span class="glyphicon glyphicon-exclamation-sign"
+											aria-hidden="true"></span> ${error}
+									</p>
+								</c:forEach>
+							</div>
+						</c:if>
+						<c:if test="${not empty error}">
+							<jsp:include page="/WEB-INF/includes/error.jsp" />
+						</c:if>
+					</c:otherwise>
+				</c:choose>
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">Edit Hardware Info</h2>
@@ -52,16 +72,16 @@
 
 						<%
 						    Hardware hardware = (Hardware) request.getAttribute("hardware");
-
-												    if (hardware != null) {
+																													if (hardware != null) {
 						%>
 
-						<form class="form-horizontal" action="edit"
+						<form class="form-horizontal" action="edit?key=<%=hardware.getKey()%>"
 							data-toggle="validator" role="form" method="post">
 							<div class="form-group">
 								<label for="type" class="col-sm-2 control-label">Type </label>
 								<div class="col-sm-9 search-field">
-									<input name="type" type="text" id="type" pattern="^[^\'\&quot]*$"
+									<input name="type" type="text" id="type"
+										pattern="^[^\'\&quot]*$"
 										class="form-control search-hardware-type"
 										value="<%=hardware.getType()%>" required>
 								</div>
@@ -73,9 +93,9 @@
 								<label for="description" class="col-sm-2 control-label">Description
 								</label>
 								<div class="col-sm-9">
-									<input name="description" type="text" id="description" pattern="^[^\'\&quot]*$"
-										class="form-control" value="<%=hardware.getDescription()%>"
-										required>
+									<input name="description" type="text" id="description"
+										pattern="^[^\'\&quot]*$" class="form-control"
+										value="<%=hardware.getDescription()%>" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -84,8 +104,9 @@
 							<div class="form-group">
 								<label for="cost" class="col-sm-2 control-label">Cost </label>
 								<div class="col-sm-9">
-									<input name="cost" type="text" id="cost" type="number" pattern="^[0-9]+(\.[0-9][0-9]?)*$"
-										class="form-control" value="<%=hardware.getCost()%>" required>
+									<input name="cost" type="text" id="cost" type="number"
+										pattern="^[0-9]+(\.[0-9][0-9]?)*$" class="form-control"
+										value="<%=hardware.getCost()%>" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -96,7 +117,7 @@
 									Purchased </label>
 								<div class="col-sm-9">
 									<input name="date" type="date" id="date" type="date"
-										class="form-control" value="" required>
+										class="form-control" value="">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -114,19 +135,15 @@
 										<%@ page import="java.util.ArrayList"%>
 
 										<%
-										    ArrayList<RefCondition> conditions = (ArrayList<RefCondition>) request
-																				            .getAttribute("conditions");
-
-																				    if (conditions != null) {
-
-																				        for (int i = 0; i < conditions.size(); i++) {
+										    ArrayList<RefCondition> conditions = (ArrayList<RefCondition>) request.getAttribute("conditions");
+																																																													for (int i = 0; i < conditions.size(); i++) {
 										%>
 
-										<option value="<%=conditions.get(i).getCode()%>"><%=conditions.get(i).getCode()%></option>
+										<option title="<%=conditions.get(i).getDescription()%>"
+											value="<%=conditions.get(i).getCode()%>"><%=conditions.get(i).getCode()%></option>
 
 										<%
 										    }
-																				    }
 										%>
 
 									</select>
@@ -140,20 +157,117 @@
 								<label for="serialNo" class="col-sm-2 control-label">Serial
 									No </label>
 								<div class="col-sm-9">
-									<input name="serialNo" type="text" id="serialNo" pattern="^[^\'\&quot]*$"
-										class="form-control" value="<%=hardware.getSerialNo()%>"
-										required>
+									<input name="serialNo" type="text" id="serialNo"
+										pattern="^[^\'\&quot]*$" class="form-control"
+										value="<%=hardware.getSerialNo()%>" required>
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+
+							<%
+							    if (hardware.getUserId() != null) {
+							%>
+							<div class="form-group">
+								<div class="col-sm-9 col-sm-offset-2">
+									<div class="radio">
+										<label> <input type="radio" name="insertWith"
+											value="user" checked> Assign to user
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="date" class="col-sm-2 control-label">Username
+								</label>
+								<div class="col-sm-9">
+									<input name="username" type="text" class="form-control"
+										value="<%=request.getAttribute("username")%>">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
 							<div class="form-group">
+								<div class="col-sm-9 col-sm-offset-2">
+									<div class="radio">
+										<label> <input type="radio" name="insertWith"
+											value="location"> Place in storage
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="date" class="col-sm-2 control-label">
+									Location ID </label>
+								<div class="col-sm-9">
+									<input name="locID" type="number" class="form-control"
+										placeholder="12">
+								</div>
 								<div class="col-sm-10 col-sm-offset-2">
-									<button type="submit" class="btn btn-default">Submit
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+
+							<%
+							    } else {
+							%>
+							<div class="form-group">
+								<div class="col-sm-9 col-sm-offset-2">
+									<div class="radio">
+										<label> <input type="radio" name="insertWith"
+											value="user" checked> Assign to user
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="date" class="col-sm-2 control-label">Username
+								</label>
+								<div class="col-sm-9">
+									<input name="username" type="text" class="form-control" 
+									placeholder="joe.shmo">
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-9 col-sm-offset-2">
+									<div class="radio">
+										<label> <input type="radio" name="insertWith"
+											value="location" checked> Place in storage
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="date" class="col-sm-2 control-label">
+									Location ID </label>
+								<div class="col-sm-9">
+									<input name="locID" type="number" class="form-control" 
+									value="<%= request.getAttribute("locationID") %>">
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+
+							<%
+							    }
+							%>
+
+							<div class="form-group">
+								<div class="col-sm-10 col-sm-offset-2">
+									<button type="submit" class="btn btn-success">Submit
 										Changes</button>
-									<button type="reset" class="btn btn-default" onClick="reloadConditions(); return false;">Reset
+									<button type="reset" class="btn btn-warning"
+										onClick="reloadConditions(); return false;">Reset
 										Values</button>
+									<a
+										href="${contextPath}/hardware/view?key=<%=hardware.getKey()%>"
+										class="btn btn-danger">Cancel</a>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -181,64 +295,7 @@
 	<script>
 		var date = '${pageContext.request.getAttribute("hardware").getPurchaseDate()}';
 		var month = date.substring(4, 7);
-		
-		if (month == 'Jan') {
-			month = '01';
-		} else if (month == 'Feb') {
-			month = '02';
-		} else if (month == 'Mar') {
-			month = '03';
-		} else if (month == 'Apr') {
-			month = '04';
-		} else if (month == 'May') {
-			month = '05';
-		} else if (month == 'Jun') {
-			month = '06';
-		} else if (month == 'Jul') {
-			month = '07';
-		} else if (month == 'Aug') {
-			month = '08';
-		} else if (month == 'Sep') {
-			month = '09';
-		} else if (month == 'Oct') {
-			month = '10';
-		} else if (month == 'Nov') {
-			month = '11';
-		} else if (month == 'Dec') {
-			month = '12';
-		}
-		
-		var day = date.substring(8, 10);
-		var year = date.substring(24);
-		
-		var today = new Date();
-		today = year + '-' + month + '-' + day;
-		$("#date").val(today);//attr("value", today);
-		
-		var condition = '${pageContext.request.getAttribute("hardware").getCondition()}';
-		$('select[name=condition]').val(condition);
-	</script>
-	<script>
-	function reloadConditions() {
-		var type = '${pageContext.request.getAttribute("hardware").getType()}';
-		console.log(type);
-		$("#type").val(type);
-		var description = '${pageContext.request.getAttribute("hardware").getDescription()}';
-		console.log(description);
-		$("#description").val(description);
-		var cost = '${pageContext.request.getAttribute("hardware").getCost()}';
-		console.log(cost);
-		$("#cost").val(cost);
-		var serialNo = '${pageContext.request.getAttribute("hardware").getSerialNo()}';
-		console.log(serialNo);
-		$("#serialNo").val(serialNo);
-		var condition = '${pageContext.request.getAttribute("hardware").getCondition()}';
-		console.log(condition);
-		$('select[name=condition]').val(condition);
-		
-		var date = '${pageContext.request.getAttribute("hardware").getPurchaseDate()}';
-		var month = date.substring(4, 7);
-		
+
 		if (month == 'Jan') {
 			month = '01';
 		} else if (month == 'Feb') {
@@ -267,11 +324,68 @@
 
 		var day = date.substring(8, 10);
 		var year = date.substring(24);
-		
+
 		var today = new Date();
 		today = year + '-' + month + '-' + day;
-		$("#date").val(today);
-	}
+		$("#date").val(today);//attr("value", today);
+
+		var condition = '${pageContext.request.getAttribute("hardware").getCondition()}';
+		$('select[name=condition]').val(condition);
+	</script>
+	<script>
+		function reloadConditions() {
+			var type = '${pageContext.request.getAttribute("hardware").getType()}';
+			console.log(type);
+			$("#type").val(type);
+			var description = '${pageContext.request.getAttribute("hardware").getDescription()}';
+			console.log(description);
+			$("#description").val(description);
+			var cost = '${pageContext.request.getAttribute("hardware").getCost()}';
+			console.log(cost);
+			$("#cost").val(cost);
+			var serialNo = '${pageContext.request.getAttribute("hardware").getSerialNo()}';
+			console.log(serialNo);
+			$("#serialNo").val(serialNo);
+			var condition = '${pageContext.request.getAttribute("hardware").getCondition()}';
+			console.log(condition);
+			$('select[name=condition]').val(condition);
+
+			var date = '${pageContext.request.getAttribute("hardware").getPurchaseDate()}';
+			var month = date.substring(4, 7);
+
+			if (month == 'Jan') {
+				month = '01';
+			} else if (month == 'Feb') {
+				month = '02';
+			} else if (month == 'Mar') {
+				month = '03';
+			} else if (month == 'Apr') {
+				month = '04';
+			} else if (month == 'May') {
+				month = '05';
+			} else if (month == 'Jun') {
+				month = '06';
+			} else if (month == 'Jul') {
+				month = '07';
+			} else if (month == 'Aug') {
+				month = '08';
+			} else if (month == 'Sep') {
+				month = '09';
+			} else if (month == 'Oct') {
+				month = '10';
+			} else if (month == 'Nov') {
+				month = '11';
+			} else if (month == 'Dec') {
+				month = '12';
+			}
+
+			var day = date.substring(8, 10);
+			var year = date.substring(24);
+
+			var today = new Date();
+			today = year + '-' + month + '-' + day;
+			$("#date").val(today);
+		}
 	</script>
 
 </body>

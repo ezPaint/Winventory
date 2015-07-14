@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!-- Software's (left) sidebar -->
+<!-- Software's side/navigation bar -->
 <div class="col-md-2">
 	<div class="list-group">
 		<a href="${contextPath}/winventory/software" class="list-group-item">

@@ -19,6 +19,7 @@ import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.User;
+import com.simoncomputing.app.winventory.util.Barcoder;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -36,7 +37,7 @@ public class HardwareViewController extends BaseController {
      * url
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-                    throws ServletException, IOException {
+            throws ServletException, IOException {
 
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
@@ -45,12 +46,18 @@ public class HardwareViewController extends BaseController {
         // with the key value (assuming there is a key parameter in the request)
         Hardware hardware = null;
         Long long_key = null;
-        
+
         List<Event> events = null;
-        
+
         if (key != null) {
             // Cast the key to the correct type
-            long_key = Long.parseLong(key);
+
+            try {
+                long_key = Long.parseLong(key);
+            } catch (Exception e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+            }
         }
         // This will fail if there is no key (i.e. the url ends at
         // "hardware/edit")
@@ -86,31 +93,34 @@ public class HardwareViewController extends BaseController {
                     // Retrieve the Location associated with it using a BO
                     // instance
                     Location location = LocationBo.getInstance().read(
-                                    (long) hardware.getLocationId());
+                            (long) hardware.getLocationId());
                     request.setAttribute("location", location);
                 } catch (BoException e) {
                     request.setAttribute("error", e.getMessage());
                     log.error(e.getMessage());
                 }
             }
-            
-            //Use Bo to get all events associated with this hardware
+
+            // get and assign barcode using Barcoder class
+            request.setAttribute("barcode", Barcoder.getBarcode(hardware));
+
+            // Use Bo to get all events associated with this hardware
             EventBo eb = EventBo.getInstance();
-        	try {
-				events = eb.getEventsOf(hardware);
-			} catch (BoException e) {
-				// TODO Auto-generated catch block
-				request.setAttribute("error", e.getMessage());
+            try {
+                events = eb.getEventsOf(hardware);
+            } catch (BoException e) {
+                // TODO Auto-generated catch block
+                request.setAttribute("error", e.getMessage());
                 log.error(e.getMessage());
-			}
+            }
         }
 
         // Set the hardware as an attribute for the request
         request.setAttribute("hardware", hardware);
-        
-        //Set the list of events as an attribute
+
+        // Set the list of events as an attribute
         request.setAttribute("events", events);
-        
+
         // Forward the request to the "hardware/view" page
         request.getRequestDispatcher("/WEB-INF/flows/hardware/view.jsp").forward(request, response);
 
@@ -120,7 +130,7 @@ public class HardwareViewController extends BaseController {
      * Runs when the "delete" button is selected on the "hardware/view" page
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-                    throws ServletException, IOException {
+            throws ServletException, IOException {
 
         // Check to see if the current User has the permissions to delete
         // Hardware items, and returns if they do not
@@ -136,7 +146,12 @@ public class HardwareViewController extends BaseController {
         HardwareBo bo = HardwareBo.getInstance();
         Long long_key = null;
         if (key != null) {
-            long_key = Long.parseLong(key);
+            try {
+                long_key = Long.parseLong(key);
+            } catch (Exception e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+            }
         }
 
         // Attempt to delete the Hardware item from the database using a BO

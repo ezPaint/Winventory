@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <title>Edit Application</title>
     
-    <!-- Include Required Prerequisites for Date Range Picker -->
+<!-- Include Required Prerequisites for Date Range Picker -->
 <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript" src="${contextPath}/resources/js/moment.min.js"></script>
 
@@ -22,11 +22,13 @@
 $(function() {
     $('input[name="purchasedDate"]').daterangepicker({
         format: 'YYYY-MM-DD',
+        minDate: '1970-01-01',
         singleDatePicker: true,
         showDropdowns: true
     }); 
     $('input[name="expirationDate"]').daterangepicker({
         format: 'YYYY-MM-DD',
+        minDate: '1970-01-01',
         singleDatePicker: true,
         showDropdowns: true
     }); 
@@ -39,7 +41,6 @@ $(function() {
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/bootstrap.css' />
 
     <script src='${contextPath}/resources/js/actions.js' type="text/javascript"></script>
-<%-- <script src='${contextPath}/resources/js/jquery-1.11.3.min.js' type="text/javascript"></script> --%> <%--Obsolete for date-picker --%>
     <script src='${contextPath}/resources/js/bootstrap.min.js' type="text/javascript"></script>
     <script src='${contextPath}/resources/js/validator.js'
     type="text/javascript"></script>
@@ -219,8 +220,12 @@ $(function() {
                             <!-- Form submission -->
                             <div class="form-group">
                                 <div class="col-sm-10 col-sm-offset-2">
-                                    <button type="submit" class="btn btn-default">Submit Changes</button>
-                                    <button type="reset" class="btn btn-default">Clear</button>
+                                    <button type="submit" value="Update" name="button" class="btn btn-primary">Submit Changes</button>
+                                    <button type="reset" class="btn btn-default">Reset</button>
+                                    <a class="btn btn-default"
+                                    href="${contextPath}/software/view?key=<%=software.getKey()%>" role="button">Cancel</a>
+                                    <button type="submit" value="Delete" name="button" class="btn btn-danger" onclick="return confirmDelete();">Delete</button>
+                                    
                                 </div>
                                 <div class="col-sm-10 col-sm-offset-2">
                                     <div class="help-block with-errors"></div>
@@ -248,7 +253,11 @@ $(function() {
             <br>
         </div>
     </div>
-    <jsp:include page="/WEB-INF/includes/footer.jsp" />   
+    <jsp:include page="/WEB-INF/includes/footer.jsp" /> 
+    <script>
+    function confirmDelete(){
+    	return confirm("Are you sure you want to delete this item?");
+    }</script>  
 </body>
 
 </html>

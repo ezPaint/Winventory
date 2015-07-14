@@ -75,7 +75,7 @@
 									<th>Cell Phone</th>
 									<th>Work Phone</th>
 									<th>Is Active</th>
-									<th>Role Id</th>
+									<th>Role</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -100,7 +100,7 @@
 									<td><%=results.get(i).getCellPhone()%></td>
 									<td><%=results.get(i).getWorkPhone()%></td>
 									<td><%=results.get(i).getIsActive()%></td>
-									<td><%=results.get(i).getRoleId()%></td>
+									<td><%=results.get(i).getRoleTitle()%></td>
 								</tr>
 								<%
 								    }

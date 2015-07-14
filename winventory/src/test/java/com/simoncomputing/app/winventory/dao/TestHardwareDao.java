@@ -84,8 +84,8 @@ public class TestHardwareDao {
         hardware.setCost( (double) randomNumber() );
         hardware.setSerialNo( randomString( "serialNo", 40 ) );
         hardware.setCondition( randomString( "condition", 40 ) );
-        hardware.setLocationId( randomNumber() );
-        hardware.setUserId( randomNumber() );
+        hardware.setLocationId( (long) 0 );
+        hardware.setUserId( (long) 0 );
         hardware.setPurchaseDate( new Date() );
 
         return hardware;
@@ -111,8 +111,8 @@ public class TestHardwareDao {
         hardware.setCost( (double) randomNumber() );
         hardware.setSerialNo( randomString( "serialNo", 40 ) );
         hardware.setCondition( randomString( "condition", 40 ) );
-        hardware.setLocationId( randomNumber() );
-        hardware.setUserId( randomNumber() );
+        hardware.setLocationId( (long) 0 );
+        hardware.setUserId( (long) 0 );
         hardware.setPurchaseDate( new Date() );
 
     }

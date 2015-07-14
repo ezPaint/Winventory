@@ -16,11 +16,11 @@ public interface RefPermissionDao {
 
     public RefPermission read( Map<String, Object> map ) throws DaoException;
 
-    
-
 
     // PROTECTED CODE -->
     
     public List<RefPermission> getAll();
+    
+    public RefPermission getRefPermissionByName(String name);
 
 }

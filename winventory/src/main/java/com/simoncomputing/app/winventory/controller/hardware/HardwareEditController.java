@@ -1,11 +1,7 @@
 package com.simoncomputing.app.winventory.controller.hardware;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,9 +12,11 @@ import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
+import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
+import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -36,7 +34,7 @@ public class HardwareEditController extends BaseController {
      * url
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-                    throws ServletException, IOException {
+            throws ServletException, IOException {
 
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
@@ -45,9 +43,14 @@ public class HardwareEditController extends BaseController {
         // with the key value (assuming there is a key parameter in the request)
         Hardware hardware = null;
         Long long_key = null;
-        if (key != null) {
+        if (key != null && !key.equals("")) {
             // Cast the key to the correct type
-            long_key = Long.parseLong(key);
+            try {
+                long_key = Long.parseLong(key);
+            } catch (Exception e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+            }
         }
         // This will fail if there is no key (i.e. the url ends at
         // "hardware/edit")
@@ -64,6 +67,24 @@ public class HardwareEditController extends BaseController {
         if (hardware == null) {
             String error = logError(log, new NullPointerException());
             request.setAttribute("error", "Error code: " + error);
+        } else {
+            try {
+                if (hardware.getUserId() != null) {
+                    User u = UserBo.getInstance().read(hardware.getUserId());
+
+                    if (u != null) {
+                        request.setAttribute("username", u.getUsername());
+                    } else {
+                        String error = logError(log, new NullPointerException());
+                        request.setAttribute("error", "Error code: " + error);
+                    }
+                } else {
+                    request.setAttribute("locationID", hardware.getLocationId());
+                }
+            } catch (BoException e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+            }
         }
 
         // Create an ArrayList of all the valid Ref_Conditions, which will be
@@ -97,64 +118,113 @@ public class HardwareEditController extends BaseController {
      * the changes are submitted)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-                    throws ServletException, IOException {
+            throws ServletException, IOException {
 
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
-
-        // Create a Hardware and attempt to retrieve the Hardware associated
-        // with the key value (assuming there is a key parameter in the request)
-        HardwareBo bo = HardwareBo.getInstance();
-        Hardware hardware = null;
         Long long_key = null;
-        if (key != null) {
+        if (key != null && !key.equals("")) {
             // Cast the key to the correct type
-            long_key = Long.parseLong(key);
+            try {
+                long_key = Long.parseLong(key);
+            } catch (Exception e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+            }
         }
-        try {
-            // Retrieve the Hardware associated with it using a BO instance
-            hardware = HardwareBo.getInstance().read(long_key);
-        } catch (BoException e) {
-            String error = logError(log, e);
-            request.setAttribute("error", "Error code: " + error);
+        Hardware h = new Hardware();
+        ArrayList<String> errors = h.bind(request);
+        h.setKey(long_key);
+
+        if (errors.size() == 0) {
+            request.setAttribute("success", true);
+
+            // Use a BO to attempt to create this hardware item and place it in
+            // the database
+            HardwareBo bo = HardwareBo.getInstance();
+            try {
+                bo.update(h);
+            } catch (BoException e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+                request.setAttribute("success", false);
+            }
+
+            // Create an ArrayList of all the valid Ref_Conditions, which will
+            // be used to prevent the user from entering
+            // or choosing a non-valid condition
+            ArrayList<RefCondition> conditions = null;
+            try {
+                // Use a BO to attempt to grab all valid conditions from the
+                // database
+                conditions = new ArrayList<RefCondition>(RefConditionBo.getInstance().getAll());
+            } catch (BoException e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+                request.setAttribute("success", false);
+            }
+
+            // Reset the conditions as an attribute for the request
+            if (conditions != null) {
+                request.setAttribute("conditions", conditions);
+            }
+
+            // Redirect to the "hardware/view" page for this specific hardware
+            this.sendRedirect(request, response, "view?key=" + key);
+
+        } else {
+            ArrayList<RefCondition> conditions = null;
+            try {
+                // Use a BO to attempt to grab all valid conditions from the
+                // database
+                conditions = new ArrayList<RefCondition>(RefConditionBo.getInstance().getAll());
+            } catch (BoException e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+                request.setAttribute("success", false);
+            }
+
+            // Reset the conditions as an attribute for the request
+            if (conditions != null) {
+                request.setAttribute("conditions", conditions);
+            }
+
+            Hardware hardware = null;
+            try {
+                hardware = HardwareBo.getInstance().read(long_key);
+            } catch (BoException e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+                request.setAttribute("success", false);
+            }
+
+            try {
+                if (hardware.getUserId() != null) {
+                    User u = UserBo.getInstance().read(hardware.getUserId());
+
+                    if (u != null) {
+                        request.setAttribute("username", u.getUsername());
+                    } else {
+                        String error = logError(log, new NullPointerException());
+                        request.setAttribute("error", "Error code: " + error);
+                    }
+                } else {
+                    request.setAttribute("locationID", hardware.getLocationId());
+                }
+            } catch (Exception e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+                request.setAttribute("success", false);
+            }
+
+            request.setAttribute("hardware", hardware);
+            request.setAttribute("success", false);
+            request.setAttribute("errors", errors);
+            // Forward the request to the "hardware/insert" page to allow the user
+            // to enter more items
+            request.getRequestDispatcher("/WEB-INF/flows/hardware/edit.jsp").forward(request,
+                    response);
+
         }
-
-        // If the hardware is not found, log the error and report the problem to
-        // the user
-        if (hardware == null) {
-            String error = logError(log, new NullPointerException());
-            request.setAttribute("error", "Error code: " + error);
-        }
-
-        // Get all of the potentially updated parameters from the request and
-        // set them for the Hardware
-        hardware.setType(request.getParameter("type"));
-        hardware.setCondition(request.getParameter("condition"));
-        hardware.setCost(Double.parseDouble(request.getParameter("cost")));
-        hardware.setDescription(request.getParameter("description"));
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        try {
-            hardware.setPurchaseDate(format.parse(request.getParameter("date")));
-        } catch (ParseException e) {
-            String error = logError(log, e);
-            request.setAttribute("error", "Error code: " + error);
-        }
-        hardware.setSerialNo(request.getParameter("serialNo"));
-
-        // Use the BO to attempt updating the Hardware in the database
-        try {
-            bo.update(hardware);
-        } catch (BoException e) {
-            String error = logError(log, e);
-            request.setAttribute("error", "Error code: " + error);
-        }
-
-        // Set the key in the request
-        request.setAttribute("key", key);
-
-        // Redirect to the "hardware/view" page for this specific hardware
-        this.sendRedirect(request, response, "view?key=" + key);
-
     }
-
 }

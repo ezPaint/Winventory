@@ -16,7 +16,7 @@ import com.simoncomputing.app.winventory.domain.Address;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
- * Controller for the Results ("All Hardware") page
+ * Controller for the Results ("All Addresses") page
  */
 @WebServlet("/location/results-address")
 public class AddressResultsController extends BaseController {
@@ -26,13 +26,13 @@ public class AddressResultsController extends BaseController {
     private Logger log = Logger.getLogger(AddressResultsController.class);
 
     /**
-     * Runs when the "hardware/results" page is accessed by a general link or
-     * through the url
+     * Runs when the "location/results-address" page is accessed by a general
+     * link or through the url
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
 
-        // Attempt to get all hardware from database using a BO
+        // Attempt to get all Addresses from database using a BO
         ArrayList<Address> results = null;
         try {
             results = new ArrayList<Address>(AddressBo.getInstance().getAll());
@@ -46,18 +46,17 @@ public class AddressResultsController extends BaseController {
             request.setAttribute("results", results);
         }
 
-        // Sets the page header to "All Hardware"
+        // Sets the page header to "All Addresses"
         request.setAttribute("page_header", "All Addresses");
 
-        // Forward the request to the "hardware/results" page
-        request.getRequestDispatcher("/WEB-INF/flows/locations/results-address.jsp").forward(request,
-                        response);
+        // Forward the request to the "location/results-address" page
+        request.getRequestDispatcher("/WEB-INF/flows/locations/results-address.jsp").forward(
+                        request, response);
 
     }
 
     /**
-     * Not currently used, for future use any page could forward an ArrayList of
-     * Hardware to this page and it will be displayed in table format
+     * Not currently used
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
@@ -71,8 +70,8 @@ public class AddressResultsController extends BaseController {
 
         request.setAttribute("page_header", "Results");
 
-        request.getRequestDispatcher("/WEB-INF/flows/locations/results-address.jsp").forward(request,
-                        response);
+        request.getRequestDispatcher("/WEB-INF/flows/locations/results-address.jsp").forward(
+                        request, response);
     }
 
 }

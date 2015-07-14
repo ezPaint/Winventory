@@ -17,6 +17,11 @@ body {
 	color: white;
 }
 
+.no-margin {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+
 .padme {
     min-height: 300px;
 	padding: 7px;

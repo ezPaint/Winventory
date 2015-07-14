@@ -1,10 +1,20 @@
 package com.simoncomputing.app.winventory.domain;
 
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+
+import com.simoncomputing.app.winventory.bo.AddressBo;
+import com.simoncomputing.app.winventory.bo.LocationBo;
+import com.simoncomputing.app.winventory.util.BoException;
+
 
 /**
 * The Location Table.
 */
-public class Location {
+public class Location implements Item{
 
     private Long      key;
     private String    description;          //Specific location of item at specified address (e.g. suite 200, desk #3)
@@ -20,5 +30,64 @@ public class Location {
     public Integer   getAddressId() { return addressId; }
     public void      setAddressId( Integer value ) { addressId = value; }
     // PROTECTED CODE -->
+    private static Logger logger = Logger.getLogger(Location.class);
+    
+    /**
+     * Binds a post request containing the insertlocation form
+     * to the location, so the location will be ready for adding/updating to the db.
+     * @param request
+     * @return errors an arraylist of error messages
+     */
+    public ArrayList<String> bindInsertForm(HttpServletRequest request) {
+        // FORM VALIDATION
+        
+        // ArrayList of errors to display for form validation problems
+        ArrayList<String> errors = new ArrayList<String>();
+        
+        // Set description
+        if (request.getParameter("description") == null) {
+            errors.add("description field is required.");
+        }
+        this.setDescription(request.getParameter("description"));
+        
+        this.setIsActive(request.getParameter("isActive") != null);
+        
+        // Set address, given address title:
+        // Start by getting all addresses
+        ArrayList<Address> addresses = new ArrayList<Address>();
+        try {
+            addresses = (ArrayList<Address>) AddressBo.getInstance().getAll();
+        } catch (BoException e) {
+            logger.error("BoException in LocationInsertController when trying to get roles");
+        }
+        
+        // find the address id for the specified address name, and set location's address id to match
+        String addressName = request.getParameter("addressName");
+        for (Address a : addresses) {
+            if (a.getName().equals(addressName)) {
+                this.setAddressId( a.getKey().intValue() );
+            }
+        }
+        
+        // Done, return the empty errors ArrayList
+        return errors;
+    }
+    
+    /**
+     * Saves the location to the db
+     * if empty arraylist is returned, the location was saved. else, not saved.
+     * @return errors array list of error messages when saving.
+     */
+    public ArrayList<String> create() {
+        ArrayList<String> errors = new ArrayList<String>();
+        LocationBo locationBo = LocationBo.getInstance();
+        try {
+            locationBo.create(this);
+        } catch (BoException e) {
+            errors.add("location could not be added.");
+            logger.error("BoException when inserting location");
+        } 
+        return errors;
+    }
 
 }

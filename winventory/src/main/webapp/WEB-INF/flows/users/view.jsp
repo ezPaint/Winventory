@@ -39,6 +39,12 @@
 		$('#resultsTable').DataTable();
 		document.getElementById("resultsTable").style.display = "table";
 	});
+	
+	jQuery(document).ready(function($) {
+		$(".clickable-row").click(function() {
+			window.document.location = $(this).data("href");
+		});
+	});
 </script>
 </head>
 
@@ -48,7 +54,6 @@
 		<div class="row">
 			<jsp:include page="userBase.jsp" />
 			<div class="col-md-8">
-			<jsp:include page="/WEB-INF/includes/error.jsp" />
 				
 
 				<div class="main">
@@ -60,6 +65,9 @@
 					
 					<!-- Include the success message (only shows if success != null -->
 					<jsp:include page="/WEB-INF/includes/success.jsp" />
+					<jsp:include page="/WEB-INF/flows/users/deleteConfirm.jsp"/>
+					<jsp:include page="/WEB-INF/includes/error.jsp"/>
+					
 				
 						<%@ page
 							import="com.simoncomputing.app.winventory.domain.User"%>
@@ -67,7 +75,6 @@
 
 						<%
 						    User user = (User) request.getAttribute("user");
-
 						    if (user != null) {
 						%>
 
@@ -168,21 +175,29 @@
 									</li>
 									<li class="list-group-item row">
 										<div class="col-md-3">
-											<b>Role Id</b>
+											<b>Role</b>
 										</div>
 										<div class="col-md-9">
-											<p><%=user.getRoleId()%></p>
+											<p><%=user.getRoleTitle()%></p>
 										</div>
 									</li>
 								</ul>
 							</div>
 						<!-- </div> -->
-						<div>
-							<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
-							<a class="btn btn-default" href="edit?key=<%=user.getKey()%>"
-								role="button">Edit</a>
-							<%-- </c:if> --%>
-						</div>
+						<form method="get" action="${contextPath}/users/view">
+							<c:set var="isSelf" value="${userInfo.key == param.key }"/>
+							<c:if test="${userInfo.hasPermission.deleteUser || (userInfo.hasPermission.deleteSelf && isSelf) }">
+								<input type="hidden" id="key" name="key"
+									value="<%=user.getKey()%>">
+						    	<input type="hidden" id="delete" name="delete"
+									value="true">
+							<button type="submit" class="btn btn-danger pull-right">Delete</button>
+							</c:if>
+						</form>
+						     <c:if test="${userInfo.hasPermission.updateUser || (userInfo.hasPermission.updateSelf && isSelf)}">
+								<a class="btn btn-default pull-right"
+									href="edit?key=<%=user.getKey()%>" role="button">Edit</a> 
+						     </c:if>
 
 						<%
 						    }
@@ -238,9 +253,9 @@
 											
 									        for (int i = 0; i < results.size(); i++) {
 									%>
-									<tr>
-										<td><a href="${contextPath}/hardware/view?key=<%=results.get(i).getKey()%>">
-												<%=results.get(i).getKey()%></a></td>
+									<tr style="cursor: pointer;" class="clickable-row"
+										data-href="${contextPath}/hardware/view?key=<%=results.get(i).getKey()%>">
+										<td><%=results.get(i).getKey()%></td>
 										<td><%=results.get(i).getType()%></td>
 										<td><%=results.get(i).getCost()%></td>
 										<td><%=results.get(i).getCondition()%></td>
@@ -261,7 +276,7 @@
 					    	} // endif(hardware results == null)
 					    	else {
 						%>
-						<p class="user-hardware-message">This user owns no hardware. </p>
+						<p class="user-hardware-message">This user owns no hardware.</p>
 						</div>
 						<%
 					    	}

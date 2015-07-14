@@ -3,6 +3,7 @@ package com.simoncomputing.app.winventory.controller.software;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -57,63 +58,80 @@ public class EditController extends BaseController {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-    
-        // Get software object from database
-        SoftwareBo bo = SoftwareBo.getInstance();
-        Long key = Long.valueOf(this.key);
-        Software software;
         
-        //Attempt to update software object
-        try {
-            software = bo.read(key);
-            
-            // Get updated values (user input)
-            String serialNo = (String) request.getParameter("serialNo");
-            String name = (String) request.getParameter("name");
-            String version = (String) request.getParameter("version");
-            String licenseKey = (String) request.getParameter("licenseKey");
-            String description = (String) request.getParameter("description");
-            
-            // For non-string values, attempt to convert to desired type (Date or double).
-            Double cost = null;
+        //Grab which button the user clicked (either 'delete' or 'submit changes')
+        String button_param = request.getParameter("button");
+        
+        //User clicked 'delete' button
+        if(button_param.equals("Delete")) {
             try {
-                cost = (Double) Double.parseDouble((String) request.getParameter("cost"));
-            }
-            catch (Exception e) {
-                logError(log, e);
-            }
-            
-            Date datePurchased = null;
-            try {
-                datePurchased = Date.valueOf((String) request.getParameter("purchasedDate"));
+                //delete selected software from database
+                SoftwareBo.getInstance().delete(Long.valueOf(key)); 
             } catch (Exception e) {
                 logError(log, e);
             }
-            
-            Date expirationDate = null;
-            try {
-                expirationDate = Date.valueOf((String) request.getParameter("expirationDate"));
-            } catch (Exception e) {
-                logError(log, e);
-            }
-            
-            // Alter Software object's data
-            software.setSerialNo(serialNo);
-            software.setName(name);
-            software.setVersion(version);
-            software.setLicenseKey(licenseKey);
-            software.setCost(cost);
-            software.setPurchasedDate(datePurchased);
-            software.setExpirationDate(expirationDate);
-            software.setDescription(description);
-            
-            //Update software object in database
-            bo.update(software);
-        } catch (BoException e) {
-            logError(log, e);
         }
         
-        // Reload results page with new software object added
+        //User clicked 'Submit Changes'
+        if (button_param.equals("Update")){
+         
+            // Get software object from database
+            SoftwareBo bo = SoftwareBo.getInstance();
+            Long key = Long.valueOf(this.key);
+            Software software;
+            
+            //Attempt to update software object in database
+            try {
+                software = bo.read(key);
+                
+                // Get updated values (user input)
+                String serialNo = (String) request.getParameter("serialNo");
+                String name = (String) request.getParameter("name");
+                String version = (String) request.getParameter("version");
+                String licenseKey = (String) request.getParameter("licenseKey");
+                String description = (String) request.getParameter("description");
+                
+                // For non-string values, attempt to convert to desired type (Date or double).
+                Double cost = null;
+                try {
+                    cost = (Double) Double.parseDouble((String) request.getParameter("cost"));
+                }
+                catch (Exception e) {
+                    logError(log, e);
+                }
+                
+                Date datePurchased = null;
+                try {
+                    datePurchased = Date.valueOf((String) request.getParameter("purchasedDate"));
+                } catch (Exception e) {
+                    logError(log, e);
+                }
+                
+                Date expirationDate = null;
+                try {
+                    expirationDate = Date.valueOf((String) request.getParameter("expirationDate"));
+                } catch (Exception e) {
+                    logError(log, e);
+                }
+                
+                // Alter Software object's data
+                software.setSerialNo(serialNo);
+                software.setName(name);
+                software.setVersion(version);
+                software.setLicenseKey(licenseKey);
+                software.setCost(cost);
+                software.setPurchasedDate(datePurchased);
+                software.setExpirationDate(expirationDate);
+                software.setDescription(description);
+                
+                //Update software object in database
+                bo.update(software);
+            } catch (BoException e) {
+                logError(log, e);
+            }
+        }
+        
+        // Reload results page with new software object deleted or updated
         ArrayList<Software> results = null;
         try {
             results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
@@ -126,5 +144,6 @@ public class EditController extends BaseController {
         }
         
         forward(request, response, "/WEB-INF/flows/software/results.jsp");
+        
     }
 }

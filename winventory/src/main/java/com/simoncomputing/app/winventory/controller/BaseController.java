@@ -115,12 +115,11 @@ public class BaseController extends HttpServlet {
      */
     public boolean requirePermission(HttpServletRequest request, HttpServletResponse response,
             String permission) throws IOException {
+        
         //If statement is true when the current user does NOT have permission
         if (!this.userHasPermission(request, permission)) {
-            UserInfoBean userInfo = this.getUserInfo(request);
-            logger.info("Permission Denied! User: " + userInfo.getUsername() + "  Requested resource: " + request.getRequestURI().toString());
             request.getSession().setAttribute("errMsg", permission);
-            response.sendRedirect(request.getContextPath() + "/permissionDenied?next=" + request.getRequestURI());
+            response.sendRedirect(request.getContextPath() + "/permissionDenied");
             return true;
         }
         return false;

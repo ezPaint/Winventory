@@ -38,8 +38,30 @@
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
+				<c:choose>
+					<c:when test="${success}">
+					
+					</c:when>
+					<c:otherwise>
+						<c:if test="${not empty errors}">
+							<div class="alert alert-danger" role="alert">
+								<h3 class="error-header">Could not insert hardware</h3>
+								<span class="sr-only">Errors</span>
+								<c:forEach items="${errors}" var="error">
+									<p class="error-msg">
+										<span class="glyphicon glyphicon-exclamation-sign"
+											aria-hidden="true"></span> ${error}
+									</p>
+								</c:forEach>
+							</div>
+						</c:if>
+						<c:if test="${not empty error}">
+							<jsp:include page="/WEB-INF/includes/error.jsp" />
+						</c:if>
+					</c:otherwise>
+				</c:choose>
 				<div class="main">
+
 					<div class="boom">
 						<h2 class="center">Insert Hardware</h2>
 					</div>
@@ -113,7 +135,7 @@
 										        for (int i = 0; i < conditions.size(); i++) {
 										%>
 
-										<option><%=conditions.get(i).getCode()%></option>
+										<option title="<%=conditions.get(i).getDescription()%>"><%=conditions.get(i).getCode()%></option>
 
 										<%
 										    }
@@ -169,9 +191,10 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="date" class="col-sm-2 control-label"> Location ID </label>
+								<label for="date" class="col-sm-2 control-label">
+									Location ID </label>
 								<div class="col-sm-9">
-									<input name="serialNo" type="number" class="form-control"
+									<input name="locID" type="number" class="form-control"
 										placeholder="12">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">

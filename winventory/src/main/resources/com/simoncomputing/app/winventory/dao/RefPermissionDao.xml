@@ -3,57 +3,57 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simoncomputing.app.winventory.dao.RefPermissionDao">
 
-	<resultMap id="RefPermissionMapper"
-		type="com.simoncomputing.app.winventory.domain.RefPermission">
-		<result column="KEY" property="key" />
-		<result column="CODE" property="code" />
-		<result column="DESCRIPTION" property="description" />
-	</resultMap>
+    <resultMap id="RefPermissionMapper" type="com.simoncomputing.app.winventory.domain.RefPermission">
+        <result column ="KEY"                 property = "key" />
+        <result column ="CODE"                property = "code" />
+        <result column ="DESCRIPTION"         property = "description" />
+    </resultMap>
 
-	<select id="read" parameterType="map" resultMap="RefPermissionMapper">
-		select * from
-		REF_PERMISSION
-		where ${where}
-	</select>
+    <select id="read" parameterType="map" resultMap="RefPermissionMapper">
+        select * from REF_PERMISSION
+        where ${where}
+    </select>
 
-	<insert id="create"
-		parameterType="com.simoncomputing.app.winventory.domain.RefPermission">
-		<selectKey resultType="_long" keyProperty="key" order="BEFORE">
-			select REF_PERMISSION_SEQ.nextval from dual
-		</selectKey>
-		insert into REF_PERMISSION
-		(
-		KEY , CODE , DESCRIPTION
-		)
-		values
-		(
-		#{key} ,
-		#{code} , #{description}
-		)
-	</insert>
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.RefPermission">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select REF_PERMISSION_SEQ.nextval from dual
+        </selectKey>
+        insert into REF_PERMISSION
+        (
+            KEY , CODE , DESCRIPTION
+        )
+        values
+        (
+            #{key} , #{code} , #{description}
+        )
+    </insert>
 
 
 
-	<update id="update"
-		parameterType="com.simoncomputing.app.winventory.domain.RefPermission">
-		update REF_PERMISSION set
-		KEY = #{key} ,
-		CODE = #{code} ,
-		DESCRIPTION = #{description}
-		where KEY = #{key}
-	</update>
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.RefPermission">
+        update REF_PERMISSION set
+            KEY                                 = #{key} ,
+            CODE                                = #{code} ,
+            DESCRIPTION                         = #{description}
+        where KEY = #{key}
+    </update>
 
-	<delete id="delete" parameterType="map">
-		delete from REF_PERMISSION
-		where ${where}
-	</delete>
+    <delete id="delete" parameterType="map">
+        delete from REF_PERMISSION
+        where ${where}
+    </delete>
 
 
-	<!-- PROTECTED CODE -->
+    <!-- PROTECTED CODE -->
 
 	<select id="getAll"
 		resultType="com.simoncomputing.app.winventory.domain.RefPermission">
 		select * from REF_PERMISSION
+	</select>
+	
+	<select id="getRefPermissionByName" parameterType="String" resultType="com.simoncomputing.app.winventory.domain.RefPermission">
+		select * from REF_PERMISSION
+		where code=#{name};
 	</select>
 
 </mapper>

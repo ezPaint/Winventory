@@ -9,7 +9,7 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/normalize.css' />
@@ -87,11 +87,12 @@
 									        for (int i = 0; i < results.size(); i++) {
 									%>
 									<tr>
-										<td><a href="view?key=<%=results.get(i).getKey()%>">
+										<td><a href="view-location?key=<%=results.get(i).getKey()%>">
 												<%=results.get(i).getKey()%></a></td>
 										<td><%=results.get(i).getDescription()%></td>
 										<td><%=results.get(i).getIsActive()%></td>
-										<td><%=results.get(i).getAddressId()%></td>
+										<td><a href="view-address?key=<%=results.get(i).getAddressId()%>">
+												<%=results.get(i).getAddressId()%></a></td>
 									</tr>
 									<%
 									    }

@@ -41,6 +41,8 @@
 				<%-- <c:if test="${userInfo.hasPermission.readLocation}"> --%>
 				<li id="location"><a href="${contextPath}/location/results-location" target="_top">Location</a></li>
 				<%-- </c:if> --%>
+				
+				<li id="event"><a href="${contextPath}/event/insert" target="_top">Events</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 

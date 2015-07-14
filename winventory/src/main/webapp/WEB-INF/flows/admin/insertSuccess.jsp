@@ -28,7 +28,7 @@
 			<div class="col-md-8">
 				<div class="main">
 					<div class="boom">
-						<h2 class="center">Create Role</h2>
+						<h2 class="center">Add a New Role</h2>
 					</div>
 
 					<div class="padme">

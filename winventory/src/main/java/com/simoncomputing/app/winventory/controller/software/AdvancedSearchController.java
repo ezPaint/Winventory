@@ -1,14 +1,11 @@
 package com.simoncomputing.app.winventory.controller.software;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.ListIterator;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.simoncomputing.app.winventory.bo.SoftwareBo;
@@ -48,15 +45,12 @@ public class AdvancedSearchController extends BaseController {
         ArrayList<String> versions = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("version")));
         
-        
-//        ArrayList<String> costs = new ArrayList<String>(Arrays.asList(request
-//                .getParameterValues("cost")));
         String minCost = request.getParameter("minCost");
         String maxCost = request.getParameter("maxCost");
         ArrayList<String> costs = new ArrayList<String>();
-        if (minCost != null)
+        if (minCost != null && !minCost.equals(""))
         costs.add(minCost);
-        if (maxCost != null)
+        if (maxCost != null && !maxCost.equals(""))
         costs.add(maxCost);
         
         ArrayList<String> keys = new ArrayList<String>(Arrays.asList(request
@@ -122,7 +116,7 @@ public class AdvancedSearchController extends BaseController {
                     // if only date search terms were provided, search all
                     // software by date
                     results = new ArrayList<Software>(SoftwareBo.getInstance().getAll());
-                    resultsBase = new ArrayList<Software>(SoftwareBo.getInstance().getAll()); //TODO: could just copy the arraylist over; which is faster?
+                    resultsBase = new ArrayList<Software>(SoftwareBo.getInstance().getAll()); 
                 } else {
                     results = new ArrayList<Software>(SoftwareBo.getInstance().searchAdvanced(
                             columns, searches));
@@ -184,7 +178,7 @@ public class AdvancedSearchController extends BaseController {
      * range
      * 
      * @param request
-     * @return
+     * @return ArrayList of date range strings for search by date range
      */
     private ArrayList<String> getDateInfo(HttpServletRequest request) {
         // will contain the date search terms
@@ -198,13 +192,13 @@ public class AdvancedSearchController extends BaseController {
         ArrayList<String> purchasedDates = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("purchasedDate")));
         // split start and end dates
-        String[] purchasedRange = purchasedDates.get(0).split(" - ");
+        String[] purchasedRange = purchasedDates.get(0).split("to");
         if (purchasedRange.length == 2) {
-            startPDate = purchasedRange[0];
-            endPDate = purchasedRange[1];
+            startPDate = purchasedRange[0].trim();
+            endPDate = purchasedRange[1].trim();
         } else if (purchasedRange.length == 1) {
-            startPDate = purchasedRange[0];
-            endPDate = purchasedRange[0];
+            startPDate = purchasedRange[0].trim();
+            endPDate = purchasedRange[0].trim();
         }
 
         ArrayList<String> expirationDates = new ArrayList<String>(Arrays.asList(request

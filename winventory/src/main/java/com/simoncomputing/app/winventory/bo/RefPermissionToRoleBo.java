@@ -161,8 +161,6 @@ public class RefPermissionToRoleBo {
         return list;
     }
 
-    
-
     // PROTECTED CODE -->
     
     public List<RefPermissionToRole> getAll() throws BoException {

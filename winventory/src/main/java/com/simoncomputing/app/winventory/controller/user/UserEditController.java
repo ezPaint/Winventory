@@ -48,8 +48,7 @@ public class UserEditController extends BaseController {
 	    long key = -1; // the key of the requested user
 	    User user; // the requested user 
 	    UserInfoBean currentUser; // the currently logged in user
-	    
-	    boolean reject = false;
+	    String roleTitle = null;
 	    
 	    // if key not present/valid, redirect to users list
 	    try {
@@ -66,7 +65,13 @@ public class UserEditController extends BaseController {
 	    if (user == null) {
 	        response.sendRedirect(request.getContextPath() + "/users/results");
 	        return;
-	    }
+	    } else {
+            try {
+                roleTitle = RoleBo.getInstance().read(user.getRoleId().longValue()).getTitle();
+            } catch (BoException e) {
+                logger.error("BoException when getting roleTitle for user " + user.getUsername());
+            }
+        }
 	    
 	    
 	    

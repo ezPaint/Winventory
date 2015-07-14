@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Password Reset</title>
+<title>Winventory</title>
     <meta charset="UTF-8">
     
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/style.css' />
@@ -18,20 +18,8 @@
     <script src='${contextPath}/resources/js/actions.js' type="text/javascript"></script>
     <script src='${contextPath}/resources/js/jquery-1.11.3.min.js' type="text/javascript"></script>
     <script src='${contextPath}/resources/js/bootstrap.min.js' type="text/javascript"></script>
+    <script src='${contextPath}/resources/js/validator.js' type="text/javascript"></script>
     
-    <script>
-    function lockoutSubmit(button) {
-        var oldValue = button.value;
-
-        button.setAttribute('disabled', true);
-        button.value = 'Sending Email';
-
-        setTimeout(function(){
-            button.value = oldValue;
-            button.removeAttribute('disabled');
-        }, 5000)
-    }
-    </script>
 </head>
 <body>
 
@@ -62,15 +50,15 @@
                     </c:if>
 						
 						
-						<form class="form-horizontal" action="insert"
+						<form class="form-horizontal" action=""
 							data-toggle="validator" role="form" method="post">			
 							
 							<div class="form-group">
-								<label for="roleTitle" class="col-sm-2 control-label">Address
+								<label for="addressName" class="col-sm-2 control-label">Address
 								</label>
 								<div class="col-sm-9">
 
-									<select name="roleTitle" class="form-control" required>
+									<select name="addressName" class="form-control" required>
 
 										<%@ page
 											import="com.simoncomputing.app.winventory.domain.Address"%>
@@ -106,7 +94,7 @@
 								</label>
 								<div class="col-sm-9">
 									<input name="description" type="text" id="description"
-										class="form-control" placeholder="First">
+										class="form-control" placeholder="Description" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -125,6 +113,17 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>	
+							
+							
+							<div class="form-group">
+								<div class="col-sm-10 col-sm-offset-2">
+									<button type="submit" class="btn btn-default">Add</button>
+									<button type="reset" class="btn btn-default">Clear</button>
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
 							
 						</form>
 					</div>

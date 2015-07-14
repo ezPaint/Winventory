@@ -11,23 +11,27 @@
 <meta charset="UTF-8">
 <title>Inventory</title>
 
-
-
-
 <!-- Include Required Prerequisites for Date Range Picker -->
 <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript" src="${contextPath}/resources/js/moment.min.js"></script>
-<!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3.3.2/css/bootstrap.css" /> -->  <!-- Duplicate -->
 
 <!-- Include Date Range Picker -->
 <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
 <script type="text/javascript">
     $(function() {
-        $('input[name="purchasedDate"]').daterangepicker({format: 'YYYY-MM-DD'});
+        $('input[name="purchasedDate"]').daterangepicker({
+        	format: 'YYYY-MM-DD',
+        	minDate: '1970-01-01',
+            separator: '  to  '	
+        });
     });
     $(function() {
-        $('input[name="expirationDate"]').daterangepicker({format: 'YYYY-MM-DD'});
+        $('input[name="expirationDate"]').daterangepicker({
+        	format: 'YYYY-MM-DD',
+        	minDate: '1970-01-01',
+        	separator: '  to  '
+        });
     });
 </script>
 
@@ -40,8 +44,6 @@
 
 <script src='${contextPath}/resources/js/actions.js'
 	type="text/javascript"></script>
-<%-- <script src='${contextPath}/resources/js/jquery-1.11.3.min.js' --%> <%-- Obsolete (can't use with Date Range Picker) --%>
-<!-- 	type="text/javascript"></script> -->
 <script src='${contextPath}/resources/js/bootstrap.min.js'
 	type="text/javascript"></script>
 <script src='${contextPath}/resources/js/validator.js' type="text/javascript"></script>
@@ -174,7 +176,7 @@
 									<span class="input-group-addon" id="basic-addon1">Date Purchased</span> 
 									<input
 										name="purchasedDate" type="text" id="purchasedDate" class="form-control"
-										placeholder="YYYY-MM-DD  -  YYY-MM-DD">
+										placeholder="YYYY-MM-DD  to  YYY-MM-DD">
 								</div>
 							</div>
 							<br>
@@ -185,15 +187,13 @@
                                     <span class="input-group-addon" id="basic-addon1">Expiration Date</span> 
                                     <input
                                         name="expirationDate" type="text" id="expirationDate" class="form-control"
-                                        placeholder="YYYY-MM-DD  -  YYY-MM-DD">
+                                        placeholder="YYYY-MM-DD  to  YYY-MM-DD">
                                 </div>
                             </div>
                             <br>
 
 							<br> <input type="hidden" name="action" value="doInsert">
 							<input type="hidden" name="table" value="property">
-							
-							
 							
 							<button type="submit" class="btn btn-default">Search</button>
 							<button type="reset" class="btn btn-default">Clear</button>

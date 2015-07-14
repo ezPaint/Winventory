@@ -36,7 +36,7 @@ public class testBarcoder {
     	assertTrue("0030000000335".equals(fullBarcode));
     	try {
     		
-			Barcoder.buildBarcodeImage(fullBarcode);
+			Barcoder.buildBarcodeImage("asasa");
 			
 		} catch (IOException e) {
 			e.printStackTrace();

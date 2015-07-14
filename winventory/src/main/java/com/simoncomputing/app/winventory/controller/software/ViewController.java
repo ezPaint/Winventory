@@ -27,6 +27,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 public class ViewController extends BaseController {
     private static final long serialVersionUID = 1L;
     private static Logger log = Logger.getLogger(ViewController.class);
+    private String key;
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -59,14 +60,17 @@ public class ViewController extends BaseController {
         request.setAttribute("software", software);
         
         request.setAttribute("events", events); 
+        this.key = key;
         
         forward(request, response, "/WEB-INF/flows/software/view.jsp");
 
     }
 
+    /**
+     * This method is called when the user clicks the 'delete' button on an item's page.
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
     }
 
 }

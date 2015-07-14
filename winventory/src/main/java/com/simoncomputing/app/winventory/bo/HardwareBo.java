@@ -17,143 +17,143 @@ public class HardwareBo {
 
     public static HardwareBo getInstance() {
         return instance;
-    }
+    } 
 
     private HardwareBo() {
-    }
+    } 
 
-    public int create(Hardware value) throws BoException {
+    public int create( Hardware value ) throws BoException {
         SqlSession session = null;
         int result = 0;
 
         try {
             session = SessionFactory.getSession();
-            HardwareDao mapper = session.getMapper(HardwareDao.class);
-            result = mapper.create(value);
+            HardwareDao mapper = session.getMapper( HardwareDao.class );
+            result = mapper.create( value );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return result;
     }
 
-    public int update(Hardware value) throws BoException {
+    public int update( Hardware value ) throws BoException {
         SqlSession session = null;
         int result = 0;
 
         try {
             session = SessionFactory.getSession();
-            HardwareDao mapper = session.getMapper(HardwareDao.class);
-            result = mapper.update(value);
+            HardwareDao mapper = session.getMapper( HardwareDao.class );
+            result = mapper.update( value );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return result;
     }
 
-    public int delete(Long key) throws BoException {
+    public int delete( Long key ) throws BoException {
         SqlSession session = null;
         int result = 0;
         String where = "KEY='" + key + "' ";
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("where", where);
+        map.put( "where", where );
 
         try {
             session = SessionFactory.getSession();
-            HardwareDao mapper = session.getMapper(HardwareDao.class);
-            result = mapper.delete(map);
+            HardwareDao mapper = session.getMapper( HardwareDao.class );
+            result = mapper.delete( map );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return result;
     }
 
-    public Hardware read(Long key) throws BoException {
+    public Hardware read( Long key ) throws BoException {
         SqlSession session = null;
         Hardware result;
         String where = "KEY='" + key + "' ";
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("where", where);
+        map.put( "where", where );
 
         try {
             session = SessionFactory.getSession();
-            HardwareDao mapper = session.getMapper(HardwareDao.class);
-            result = mapper.read(map);
+            HardwareDao mapper = session.getMapper( HardwareDao.class );
+            result = mapper.read( map );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return result;
     }
 
-    public List<Hardware> getListByLocationId(Integer key) throws BoException {
+    public List<Hardware> getListByLocationId( Long key ) throws BoException {
         SqlSession session = null;
         List<Hardware> list;
 
         try {
             session = SessionFactory.getSession();
-            HardwareDao mapper = session.getMapper(HardwareDao.class);
-            list = mapper.getListByLocationId(key);
+            HardwareDao mapper = session.getMapper( HardwareDao.class );
+            list = mapper.getListByLocationId( key );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 
         return list;
     }
 
-    public List<Hardware> getListByUserId(Integer key) throws BoException {
+    public List<Hardware> getListByUserId( Long key ) throws BoException {
         SqlSession session = null;
         List<Hardware> list;
 
         try {
             session = SessionFactory.getSession();
-            HardwareDao mapper = session.getMapper(HardwareDao.class);
-            list = mapper.getListByUserId(key);
+            HardwareDao mapper = session.getMapper( HardwareDao.class );
+            list = mapper.getListByUserId( key );
             session.commit();
 
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             session.rollback();
-            throw new BoException(e);
+            throw new BoException( e );
 
-        } finally {
-            if (session != null)
+        } finally { 
+            if ( session != null )
                 session.close();
         }
 

@@ -147,7 +147,7 @@
 									
 								<div class="col-sm-9">
 									<input name="cellPhone" type="text" id="cellPhone" 
-										class="form-control" value="<%=user.getCellPhone() %>" required>
+										class="form-control" value="<%=user.getCellPhone() %>" >
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -160,7 +160,7 @@
 									
 								<div class="col-sm-9">
 									<input name="workPhone" type="text" id="workPhone" 
-										class="form-control" value="<%=user.getWorkPhone() %>" required>
+										class="form-control" value="<%=user.getWorkPhone() %>" >
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -172,13 +172,14 @@
 								</label>
 								<div class="col-sm-9">
 
-									<select name="role" class="form-control" required>
+									<select name="roleTitle" class="form-control" required>
 
 										<%@ page
 											import="com.simoncomputing.app.winventory.domain.Role"%>
 										<%@ page import="java.util.ArrayList"%>
 
 										<%
+											String roleTitle = user.getRoleTitle();
 										    ArrayList<Role> roles = (ArrayList<Role>) request
 																				            .getAttribute("roles");
 
@@ -186,8 +187,13 @@
 
 																				        for (int i = 0; i < roles.size(); i++) {
 										%>
-
-<!--  FIX THIS: make it user's role -->		<option value="<%=roles.get(i).getTitle()%>"><%=roles.get(i).getTitle()%></option>
+											<%  if (roles.get(i).getTitle().equals(roleTitle)) { %>
+											
+												<option value="<%=roles.get(i).getTitle()%>" selected><%=roles.get(i).getTitle()%></option>
+											
+											<% } else { %>
+												<option value="<%=roles.get(i).getTitle()%>" ><%=roles.get(i).getTitle()%></option>
+											<% } %>
 
 										<%
 										    }

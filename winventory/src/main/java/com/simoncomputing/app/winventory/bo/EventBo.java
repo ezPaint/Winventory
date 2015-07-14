@@ -12,6 +12,7 @@ import com.simoncomputing.app.winventory.dao.*;
 import com.simoncomputing.app.winventory.util.BoException;
 import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.Hardware;
+import com.simoncomputing.app.winventory.domain.Item;
 import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.domain.User;
@@ -145,14 +146,14 @@ public class EventBo {
         return result;
     }
     
-    public int unlink(Hardware hardware, Event event) throws BoException {
+    public int link(Event event, Software software) throws BoException {
         SqlSession session = null;
         int result = 0;
 
         try {
             session = SessionFactory.getSession();
-            EventToHardwareDao mapper = session.getMapper( EventToHardwareDao.class );
-            result = mapper.unlink( event.getKey(), hardware.getKey() );
+            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
+            result = mapper.link( event.getKey(), software.getKey() );
             session.commit();
 
         } catch ( Exception e ) {
@@ -257,6 +258,39 @@ public class EventBo {
         }
 
         return result;
+    }
+    
+    /**
+     * Creates an event and stores it into the database.
+     * Returns the created event, or null if no event was added (something went wrong)
+     * 
+     * throws BoException if interaction with the database throws a BoException
+     */
+    public  Event createSystemEvent(String description, Item ... items )throws BoException
+    {
+    	Event event = new Event();
+    	event.setCategory("SYSTEM");
+    	event.setDateCreated(new Date(System.currentTimeMillis()));
+    	event.setDescription(description);
+    	
+    	create(event);
+    	
+    	for (Item item : items)
+    	{
+    		if (item.getClass().equals(Hardware.class))
+    		{
+    			link(event, (Hardware)item);
+    		}
+    		if (item.getClass().equals(Software.class))
+    		{
+    			link(event, (Software)item);
+    		}
+    		
+    		//TODO implement Location and User
+    	}
+    
+    	
+    	return event;
     }
     
     

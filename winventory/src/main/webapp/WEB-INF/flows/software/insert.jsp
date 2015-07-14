@@ -20,11 +20,13 @@
 $(function() {
     $('input[name="purchasedDate"]').daterangepicker({
     	format: 'YYYY-MM-DD',
+    	minDate: '1970-01-01',
         singleDatePicker: true,
         showDropdowns: true
     }); 
     $('input[name="expirationDate"]').daterangepicker({
     	format: 'YYYY-MM-DD',
+    	minDate: '1970-01-01',
         singleDatePicker: true,
         showDropdowns: true
     }); 
@@ -41,8 +43,6 @@ $(function() {
 
 <script src="${contextPath}/resources/js/actions.js"
 	type="text/javascript"></script>
-<%-- <script src='${contextPath}/resources/js/jquery-1.11.3.min.js' --%>     <%--Too obsolete for date picker --%>
-<!-- 	type="text/javascript"></script> -->
 <script src='${contextPath}/resources/js/bootstrap.min.js'
 	type="text/javascript"></script>
 <script src='${contextPath}/resources/js/validator.js' type="text/javascript"></script>
@@ -53,7 +53,6 @@ $(function() {
 	<div class="container-fluid">
 		<div class="row">
 			<jsp:include page="swBase.jsp" />
-			<h5 style="color: blue">${message}</h5>
 			<div class="col-md-8">
 				<div class="main">
 					<div class="boom">
@@ -63,8 +62,7 @@ $(function() {
 						<br>                          
 
 						<form class="form-horizontal" action="insert"
-							data-toggle="validator" role="form" method="post" name="myform" 
-							onsubmit="return validateDates();">
+							data-toggle="validator" role="form" method="post" name="myform">
 							
 							<!-- Name entry field -->
 							<div class="form-group">

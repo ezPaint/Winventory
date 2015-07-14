@@ -139,4 +139,26 @@ public class RefPermissionBo {
 
         return result;
     }
+    
+    public RefPermission getRefPermissionByName(String name) throws BoException{
+        SqlSession session = null;
+        RefPermission result;
+
+        try {
+            session = SessionFactory.getSession();
+            RefPermissionDao mapper = session.getMapper( RefPermissionDao.class );
+            result = mapper.getRefPermissionByName(name);
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return result;
+    }
 }

@@ -25,6 +25,14 @@ import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
 
+/**
+ * The following is a controller to handle the Barcode page in the
+ * Winventory site.  The doGet will simply load the page while the doPost
+ * will handle the processing of taking in and parsing the barcode as well as
+ * input determining when to begin a new search or update the database
+ * @author seamus.lowry
+ */
+
 @WebServlet("/barcodes/barcode")
 public class BarcodeController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -41,12 +49,6 @@ public class BarcodeController extends HttpServlet {
 	
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	/*
-    	 * remove all session variables used for persistence
-    	 */
-		request.getSession().removeAttribute("user");
-		request.getSession().removeAttribute("hardware");
-		request.getSession().removeAttribute("location");
     	request.getRequestDispatcher("/WEB-INF/flows/barcodes/barcode.jsp").forward(request,
                 response);
     }
@@ -72,12 +74,12 @@ public class BarcodeController extends HttpServlet {
 				// avoids NullPointerExceptions
 			}
 			@SuppressWarnings("unchecked")
-			ArrayList<Hardware> hwList = (ArrayList<Hardware>) request.getSession().getAttribute("hardware");
+			ArrayList<Hardware> hwList = (ArrayList<Hardware>) request.getSession().getAttribute("barcodeHardware");
 				// the list of hardware currently being worked with
 			String modifyCode;	// where the barcode for what must be modified will be stored
-			User owner = (User)request.getSession().getAttribute("user");
+			User owner = (User)request.getSession().getAttribute("barcodeUser");
 				// the user stored on the Session, can be null
-			Location loc = (Location)request.getSession().getAttribute("location");
+			Location loc = (Location)request.getSession().getAttribute("barcodeLocation");
 				// the location stored on the Session, can be null
 			if(owner==null){	// if working with Location
 				modifyCode="004"+padZeroes(loc.getKey().toString());	// make barcode for Location
@@ -95,14 +97,14 @@ public class BarcodeController extends HttpServlet {
 			}
 		} else if (clear){	// if want to clear previous input (start a new search)
 			// clear User, Location, and Hardware list from the Session
-			request.removeAttribute("user");
-			request.removeAttribute("hardware");
-			request.removeAttribute("location");
+			request.removeAttribute("barcodeUser");
+			request.removeAttribute("barcodeHardware");
+			request.removeAttribute("barcodeLocation");
 			logger.trace("clearing barcode page to start new search");
 		} else if (!valid){	// if input is not valid
 			// determine and set correct error message; store barcode
 			request.setAttribute("error", barcodeErrorMessage(barcode));
-			request.getSession().setAttribute("barcode", barcode);
+			request.setAttribute("barcode", barcode);
 			logger.trace("Invalid barcode input entered");
 		} else if(barcode != null){
 			long pk = -1;	// store invalid pk before initialized
@@ -122,15 +124,16 @@ public class BarcodeController extends HttpServlet {
     			switch(tableIdentifier){	// switch based on table identifier
     			case "1":	// a User barcode
     				logger.trace("preloading based on user " + pk);
-    				request.getSession().setAttribute("user", ub.read(pk));	// assign correct user object to session
-    				request.getSession().setAttribute("location", null);	// ensure no location object on session
-    				hardware = hb.getListByUserId((int)pk);					// get correct hardware list based on User
-    				request.getSession().setAttribute("hardware", hardware);// put that list on the session
+    				request.getSession().setAttribute("barcodeUser", ub.read(pk));	// assign correct user object to session
+    				request.getSession().setAttribute("barcodeLocation", null);	// ensure no location object on session
+    				hardware = hb.getListByUserId(pk);					// get correct hardware list based on User
+    				System.out.println(hardware);
+    				request.getSession().setAttribute("barcodeHardware", (ArrayList<Hardware>)hardware);// put that list on the session
     				break;
     			case "2":	// a Hardware barcode
     				logger.trace("adding to hardware list in barcode page");
     				@SuppressWarnings("unchecked")
-					ArrayList<Hardware> hwList = (ArrayList<Hardware>) request.getSession().getAttribute("hardware");
+					ArrayList<Hardware> hwList = (ArrayList<Hardware>) request.getSession().getAttribute("barcodeHardware");
     					// get the hardware list from the session
     				if (hwList==null){
     					hwList = new ArrayList<Hardware>();	// initialize a list if there is none yet
@@ -143,7 +146,7 @@ public class BarcodeController extends HttpServlet {
     						// if the hardware is already in the list, provide an error message saying so
     					logger.trace("attempted to add duplicate hardware in barcode page");
     				}
-    				request.getSession().setAttribute("hardware", hwList);
+    				request.getSession().setAttribute("barcodeHardware", hwList);
     				String logStr = "Hardware keys in hwList (barcode page):";
     				for (Hardware hard: hwList){
     					logStr+= hard.getKey() + ", ";
@@ -152,17 +155,17 @@ public class BarcodeController extends HttpServlet {
     				break;
     			case "4":	// if a Location barcode
     				logger.trace("preloading based on location " + pk);
-    				request.getSession().setAttribute("user", null);	// ensure no user on the session
-    				request.getSession().setAttribute("location", lb.read(pk));	// put correct location on the session
-    				hardware = hb.getListByLocationId((int)pk);			// get the appropriate hardware list
-    				request.getSession().setAttribute("hardware", hardware);	// put that list on the session
+    				request.getSession().setAttribute("barcodeUser", null);	// ensure no user on the session
+    				request.getSession().setAttribute("barcodeLocation", lb.read(pk));	// put correct location on the session
+    				hardware = hb.getListByLocationId(pk);			// get the appropriate hardware list
+    				request.getSession().setAttribute("barcodeHardware", hardware);	// put that list on the session
     				break;
     			default:	// entered a username
     				logger.trace("preloading based on username " + barcode);
     				User user = ub.getUserByUsername(barcode);		// get user
-    				request.getSession().setAttribute("location", null);	// ensure no location on session
-    				request.getSession().setAttribute("user", user);	// set user attribute appropriately
-    				request.getSession().setAttribute("hardware", hb.getListByUserId(user.getKey().intValue()));	// get correct hardware list
+    				request.getSession().setAttribute("barcodeLocation", null);	// ensure no location on session
+    				request.getSession().setAttribute("barcodeUser", user);	// set user attribute appropriately
+    				request.getSession().setAttribute("barcodeHardware", hb.getListByUserId(user.getKey()));	// get correct hardware list
     				break;
     			}
 			} catch (BoException be) {
@@ -174,8 +177,8 @@ public class BarcodeController extends HttpServlet {
 		 * if the post was submitted without a user or location, the input was valid, and we're not clearing, return error 
 		 */
 		
-		if (request.getAttribute("error")==null && !clear && request.getSession().getAttribute("user")==null && request.getSession().getAttribute("location")==null){
-    		request.getSession().setAttribute("hardware",null);
+		if (request.getAttribute("error")==null && !clear && request.getSession().getAttribute("barcodeUser")==null && request.getSession().getAttribute("barcodeLocation")==null){
+    		request.getSession().setAttribute("barcodeHardware",null);
     		request.setAttribute("error","You must enter an Owner or Location first");
     		logger.error("Attempted to add hardware before a user or location.");
     	}
@@ -238,8 +241,8 @@ public class BarcodeController extends HttpServlet {
 				/*
 				 * append to email notifying user of change if user exists and is different (i.e. there IS a change to notify)
 				 */
-				Integer oldId = hw.getUserId();		//id of previous owner,null if none
-				Integer newId = updatePk.intValue();//id of new owner, cannot be null
+				Long oldId = hw.getUserId();		//id of previous owner,null if none
+				Long newId = updatePk;//id of new owner, cannot be null
 				User tmp;							//temporary user object for convenience
 				String email;						//email address to send to
 
@@ -284,9 +287,9 @@ public class BarcodeController extends HttpServlet {
 								+ " with serial number(s):\n\n" + hw.getKey() + "(newly yours)\n");
 					}
 				}
-				hw.setUserId(updatePk.intValue());	// always update userid
+				hw.setUserId(updatePk);	// always update userid
 			}else{	// working with location
-				hw.setLocationId(updatePk.intValue()); // always update locationid
+				hw.setLocationId(updatePk); // always update locationid
 			}
 			
 			/*

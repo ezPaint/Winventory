@@ -14,6 +14,9 @@
     </select>
 
     <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.Role">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select ROLE_SEQ.nextval from dual
+        </selectKey>
         insert into ROLE
         (
             KEY , TITLE

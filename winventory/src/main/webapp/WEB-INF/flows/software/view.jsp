@@ -48,10 +48,9 @@
 						%>
 
 
-						<div class="media">
-							<div class="media-left">
-								<img class="media-object"
-									src="${contextPath}/resources/images/barcode.gif">
+						<div class="col-md-4">
+							<img src="${contextPath}/getBarcodeImage?key=${software.getKey()}&table=3"
+								class="img img-responsive">
 							</div>
 							<div class="media-body">
 								<ul class="list-group">
@@ -112,7 +111,7 @@
 											<b>Cost</b>
 										</div>
 										<div class="col-md-9">
-											<p><%=software.getCost()%></p>
+											<p><%= String.format("%.2f", software.getCost()) %></p>
 										</div>
 									</li>
 									
@@ -126,7 +125,7 @@
 										</div>
 									</li>
 									
-									<!-- Displays the software's expiraiton date -->
+									<!-- Displays the software's expiration date -->
 									<li class="list-group-item row">
 										<div class="col-md-3">
 											<b>Expiration Date</b>
@@ -145,15 +144,23 @@
 											<p><%=software.getDescription()%></p>
 										</div>
 									</li>
+									<li class="list-group-item row">
+										<div class="col-md-3">
+											<b>Barcode</b>
+										</div>
+										<div class="col-md-9">
+											<p><%=Barcoder.getBarcode(software)%></p>
+										</div>
+									</li>
 								</ul>
 							</div>
 						</div>
 						<div>
-						    <!-- Button for the user to edit the software object. -->
+						    <!-- Button for the user to edit/delete the software object. -->
 							<%-- <c:if test="${userInfo.hasPermission.updateSoftware}"> --%>
 								<a class="btn btn-default"
 									href="edit?key=<%=software.getKey()%>" role="button">Edit</a>
-							<%-- </c:if> --%>
+								<a class="btn btn-default" href="${contextPath}/software">Cancel</a>
 						</div>
 						<%
 						    } else {
@@ -165,6 +172,7 @@
 						    }
 						%>
 						<%@ page import="com.simoncomputing.app.winventory.domain.Software"%>
+						<%@ page import="com.simoncomputing.app.winventory.util.Barcoder"%>
 						<jsp:include page="/WEB-INF/includes/events.jsp" />
 						
 					</div>
@@ -175,7 +183,6 @@
 	<br>
 	<br>
 	<br>
-
 	<jsp:include page="/WEB-INF/includes/footer.jsp" />
 </body>
 

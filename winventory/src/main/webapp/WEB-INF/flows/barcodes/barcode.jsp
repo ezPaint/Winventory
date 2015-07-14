@@ -91,14 +91,14 @@ function clearBarSession(){
 		<br>
 		<div class="row">
 			<div class="col-xs-6 form-group">
-				<label>Owner</label> <input id="person" name="person" class="form-control"
-					type="text" value="${user.username}" readonly/>
+				<label>Owner</label> <input class="form-control" type="text"
+					value="${barcodeUser.username}" readonly/>
 			</div>
 			<div class="col-xs-6 form-group">
-				<label>Location</label> <input id="location" name="location" class="form-control"
-					type="text" value="${location.description}" readonly/>
+				<label>Location</label> <input class="form-control" type="text"
+					value="${barcodeLocation.description}" readonly/>
 			</div>
-			<c:if test="${not empty hardware}">
+			<c:if test="${not empty barcodeHardware}">
 				<div class="col-xs-12">
 					<label for="hardwares">Hardware</label>
 					<table id="hardwares" class="table" style="width:100%">
@@ -115,7 +115,7 @@ function clearBarSession(){
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="i" items="${hardware}">
+							<c:forEach var="i" items="${barcodeHardware}">
 								<tr>
 									<td><c:out value="${i.key}"/></td>
 									<td><c:out value="${i.type}"/></td>

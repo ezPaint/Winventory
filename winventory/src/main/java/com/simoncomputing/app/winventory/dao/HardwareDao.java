@@ -19,8 +19,8 @@ public interface HardwareDao {
 
     public Hardware read( Map<String, Object> map ) throws DaoException;
 
-    public List<Hardware> getListByLocationId( Integer key ) throws DaoException;
-    public List<Hardware> getListByUserId( Integer key ) throws DaoException;
+    public List<Hardware> getListByLocationId( Long key ) throws DaoException;
+    public List<Hardware> getListByUserId( Long key ) throws DaoException;
 
     // PROTECTED CODE -->
 

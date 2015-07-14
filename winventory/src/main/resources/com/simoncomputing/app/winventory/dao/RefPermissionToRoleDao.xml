@@ -3,62 +3,56 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simoncomputing.app.winventory.dao.RefPermissionToRoleDao">
 
-	<resultMap id="RefPermissionToRoleMapper"
-		type="com.simoncomputing.app.winventory.domain.RefPermissionToRole">
-		<result column="KEY" property="key" />
-		<result column="PERMISSION_ID" property="permissionId" />
-		<result column="ROLE_ID" property="roleId" />
-	</resultMap>
+    <resultMap id="RefPermissionToRoleMapper" type="com.simoncomputing.app.winventory.domain.RefPermissionToRole">
+        <result column ="KEY"                 property = "key" />
+        <result column ="PERMISSION_ID"       property = "permissionId" />
+        <result column ="ROLE_ID"             property = "roleId" />
+    </resultMap>
 
-	<select id="read" parameterType="map" resultMap="RefPermissionToRoleMapper">
-		select * from
-		REF_PERMISSION_TO_ROLE
-		where ${where}
-	</select>
+    <select id="read" parameterType="map" resultMap="RefPermissionToRoleMapper">
+        select * from REF_PERMISSION_TO_ROLE
+        where ${where}
+    </select>
 
-	<insert id="create"
-		parameterType="com.simoncomputing.app.winventory.domain.RefPermissionToRole">
-		<selectKey resultType="_long" keyProperty="key" order="BEFORE">
-			select REF_PERMISSION_TO_ROLE_SEQ.nextval from dual
-		</selectKey>
-		insert into REF_PERMISSION_TO_ROLE
-		values
-		(
-		#{key} , #{permissionId} , #{roleId}
-		)
-	</insert>
+    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.RefPermissionToRole">
+        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
+            select REF_PERMISSION_TO_ROLE_SEQ.nextval from dual
+        </selectKey>
+        insert into REF_PERMISSION_TO_ROLE
+        (
+            KEY , PERMISSION_ID , ROLE_ID
+        )
+        values
+        (
+            #{key} , #{permissionId} , #{roleId}
+        )
+    </insert>
 
-	<select id="getListByPermissionId" parameterType="integer"
-		resultMap="RefPermissionToRoleMapper">
-		select * from REF_PERMISSION_TO_ROLE
-		where PERMISSION_ID =
-		#{permissionId}
-	</select>
-	<select id="getListByRoleId" parameterType="integer"
-		resultMap="RefPermissionToRoleMapper">
-		select * from REF_PERMISSION_TO_ROLE
-		where ROLE_ID =
-		#{roleId}
-	</select>
+    <select id="getListByPermissionId" parameterType="integer" resultMap="RefPermissionToRoleMapper">
+        select * from REF_PERMISSION_TO_ROLE
+        where PERMISSION_ID = #{permissionId}
+    </select>
+    <select id="getListByRoleId" parameterType="integer" resultMap="RefPermissionToRoleMapper">
+        select * from REF_PERMISSION_TO_ROLE
+        where ROLE_ID = #{roleId}
+    </select>
 
 
-	<update id="update"
-		parameterType="com.simoncomputing.app.winventory.domain.RefPermissionToRole">
-		update REF_PERMISSION_TO_ROLE set
-		KEY = #{key} ,
-		PERMISSION_ID = #{permissionId} ,
-		ROLE_ID = #{roleId}
-		where KEY = #{key}
-	</update>
+    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.RefPermissionToRole">
+        update REF_PERMISSION_TO_ROLE set
+            KEY                                 = #{key} ,
+            PERMISSION_ID                       = #{permissionId} ,
+            ROLE_ID                             = #{roleId}
+        where KEY = #{key}
+    </update>
 
-	<delete id="delete" parameterType="map">
-		delete from
-		REF_PERMISSION_TO_ROLE
-		where ${where}
-	</delete>
+    <delete id="delete" parameterType="map">
+        delete from REF_PERMISSION_TO_ROLE
+        where ${where}
+    </delete>
 
 
-	<!-- PROTECTED CODE -->
+    <!-- PROTECTED CODE -->
 
 	<select id="getAll" resultMap="RefPermissionToRoleMapper">select * from
 		REF_PERMISSION_TO_ROLE;
