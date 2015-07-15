@@ -10,7 +10,7 @@
 <head>
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
 <meta charset="UTF-8">
-<title>Edit Hardware</title>
+<title>Winventory | Edit Hardware</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>

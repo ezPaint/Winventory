@@ -41,7 +41,6 @@ public class BarcodeController extends HttpServlet {
     static EmailService emailer;
 	private static UserBo ub = UserBo.getInstance();			// User business object
 	private static HardwareBo hb = HardwareBo.getInstance();	// Hardware business object
-	private static LocationBo lb = LocationBo.getInstance();	// Location business object
 	
 	/**
 	 * simply load the jsp on a GET
@@ -61,8 +60,6 @@ public class BarcodeController extends HttpServlet {
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	request.setAttribute("ub", ub);		// give userbo to request
-    	request.setAttribute("lb", lb);		// give locationbo to request
     	bean.bind(request);
     	String barcode = bean.getBarcode();
     	boolean update = bean.shouldUpdate();
@@ -124,11 +121,12 @@ public class BarcodeController extends HttpServlet {
     	}
 		
 		/*
-		 * set hardware and hardwareKeys appropriately
+		 * set hardware, hardwareKeys, and removeHw appropriately
 		 */
 		
 		request.setAttribute("hardware", bean.getHardwareList());
 		request.setAttribute("hardwareKeys", bean.getHardwareIds());
+		request.setAttribute("removalKeys", bean.getRemovalIds());
 		
     	request.getRequestDispatcher("/WEB-INF/flows/barcodes/barcode.jsp").forward(request,
                 response);

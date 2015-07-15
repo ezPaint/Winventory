@@ -9,6 +9,7 @@
 
 <head>
 <meta charset="UTF-8">
+<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
 <title>Winventory</title>
 
 <link type="text/css" rel="stylesheet"

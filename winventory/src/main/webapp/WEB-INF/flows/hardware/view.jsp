@@ -13,7 +13,7 @@
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
 
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | View Hardware</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/normalize.css' />

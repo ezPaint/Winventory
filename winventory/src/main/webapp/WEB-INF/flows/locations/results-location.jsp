@@ -9,6 +9,7 @@
 
 <head>
 <meta charset="UTF-8">
+<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
 <title>Winventory</title>
 
 <link type="text/css" rel="stylesheet"
@@ -91,7 +92,7 @@
 												<%=results.get(i).getKey()%></a></td>
 										<td><%=results.get(i).getDescription()%></td>
 										<td><%=results.get(i).getIsActive()%></td>
-										<td><a href="view-address?key=<%=results.get(i).getAddressId()%>">
+										<td><a href="view-address?key=<%=results.get(i).getAddressId()%>" class="btn btn-primary">
 												<%=results.get(i).getAddressId()%></a></td>
 									</tr>
 									<%

@@ -4,8 +4,7 @@
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-<%@ page
-							import="com.simoncomputing.app.winventory.domain.Hardware"%>
+<%@ page import="com.simoncomputing.app.winventory.domain.Hardware"%>
 <% 
 
 String delete = (String) request.getAttribute("delete");

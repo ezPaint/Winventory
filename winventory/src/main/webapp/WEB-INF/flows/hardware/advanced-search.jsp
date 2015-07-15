@@ -11,7 +11,7 @@
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
 
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Search Hardware</title>
 
 <!-- Include Required Prerequisites for Date Range Picker -->
 <script type="text/javascript"

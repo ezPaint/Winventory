@@ -114,28 +114,8 @@ public class Hardware implements Item{
     }
 
     // PROTECTED CODE -->
-
-    public User getUser() {
-        User u = null;
-        try {
-            u = UserBo.getInstance().read(this.userId);
-        } catch (BoException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return u;
-    }
-
-    public Location getLocation() {
-        Location l = null;
-        try {
-            l = LocationBo.getInstance().read(this.locationId);
-        } catch (BoException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return l;
-    }
+    private static LocationBo lb = LocationBo.getInstance();
+    private static UserBo ub = UserBo.getInstance();
 
     public String getShortDescription() {
         if (description.length() > 22)
@@ -144,6 +124,22 @@ public class Hardware implements Item{
             return description;
     }
 
+    public Location getLocation(){
+    	try {
+			return lb.read(locationId);
+		} catch (BoException e) {
+			return null;
+		}
+    }
+    
+    public User getUser(){
+    	try {
+			return ub.read(userId);
+		} catch (BoException e) {
+			return null;
+		}
+    }
+    
     public ArrayList<String> bind(HttpServletRequest request) {
 
         ArrayList<String> errors = new ArrayList<String>();

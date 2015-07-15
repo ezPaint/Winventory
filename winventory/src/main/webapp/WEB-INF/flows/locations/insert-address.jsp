@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
 <title>Winventory</title>
     <meta charset="UTF-8">
     
