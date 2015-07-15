@@ -59,7 +59,11 @@
     <!-- PROTECTED CODE -->
     
     <select id="getAll" resultMap="AddressMapper">
-		select * from Address;
+		select * from ADDRESS;
+	</select>
+	
+	 <select id="getAllActive" resultMap="AddressMapper">
+		select * from ADDRESS where IS_ACTIVE = '1';
 	</select>
 
 </mapper>

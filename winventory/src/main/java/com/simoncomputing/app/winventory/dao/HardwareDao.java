@@ -39,6 +39,8 @@ public interface HardwareDao {
             @Param("searches") ArrayList<ArrayList<String>> searches,
             @Param("stored") Boolean stored,
             @Param("owned") Boolean owned,
+            @Param("active") Boolean active, 
+            @Param("inActive") Boolean inActive,
             @Param("cost") Boolean cost,
             @Param("minCost") double minCost,
             @Param("maxCost") double maxCost,

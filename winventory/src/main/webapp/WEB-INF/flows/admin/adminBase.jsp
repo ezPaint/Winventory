@@ -6,16 +6,16 @@
 <div class="col-md-2">
 	<div class="list-group">
 		<c:if test="${userInfo.roleId == 1 }">
-			<a id="results" href="${contextPath}/admin/condition"
+			<a id="condition" href="${contextPath}/admin/condition"
 				class="list-group-item"> <span class="glyphicon glyphicon-cog"
 				aria-hidden="true"> Conditions</span></a>
-			<a id="insert" href="${contextPath }/admin/role"
+			<a id="role" href="${contextPath }/admin/role"
 				class="list-group-item"> <span class="glyphicon glyphicon-lock"
 				aria-hidden="true"> Roles & Permissions</span></a>
-			<a id="results" href="${contextPath}/admin/setSmtp"
+			<a id="setSmtp" href="${contextPath}/admin/setSmtp"
 				class="list-group-item"> <span
 				class="glyphicon glyphicon-envelope" aria-hidden="true"> SMTP</span></a>
-			<a id="results" href="${contextPath}/admin/setGoogleClient"
+			<a id="setGoogleClient" href="${contextPath}/admin/setGoogleClient"
 				class="list-group-item"> <span class="glyphicon glyphicon-globe"
 				aria-hidden="true"> Google Client</span></a>
 		</c:if>
@@ -49,5 +49,5 @@
 
 <script>
 	pathArray = location.href.replace('#', '').replace('?', '/').split('/');
-	document.getElementById(pathArray[4]).className = "list-group-item active";
+	document.getElementById(pathArray[5]).className = "list-group-item active";
 </script>

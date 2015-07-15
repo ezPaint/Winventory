@@ -8,6 +8,8 @@
 <html lang="en">
 
 <head>
+<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
+
 <meta charset="UTF-8">
 <title>Inventory</title>
 
@@ -179,6 +181,7 @@
 							</div>
 
 							<div class="form-group" id="search_container">
+								<h5>Search by Ownership</h5>
 								<div class="radio">
 									<label> <input type="radio" name="optionsSearch"
 										id="search1" value="all" checked> Search All
@@ -192,6 +195,24 @@
 								<div class="radio">
 									<label> <input type="radio" name="optionsSearch"
 										id="search3" value="stored"> Search Stored
+									</label>
+								</div>
+							</div>
+							<div class="form-group" id="search_container">
+							<h5>Search by Activity</h5>
+								<div class="radio">
+									<label> <input type="radio" name="activeSearch"
+										value="all" checked> Search All
+									</label>
+								</div>
+								<div class="radio">
+									<label> <input type="radio" name="activeSearch"
+										 value="active"> Search Active
+									</label>
+								</div>
+								<div class="radio">
+									<label> <input type="radio" name="activeSearch"
+										 value="inActive"> Search Not Active
 									</label>
 								</div>
 							</div>

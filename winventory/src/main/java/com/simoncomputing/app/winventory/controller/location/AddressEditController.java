@@ -119,7 +119,7 @@ public class AddressEditController extends BaseController {
 
         // check if there are any errors that exist
         ArrayList<String> errors = new ArrayList<String>();
-        errors = address.bindInsertForm(request);
+        errors = address.bindInsertFormForEdit(request);
         
         // Update if no errors, otherwise reload the page and inform the User
         if (errors.size() == 0) {

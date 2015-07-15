@@ -8,6 +8,9 @@
 <html lang="en">
 
 <head>
+
+<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
+
 <meta charset="UTF-8">
 <title>Inventory</title>
 
@@ -77,6 +80,7 @@
 										<th>Purchase Date</th>
 										<th>Description</th>
 										<th>Serial No.</th>
+										<th>Active</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -101,6 +105,7 @@
 										<td><%=results.get(i).getPurchaseDate()%></td>
 										<td><%=results.get(i).getDescription()%></td>
 										<td><%=results.get(i).getSerialNo()%></td>
+										<td><%=results.get(i).getIsActive()%></td>
 									</tr>
 									<%
 									    }

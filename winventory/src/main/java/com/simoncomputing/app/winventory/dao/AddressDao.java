@@ -21,4 +21,5 @@ public interface AddressDao {
     
     public List<Address> getAll() throws DaoException;
 
+    public List<Address> getAllActive() throws DaoException;
 }

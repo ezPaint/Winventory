@@ -2,29 +2,17 @@ package com.simoncomputing.app.winventory.controller.software;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-
-import com.simoncomputing.app.winventory.bo.AccessTokenBo;
 import com.simoncomputing.app.winventory.bo.EventBo;
-import com.simoncomputing.app.winventory.bo.HardwareBo;
-import com.simoncomputing.app.winventory.bo.LocationBo;
 import com.simoncomputing.app.winventory.bo.SoftwareBo;
-import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.EventType;
-import com.simoncomputing.app.winventory.domain.Hardware;
-import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.Software;
-import com.simoncomputing.app.winventory.domain.User;
-import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -67,7 +55,7 @@ public class SoftwareDeleteController extends BaseController {
             //Record event 
             EventBo.getInstance().unlink(new Event(), sw);
             EventBo.getInstance().createSystemEvent(name + " was deleted.", 
-                getUserInfo(request), EventType.SYSTEM, sw);
+                getUserInfo(request), EventType.SYSTEM, null, null, sw, null);
         } catch (Exception e) {
             logError(logger, e);
         }
@@ -84,7 +72,6 @@ public class SoftwareDeleteController extends BaseController {
             request.setAttribute("results", results);
         }
         
-        //forward(request, response, "/WEB-INF/flows/software/results.jsp");
         sendRedirect(request, response, "/winventory/software?key=" + key + "&success=" + true);
 
     }

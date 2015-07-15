@@ -111,7 +111,7 @@
 									</label>
 								<div class="col-sm-9">
 									<input name="isActive" type="checkbox" id="isActive"
-										class="" style="margin-top: 24px;" value="true"> Yes, the location is currently active.
+										class="" style="margin-top: 24px;" value="true" checked> Yes, the location is currently active.
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

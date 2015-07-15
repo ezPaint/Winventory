@@ -8,6 +8,7 @@
 <html lang="en">
 
 <head>
+<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
 <meta charset="UTF-8">
 <title>Inventory</title>
 
@@ -46,7 +47,7 @@
 					</div>
 					<div class="padme">
 						<br>
-						
+
 						<c:if test="${not empty errors}">
 							<div class="alert alert-danger" role="alert">
 								<h3 class="error-header">Could not insert hardware</h3>
@@ -59,11 +60,11 @@
 								</c:forEach>
 							</div>
 						</c:if>
-						
-							<!-- include confirmation/error messages -->
-							<jsp:include page="/WEB-INF/includes/error.jsp" />
-							<jsp:include page="/WEB-INF/includes/success.jsp" />
-							
+
+						<!-- include confirmation/error messages -->
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
+
 						<form class="form-horizontal" action="insert"
 							data-toggle="validator" role="form" method="post">
 							<div class="form-group">
@@ -171,8 +172,8 @@
 								<label for="date" class="col-sm-2 control-label">Username
 								</label>
 								<div class="col-sm-9 search-field">
-									<input name="username" type="text" class="form-control username-typeahead"
-										placeholder="joe.shmo">
+									<input name="username" type="text"
+										class="form-control username-typeahead" placeholder="joe.shmo">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -193,6 +194,17 @@
 								<div class="col-sm-9">
 									<input name="locID" type="number" class="form-control"
 										placeholder="12">
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="checkbox">
+										<label> <input value="true" name="isActive" type="checkbox" checked> Is Active
+										</label>
+									</div>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

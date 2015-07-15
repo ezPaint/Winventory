@@ -10,6 +10,8 @@
 <html lang="en">
 
 <head>
+<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
+
 <meta charset="UTF-8">
 <title>Inventory</title>
 
@@ -100,8 +102,7 @@
 									class="img img-responsive"><br>
 								<button onclick="printBarcode()" style="margin-left: 40%"
 									class="btn btn-success">Print</button>
-								<br>
-								<br>
+								<br> <br>
 								<div id="noPrinters" class="text-center" style="display: none">
 									No valid DYMO printers were found.</div>
 								<div id="warning" class="text-center" style="display: none">
@@ -202,6 +203,14 @@
 											</div>
 										</li>
 									</c:if>
+									<li class="list-group-item row">
+										<div class="col-md-4">
+											<b>Active</b>
+										</div>
+										<div class="col-md-8">
+											<p><%=hardware.getIsActive()%></p>
+										</div>
+									</li>
 								</ul>
 							</div>
 						</div>

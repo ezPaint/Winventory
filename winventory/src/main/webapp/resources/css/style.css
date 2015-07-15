@@ -5,11 +5,14 @@ body {
 	background-image: url(../images/greyzz.png);
 }
 
-.btn-brown {
-	color: #fff;
-	background-color: rgb(199, 140, 98);
-	border-color: rgb(199, 140, 98);
+.btn-center {
+	display: block !important;
+	width: 50%;
+	margin-left: auto;
+	margin-right: auto;
 }
+
+
 
 .extra-box {
 	width: 100%;

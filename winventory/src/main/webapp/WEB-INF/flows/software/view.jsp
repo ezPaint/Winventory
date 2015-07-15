@@ -214,13 +214,7 @@
 											<a class="btn btn-default"
 												href="edit?key=<%=software.getKey()%>" role="button">Edit</a> 
 								    	</c:if>
-								     
-										<c:if test="${userInfo.hasPermission.deleteSoftware }">
- 											<input type="hidden" id="key" name="key" value="<%=software.getKey()%>">
-								    		<input type="hidden" id="delete" name="delete" value="true">
-										<button type="submit" class="btn btn-danger">Delete</button>
-										</c:if>
-									
+								    	
 									</form>
 								</div>
 							</div>

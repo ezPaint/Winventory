@@ -349,6 +349,7 @@ public class HardwareBo {
      */
     public List<Hardware> searchAdvanced(ArrayList<String> columns,
                     ArrayList<ArrayList<String>> searches, Boolean stored, Boolean owned,
+                    Boolean active, Boolean inActive,
                     Boolean cost, double minCost, double maxCost,
                     Boolean date, Date startDate, Date endDate)
                     throws BoException {
@@ -363,7 +364,7 @@ public class HardwareBo {
         try {
             session = SessionFactory.getSession();
             HardwareDao mapper = session.getMapper(HardwareDao.class);
-            list = mapper.searchAdvanced(columns, searches, stored, owned,
+            list = mapper.searchAdvanced(columns, searches, stored, owned, active, inActive,
                     cost, minCost, maxCost, date, startDate, endDate);
             session.commit();
         } catch (Exception e) {

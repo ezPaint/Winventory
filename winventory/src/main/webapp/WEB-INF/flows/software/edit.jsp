@@ -224,7 +224,6 @@ $(function() {
                                     <button type="reset" class="btn btn-default">Reset</button>
                                     <a class="btn btn-default"
                                     href="${contextPath}/software/view?key=<%=software.getKey()%>" role="button">Cancel</a>
-                             
                                     
                                 </div>
                                 <div class="col-sm-10 col-sm-offset-2">
@@ -232,8 +231,33 @@ $(function() {
                                 </div>
                             </div>
                         </form>
-                        
-                        <% } %>
+                         <br>
+                         <br>
+                         <br>
+                         <br>
+                         <hr>
+                         <br>
+                         <!-- <div class="center"> -->
+                         	<!-- <div class="col-md-5"></div> -->
+                         	<!-- <div class="col-md-4"> -->
+                         
+                          	<form action="${contextPath}/software/view" role="form" method="get" class="form-group">
+
+								<c:if test="${userInfo.hasPermission.deleteSoftware }">
+                                    <input type="hidden" id="key" name="key" value="<%=software.getKey()%>">
+                                        <input type="hidden" id="delete" name="delete" value="true">
+                                    <button type="Submit" name="button" value="Delete" class="btn btn-danger btn-lg btn-center">Delete Forever</button>
+                                    
+								</c:if>
+						 	</form>
+						
+						 	<!-- </div>
+                         	<div class="col-md-3"></div> -->
+						 <!-- </div> -->
+
+						<%
+						    }
+						%>
                                         
                         <br>
                         <div>
@@ -251,10 +275,10 @@ $(function() {
         </div>
     </div>
     <jsp:include page="/WEB-INF/includes/footer.jsp" /> 
-    <script>
+    <!-- <script>
     function confirmDelete(){
     	return confirm("Are you sure you want to delete this item?");
-    }</script>  
+    }</script> -->  
 </body>
 
 </html>

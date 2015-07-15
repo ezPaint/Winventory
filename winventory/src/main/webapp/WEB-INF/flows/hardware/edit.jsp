@@ -8,6 +8,7 @@
 <html lang="en">
 
 <head>
+<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
 <meta charset="UTF-8">
 <title>Edit Hardware</title>
 
@@ -38,22 +39,22 @@
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-						<c:if test="${not empty errors}">
-							<div class="alert alert-danger" role="alert">
-								<h3 class="error-header">Could not insert hardware</h3>
-								<span class="sr-only">Errors</span>
-								<c:forEach items="${errors}" var="error">
-									<p class="error-msg">
-										<span class="glyphicon glyphicon-exclamation-sign"
-											aria-hidden="true"></span> ${error}
-									</p>
-								</c:forEach>
-							</div>
-						</c:if>
-						<c:if test="${not empty error}">
-							<jsp:include page="/WEB-INF/includes/error.jsp" />
-							<jsp:include page="/WEB-INF/includes/success.jsp" />
-						</c:if>
+				<c:if test="${not empty errors}">
+					<div class="alert alert-danger" role="alert">
+						<h3 class="error-header">Could not insert hardware</h3>
+						<span class="sr-only">Errors</span>
+						<c:forEach items="${errors}" var="error">
+							<p class="error-msg">
+								<span class="glyphicon glyphicon-exclamation-sign"
+									aria-hidden="true"></span> ${error}
+							</p>
+						</c:forEach>
+					</div>
+				</c:if>
+				<c:if test="${not empty error}">
+					<jsp:include page="/WEB-INF/includes/error.jsp" />
+					<jsp:include page="/WEB-INF/includes/success.jsp" />
+				</c:if>
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">Edit Hardware Info</h2>
@@ -67,11 +68,12 @@
 
 						<%
 						    Hardware hardware = (Hardware) request.getAttribute("hardware");
-																													if (hardware != null) {
+																																																					if (hardware != null) {
 						%>
 
-						<form class="form-horizontal" action="edit?key=<%=hardware.getKey()%>"
-							data-toggle="validator" role="form" method="post">
+						<form class="form-horizontal"
+							action="edit?key=<%=hardware.getKey()%>" data-toggle="validator"
+							role="form" method="post">
 							<div class="form-group">
 								<label for="type" class="col-sm-2 control-label">Type </label>
 								<div class="col-sm-9 search-field">
@@ -131,7 +133,7 @@
 
 										<%
 										    ArrayList<RefCondition> conditions = (ArrayList<RefCondition>) request.getAttribute("conditions");
-																																																													for (int i = 0; i < conditions.size(); i++) {
+																																																																																																					for (int i = 0; i < conditions.size(); i++) {
 										%>
 
 										<option title="<%=conditions.get(i).getDescription()%>"
@@ -177,7 +179,8 @@
 								<label for="date" class="col-sm-2 control-label">Username
 								</label>
 								<div class="col-sm-9 search-field">
-									<input name="username" type="text" class="form-control username-typeahead"
+									<input name="username" type="text"
+										class="form-control username-typeahead"
 										value="<%=request.getAttribute("username")%>">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
@@ -221,8 +224,8 @@
 								<label for="date" class="col-sm-2 control-label">Username
 								</label>
 								<div class="col-sm-9">
-									<input name="username" type="text" class="form-control" 
-									placeholder="joe.shmo">
+									<input name="username" type="text" class="form-control"
+										placeholder="joe.shmo">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -241,8 +244,8 @@
 								<label for="date" class="col-sm-2 control-label">
 									Location ID </label>
 								<div class="col-sm-9">
-									<input name="locID" type="number" class="form-control" 
-									value="<%= request.getAttribute("locationID") %>">
+									<input name="locID" type="number" class="form-control"
+										value="<%=request.getAttribute("locationID")%>">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -253,10 +256,41 @@
 							    }
 							%>
 
+							<c:if test="${hardware.getIsActive()}">
+
+								<div class="form-group">
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="checkbox">
+											<label> <input value="true" name="isActive"
+												type="checkbox" checked> Is Active
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+							</c:if>
+
+							<c:if test="${not hardware.getIsActive()}">
+
+								<div class="form-group">
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="checkbox">
+											<label> <input value="true" name="isActive"
+												type="checkbox"> Is Active
+											</label>
+										</div>
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+							</c:if>
+
 							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2">
-									<button type="submit" class="btn btn-primary">Submit
-									</button>
+									<button type="submit" class="btn btn-primary">Submit</button>
 									<button type="reset" class="btn btn-default"
 										onClick="reloadConditions(); return false;">Reset</button>
 									<a

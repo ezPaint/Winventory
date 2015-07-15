@@ -41,7 +41,7 @@ public class LocationInsertController extends BaseController {
     	// the location insert form   	
     	 ArrayList<Address> addresses = new ArrayList<Address>();
          try {
-        	 addresses = (ArrayList<Address>) AddressBo.getInstance().getAll();
+        	 addresses = (ArrayList<Address>) AddressBo.getInstance().getAllActive();
          } catch (BoException e) {
              logger.error("BoException in LocationInsertController when trying to get locations");
          }

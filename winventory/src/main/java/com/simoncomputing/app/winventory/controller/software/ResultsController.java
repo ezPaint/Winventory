@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
  * @author Megan Rigsbee
  *
  */
-@WebServlet("/software")
+@WebServlet("/software/results")
 public class ResultsController extends BaseController {
     
     private static final long serialVersionUID = 1L;

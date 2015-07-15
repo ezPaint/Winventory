@@ -99,6 +99,77 @@ public class Address {
             errors.add("Zipcode field is required.");
         }
         this.setZipcode(request.getParameter("zipcode"));
+        
+        // addresses will be assumed to be active when inserted
+        this.setIsActive(true);
+
+        // Done, return the empty errors ArrayList
+        return errors;
+    }
+    
+    /**
+     * Binds a post request containing the insertlocation form
+     * to the location, so the location will be ready for adding/updating to the db.
+     * @param request
+     * @return errors an arraylist of error messages
+     */
+    public ArrayList<String> bindInsertFormForEdit(HttpServletRequest request) {
+        // FORM VALIDATION
+        
+        // ArrayList of errors to display for form validation problems
+        ArrayList<String> errors = new ArrayList<String>();
+        
+        // List of existing addresses needed for validation
+        AddressBo addressBo = AddressBo.getInstance();
+        List<Address> existingAddresses = new ArrayList<Address>();
+        try {
+            existingAddresses = addressBo.getAll();
+        } catch (BoException e) {
+            logger.error("Error getting all Addresses from AddressBo");
+        }
+        
+        int count = 0;
+        
+        if (request.getParameter("name") == null) {
+            errors.add("Address name field is required.");
+        }
+        //Address name must be unique since inserting a location
+        //selects the address by address name
+        for (Address a : existingAddresses) {
+            if (a.getName().equalsIgnoreCase(request.getParameter("name"))) {
+                count++;
+            }
+        }
+        
+        if (count > 1) {
+            errors.add("Address name already exists");
+        }
+        
+        this.setName(request.getParameter("name"));
+       
+        if (request.getParameter("street1") == null) {
+            errors.add("Street address field is required.");
+        }
+        this.setStreet1(request.getParameter("street1"));
+        this.setStreet2(request.getParameter("street2"));
+        
+        if (request.getParameter("city") == null) {
+            errors.add("City field is required.");
+        }
+        this.setCity(request.getParameter("city"));
+        
+        if (request.getParameter("state") == null) {
+            errors.add("State field is required.");
+        }
+        this.setState(request.getParameter("state"));
+        
+        if (request.getParameter("zipcode") == null) {
+            errors.add("Zipcode field is required.");
+        }
+        this.setZipcode(request.getParameter("zipcode"));
+        
+        // addresses will be assumed to be active when inserted
+        this.setIsActive(true);
 
         // Done, return the empty errors ArrayList
         return errors;

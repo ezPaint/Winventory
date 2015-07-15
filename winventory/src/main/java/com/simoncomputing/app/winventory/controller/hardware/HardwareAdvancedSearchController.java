@@ -123,6 +123,17 @@ public class HardwareAdvancedSearchController extends BaseController {
         if (searchOption.equals("owned")) {
             owned = true;
         }
+        
+        String activeOption = request.getParameter("activeSearch");
+        
+        boolean active = false;
+        boolean inActive = false;
+        if (activeOption.equals("active")) {
+            active = true;
+        }
+        if (activeOption.equals("inActive")) {
+            inActive = true;
+        }
 
         boolean date = false;
         String dateString = request.getParameter("date");
@@ -178,7 +189,8 @@ public class HardwareAdvancedSearchController extends BaseController {
         } else {
             try {
                 results = new ArrayList<Hardware>(HardwareBo.getInstance().searchAdvanced(columns,
-                        searches, stored, owned, cost, minCost, maxCost, date, startDate, endDate));
+                        searches, stored, owned, active, inActive, 
+                        cost, minCost, maxCost, date, startDate, endDate));
             } catch (BoException e) {
                 error = logError(log, e);
                 request.setAttribute("error", "Error code: " + error);

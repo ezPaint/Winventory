@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <div class="top-header">
 		<div class="media-right">
@@ -24,24 +25,24 @@
 		</div>
 		<div class="collapse navbar-collapse" id="navbar">
 			<ul class="nav navbar-nav">
-				<!-- Only display labels in navbar if user has read permission for the associate objects -->
-				<%-- c:if test="${userInfo.hasPermission.readSoftware}"> --%>
-				<li id="software"><a href="${contextPath}/software">Software</a></li>
-				<%-- </c:if>
-				<c:if test="${userInfo.hasPermission.readHardware}"> --%>
+				<!-- Only display labels in navbar if user has read permission for the associated objects -->
+				<c:if test="${userInfo.hasPermission.readSoftware}">
+				<li id="software"><a href="${contextPath}/software/results">Software</a></li>
+				</c:if>
+				<c:if test="${userInfo.hasPermission.readHardware}">
 				<li id="hardware"><a href="${contextPath}/hardware/results"
 					target="_top">Hardware</a></li>
-				<%-- </c:if>
-				<c:if test="${userInfo.hasPermission.readBarcode}"> --%>
+				</c:if>
+				<c:if test="${userInfo.hasPermission.readBarcode}">
 				<li id="barcodes"><a href="${contextPath}/barcodes/barcode"
 					target="_top">Barcode</a></li>
-				<%-- </c:if> --%>
-				<%-- <c:if test="${userInfo.hasPermission.readUser}"> --%>
+				</c:if>
+				<c:if test="${userInfo.hasPermission.readUser}">
 				<li id="users"><a href="${contextPath}/users/results" target="_top">Users</a></li>
-				<%-- </c:if> --%>
-				<%-- <c:if test="${userInfo.hasPermission.readLocation}"> --%>
+				</c:if>
+				<c:if test="${userInfo.hasPermission.readLocation}">
 				<li id="location"><a href="${contextPath}/location/results-location" target="_top">Location</a></li>
-				<%-- </c:if> --%>
+				</c:if>
 				
 				<li id="event"><a href="${contextPath}/event/insert" target="_top">Events</a></li>
 			</ul>

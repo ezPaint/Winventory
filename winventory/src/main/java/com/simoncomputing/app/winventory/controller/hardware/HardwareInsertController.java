@@ -135,7 +135,6 @@ public class HardwareInsertController extends BaseController {
             }
 
             request.setAttribute("success", false);
-            request.setAttribute("errors", errors);
         }
 
         // Add an event to this hardware that describing its creation.
@@ -145,11 +144,11 @@ public class HardwareInsertController extends BaseController {
                 if (h.getUserId() != null) {
                     String strang = "Inserted into DB and assigned to " + h.getUser().getUsername();
                     EventBo.getInstance().createSystemEvent(strang,
-                            getUserInfo(request), EventType.ADMIN, h);
+                            getUserInfo(request), EventType.ADMIN, h, null, null, null);
                 } else if (h.getLocationId() != null) {
                     String strang = "Inserted into DB and stored at " + h.getLocation().getDescription();
                     EventBo.getInstance().createSystemEvent(strang,
-                            getUserInfo(request), EventType.ADMIN, h);
+                            getUserInfo(request), EventType.ADMIN, h, null, null, null);
                 } else {
                     log.error("Hardware was somehow almost inserted into DB with no user or location ID");
                     errors.add("Hardware was somehow almost inserted into DB with no user or location ID.");
@@ -162,11 +161,9 @@ public class HardwareInsertController extends BaseController {
                 request.setAttribute("success", false);
             }
         }
-        if (request.getAttribute("success") != null) {
-            if ((boolean) request.getAttribute("success")) {
-                request.setAttribute("success", "true");
-            }
-        }
+        
+        request.setAttribute("errors", errors);
+        
         // Forward the request to the "hardware/insert" page to allow the user
         // to enter more items
         request.getRequestDispatcher("/WEB-INF/flows/hardware/insert.jsp").forward(request,

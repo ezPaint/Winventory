@@ -27,11 +27,16 @@ public class AdvancedSearchController extends BaseController {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        forward(request, response, "/WEB-INF/flows/software/advanced-search.jsp");
+        
+        if (userHasPermission(request, "readSoftware")) {
+            forward(request, response, "/WEB-INF/flows/software/advanced-search.jsp");
+        } else {
+            denyPermission(request, response);
+        }
     }
     /**
-     * Retrieves searches, removes blank fields, populate arraylists for database search
+     * Retrieves searches, removes blank fields, populate arraylists for
+     * database search
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,71 +49,84 @@ public class AdvancedSearchController extends BaseController {
                 .getParameterValues("serialNo")));
         ArrayList<String> versions = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("version")));
-        
-        //Add cost values to an arraylist 'costs'
+
+        // Add cost values to an arraylist 'costs'
         String minCost = request.getParameter("minCost");
         String maxCost = request.getParameter("maxCost");
-        ArrayList<String> costs = new ArrayList<String>();   //holds min and max cost
+        ArrayList<String> costs = new ArrayList<String>(); // holds min and max
+                                                           // cost
         if (minCost != null && !minCost.equals(""))
-        costs.add(minCost);
+            costs.add(minCost);
         if (maxCost != null && !maxCost.equals(""))
-        costs.add(maxCost);
-        
+            costs.add(maxCost);
+
         ArrayList<String> keys = new ArrayList<String>(Arrays.asList(request
                 .getParameterValues("licenseKey")));
-       
+
         // Remove blank fields
         cleanFields(names);
         cleanFields(serials);
         cleanFields(versions);
         cleanFields(costs);
         cleanFields(keys);
-        
-        //Holds search results for RANGES (purchased date, expiration date, cost) 
+
+        // Holds search results for RANGES (purchased date, expiration date,
+        // cost)
         SoftwareBo bo = SoftwareBo.getInstance();
         ArrayList<Software> results = new ArrayList<Software>();
         try {
-            results = (ArrayList<Software>) bo.getAll();  //Captures ALL software results
+            results = (ArrayList<Software>) bo.getAll(); // Captures ALL
+                                                         // software results
         } catch (BoException e) {
             logError(log, e);
         }
-        //Narrow down by DATES ---------------------------------------------------------------------
+        // Narrow down by DATES
+        // ---------------------------------------------------------------------
         String[] purchasedDate = (String[]) request.getParameter("purchasedDate").split("to");
         String[] expirationDate = (String[]) request.getParameter("expirationDate").split("to");
         ArrayList<String> dates = new ArrayList<String>();
-        if (purchasedDate.length == 2){
-            dates.add(purchasedDate[0].trim()); //purchase date start
-            dates.add(purchasedDate[1].trim()); //purchase date end
+        if (purchasedDate.length == 2) {
+            dates.add(purchasedDate[0].trim()); // purchase date start
+            dates.add(purchasedDate[1].trim()); // purchase date end
         } else {
-            dates.add(""); 
+            dates.add("");
             dates.add("");
         }
-        if (expirationDate.length == 2){
-            dates.add(expirationDate[0].trim()); //purchase date start
-            dates.add(expirationDate[1].trim()); //purchase date end
+        if (expirationDate.length == 2) {
+            dates.add(expirationDate[0].trim()); // purchase date start
+            dates.add(expirationDate[1].trim()); // purchase date end
         } else {
             dates.add("");
             dates.add("");
         }
         try {
-            //Narrow down list by DATES
-            results = (ArrayList<Software>) bo.searchDateRange(results, dates); 
+            // Narrow down list by DATES
+            results = (ArrayList<Software>) bo.searchDateRange(results, dates);
         } catch (BoException e) {
             logError(log, e);
         }
 
-        //Narrow down list by Cost -----------------------------------------------------------------
+        // Narrow down list by Cost
+        // -----------------------------------------------------------------
         try {
-            results = (ArrayList<Software>) bo.searchCostRange(results, costs.get(0), costs.get(1)); //Reduce list by cost
+            results = (ArrayList<Software>) bo.searchCostRange(results, costs.get(0), costs.get(1)); // Reduce
+                                                                                                     // list
+                                                                                                     // by
+                                                                                                     // cost
         } catch (BoException e) {
             logError(log, e);
         }
-        
-        //Narrow down list by Name, Serial No, Version, License Key --------------------------------
-        
+
+        // Narrow down list by Name, Serial No, Version, License Key
+        // --------------------------------
+
         // passed as parameters to the dao
-        ArrayList<String> columns = new ArrayList<String>(); // corresponds to database columns
-        ArrayList<ArrayList<String>> searches = new ArrayList<ArrayList<String>>(); //search terms from user
+        ArrayList<String> columns = new ArrayList<String>(); // corresponds to
+                                                             // database columns
+        ArrayList<ArrayList<String>> searches = new ArrayList<ArrayList<String>>(); // search
+                                                                                    // terms
+                                                                                    // from
+                                                                                    // user
 
         // if the user specified search terms for "name", add "name" to columns
         // and all of the search terms to searches, otherwise ignore the
@@ -133,27 +151,29 @@ public class AdvancedSearchController extends BaseController {
             searches.add(keys);
         }
 
-        //Get array of just the user's chosen software name, serial no, version, license key
+        // Get array of just the user's chosen software name, serial no,
+        // version, license key
         ArrayList<Software> temp = new ArrayList<Software>();
         try {
-                temp = (ArrayList<Software>) bo.searchAdvanced(columns, searches);
+            temp = (ArrayList<Software>) bo.searchAdvanced(columns, searches);
 
-            } catch (BoException e) {
-                error = e.getLocalizedMessage();
-                logError(log, e);
-            }
-        
-        //Combine date/cost (ranges) array with name/serialno/version/licensekey array
+        } catch (BoException e) {
+            error = e.getLocalizedMessage();
+            logError(log, e);
+        }
+
+        // Combine date/cost (ranges) array with
+        // name/serialno/version/licensekey array
         ArrayList<Software> searchResults = new ArrayList<Software>();
-        for (Software a : results){
-            for (Software b : temp){
-                if (a.equals(b)){
+        for (Software a : results) {
+            for (Software b : temp) {
+                if (a.equals(b)) {
                     searchResults.add(a);
                     break;
                 }
             }
         }
-        
+
         if (results != null) {
             request.setAttribute("results", searchResults);
         }

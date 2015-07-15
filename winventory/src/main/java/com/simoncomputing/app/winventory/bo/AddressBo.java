@@ -146,4 +146,32 @@ public class AddressBo {
         return list;
     }
 
+    
+    /**
+     * Returns a {@link List} of all active {@link Address} objects from the database
+     * 
+     * @return A {@link List} of all active {@link Address} objects
+     * @throws BoException
+     */
+    public List<Address> getAllActive() throws BoException {
+        SqlSession session = null;
+        List<Address> list;
+
+        try {
+            session = SessionFactory.getSession();
+            AddressDao mapper = session.getMapper(AddressDao.class);
+            list = mapper.getAllActive();
+            session.commit();
+
+        } catch (Exception e) {
+            session.rollback();
+            throw new BoException(e);
+
+        } finally {
+            if (session != null)
+                session.close();
+        }
+
+        return list;
+    }
 }

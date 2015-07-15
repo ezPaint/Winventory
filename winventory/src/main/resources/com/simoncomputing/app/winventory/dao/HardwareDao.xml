@@ -124,6 +124,14 @@
 			AND (user_id IS NOT NULL)
 		</if>
 
+		<if test="active">
+			AND (is_Active IS TRUE)
+		</if>
+
+		<if test="inActive">
+			AND (is_Active IS FALSE)
+		</if>
+
 	</select>
 
 	<select id="getInUse" resultMap="HardwareMapper">

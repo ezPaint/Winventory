@@ -38,12 +38,13 @@
 					"paging" : false,
 					"dom" : '<"top">rt<"bottom"flp><"clear">'
 				});
+				
 				$('#hardwares tr').on(
 						'click',
 						'td:eq(7)',
 						function() {
 							var input;
-							var parentNode = $(this).parent();
+							var parentNode = $(this).parent("tr");
 							var pk = parentNode.find("td:nth-child(1)").text();
 							var icon = parentNode.find("td:nth-child(8)");
 							$(this).find("span").toggleClass(
@@ -55,8 +56,6 @@
 									value : null
 								});
 							} else {
-								table.$('tr.alert alert-danger').removeClass(
-										'alert alert-danger');
 								parentNode.addClass('alert alert-danger');
 								$('<input>').attr({
 									type : 'hidden',
@@ -67,7 +66,31 @@
 							}
 						});
 			});
-
+	
+	var toggleRemoveClick = function($obj) {
+		var input;
+		var parentNode = $obj.parent("tr");
+		var pk = parentNode.find("td:nth-child(1)").text();
+		var icon = parentNode.find("td:nth-child(8)");
+		$(this).find("span").toggleClass(
+				'glyphicon glyphicon-remove').toggleClass(
+				'glyphicon glyphicon-repeat')
+		if (parentNode.hasClass('alert alert-danger')) {
+			parentNode.removeClass('alert alert-danger');
+			input = $("#" + pk).attr({
+				value : null
+			});
+		} else {
+			parentNode.addClass('alert alert-danger');
+			$('<input>').attr({
+				type : 'hidden',
+				id : pk,
+				name : 'removeHw',
+				value : pk
+			}).appendTo('form');
+		}
+	}
+	
 	function finalSubmission() {
 		var hiddenInput = document.getElementById("toSubmit");
 		hiddenInput.value = true;
@@ -93,18 +116,30 @@
 					<div class="padme">
 						<form id="form" class="form-group center" method="post"
 							action="${contextPath}/barcodes/barcode">
-							<label>Enter a username or scan a barcode</label> <input
-								style="width: 50%; margin-left: 25%" id="barcode" name="barcode"
-								class="form-control center"
-								placeholder="Scan Barcode or Enter Username Here" type="text"
-								autocomplete="off" autofocus onfocus="this.select()"
-								value="${barcode}" /> <input type="hidden" id="toSubmit"
-								name="toSubmit" value=false /> <input type="hidden" id="clear"
-								name="clear" value=false /> <input type="hidden" id="userId"
-								name="userId" value="${user.key}" /> <input type="hidden"
-								id="locationId" name="locationId" value="${location.key}" />
+							<c:choose>
+								<c:when test="${not empty user or not empty location}">
+									<c:set var="placeholder" value="Scan Hardware Barcode to Add"/>
+								</c:when>
+								<c:when test="${empty user and empty location}">
+									<c:set var="placeholder" value="Scan User/Location Barcode to Enter Username to Begin"/>
+								</c:when>
+							</c:choose>
+							<br><input style="width: 50%; margin-left: 25%" id="barcode" name="barcode"
+									class="form-control center"
+									placeholder="${placeholder}" type="text"
+									autocomplete="off" autofocus onfocus="this.select()"
+									value="${barcode}" />
+							<input type="hidden" id="toSubmit"
+							name="toSubmit" value=false /> <input type="hidden" id="clear"
+							name="clear" value=false /> <input type="hidden" id="userId"
+							name="userId" value="${user.key}" /> <input type="hidden"
+							id="locationId" name="locationId" value="${location.key}" />
 							<c:forEach var="i" items="${hardwareKeys}">
 								<input type="hidden" id="hardwareId" name="hardwareId"
+									value="${i}" />
+							</c:forEach>
+							<c:forEach var="i" items="${removalKeys}">
+								<input type="hidden" id="removeHw" name="removeHw"
 									value="${i}" />
 							</c:forEach>
 						</form>
@@ -142,15 +177,15 @@
 										</thead>
 										<tbody>
 											<c:forEach var="i" items="${hardware}">
-												<tr>
+												<tr id="hardwareId${i.key}">
 													<td><c:out value="${i.key}" /></td>
 													<td><c:out value="${i.type}" /></td>
 													<td><c:out value="${i.cost}" /></td>
 													<td><c:out value="${i.condition}" /></td>
 													<td><c:out value="${i.getShortDescription()}" /></td>
 													<c:choose>
-														<c:when test="${not empty ub.read(i.userId).username}">
-															<td><c:out value="${ub.read(i.userId).username}" /></td>
+														<c:when test="${not empty i.getUser().username}">
+															<td><c:out value="${i.getUser().username}" /></td>
 														</c:when>
 														<c:otherwise>
 															<td>No Owner</td>
@@ -158,16 +193,23 @@
 													</c:choose>
 													<c:choose>
 														<c:when
-															test="${not empty lb.read(i.locationId).description}">
+															test="${not empty i.getLocation().description}">
 															<td><c:out
-																	value="${lb.read(i.locationId).description}" /></td>
+																	value="${i.getLocation().description}" /></td>
 														</c:when>
 														<c:otherwise>
 															<td>No Registered Location</td>
 														</c:otherwise>
 													</c:choose>
 													<td><span style="margin-left: 15%"
-														class="glyphicon glyphicon-remove"></span></td>
+														class="glyphicon glyphicon-remove"></span>
+														<c:if test="${removalKeys.contains(i.key)}">
+															<script>
+																//document.getElementById("hardwareId${i.key}")cells[7].click();
+																toggleRemoveClick($("#hardwareId${i.key} td:eq(7)"));
+															</script>
+														</c:if>
+													</td>
 												</tr>
 											</c:forEach>
 										</tbody>

@@ -515,7 +515,7 @@ public class EventBo {
      * 
      * throws BoException if interaction with the database throws a BoException
      */
-    public Event createSystemEvent(String description, UserInfoBean creator, EventType type, Item ... items ) throws BoException
+    public Event createSystemEvent(String description, UserInfoBean creator, EventType type, Hardware hw,  Location loc, Software sw,User user) throws BoException
     {
     	//log.debug("Attempting to add " + description + " system event.");
     	//TODO maybe should check for problems and rollback session in this method since multiple
@@ -526,27 +526,24 @@ public class EventBo {
     	event.setDescription(description);
     	event.setCreatorId(creator.getKey());
 
-    	
+    	if (hw != null)
+		{
+    		event.setHardwareId(hw.getKey());
+		}
+    	if (loc != null)
+		{
+    		event.setLocationId(loc.getKey());
+		}
+    	if (sw != null)
+		{
+    		event.setSoftwareId(sw.getKey());
+		}
+    	if (user != null)
+		{
+    		event.setUserId(user.getKey());
+		}
+
     	create(event);
-    	
-    	for (Item item : items)
-    	{
-    		if (item.getClass().equals(Hardware.class))
-    		{
-    			link(event, (Hardware)item);
-    		}
-    		if (item.getClass().equals(Software.class))
-            {
-                link(event, (Software)item);
-            }
-    		if (item.getClass().equals(Location.class))
-            {
-                link(event, (Location)item);
-            }
-    		
-    		//TODO implement Location and User
-    	}
-    
     	
     	return event;
     }

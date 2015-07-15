@@ -1,9 +1,6 @@
 package com.simoncomputing.app.winventory.domain;
 import java.sql.Date;
 
-
-
-
 /**
 * The Software Table.
 */
