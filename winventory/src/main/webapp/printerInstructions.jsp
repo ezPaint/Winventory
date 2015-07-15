@@ -83,6 +83,7 @@ span.highlight{
 			<h5>Check your browser</h5>
 			<p style="padding-left:3em">Only Safari and Internet Explorer are support page to printer functionality. If you would like to print directly from the page, please use another browser, such as
 			Safari or Internet Explorer. Our apologies, but we aren't happy about it either.</p>
+			<p style="padding-left:3em">If either of those browsers is unacceptable, just copy and paste the image into the DYMO application or download and open it in the app.</p>
 			<h5>Ensure You have a DYMO Printer</h5>
 			<p style="padding-left:3em">Examples can be found <a href="http://www.dymo.com/en-US" target="_blank">here</a>.  If you do not have
 			 a DYMO printer, the on-page print button will not work.</p>
@@ -108,6 +109,10 @@ span.highlight{
 			<h4>Contact the Developers</h4>
 			<p>If the problem persists, please feel free to contact the developers at
 			703-DONT-TRY to further look into the issue.</p>
+		</div>
+		<div class="list-group-item">
+			<h4>Still Broke?</h4>
+			<p>Did you really need to print that barcode? Honestly?</p>
 		</div>
 	</div>
 </body>
