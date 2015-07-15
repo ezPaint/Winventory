@@ -18,6 +18,7 @@ import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.formbean.UserInfoBean;
+import com.simoncomputing.app.winventory.util.Barcoder;
 import com.simoncomputing.app.winventory.util.BoException;
 import com.simoncomputing.app.winventory.controller.BaseController;
 
@@ -39,25 +40,36 @@ public class UserViewController extends BaseController {
         try {
             key = Long.parseLong(request.getParameter("key"));
             user = UserBo.getInstance().read(key);
+            request.setAttribute("barcode", Barcoder.getBarcode(user));
             currentUser = this.getUserInfo(request);
                     
         } catch (Exception e) {
             logger.info("Invalid key for HTTP GET /users/edit. Redirecting to list users page.");
-            response.sendRedirect(request.getContextPath() + "/users/results");
+            String error = "No user exists with key " + key +". The user may have been deleted or "
+                    + "that may be the wrong key.";
+            if (key == -1) {
+                error = "Invalid user key.";
+            }
+            response.sendRedirect(request.getContextPath() + "/users/results?error=" + error);
             return;
         }
         
         // if the user does not exist:
         if (user == null) {
-            response.sendRedirect(request.getContextPath() + "/users/results");
+            logger.info("Invalid key for HTTP GET /users/edit. Redirecting to list users page.");
+            String error = "No user exists with key " + key +". The user may have been deleted or "
+                    + "that may be the wrong key.";
+            response.sendRedirect(request.getContextPath() + "/users/results?error=" + error);
             return;
         }
         
         
         
         // if the user is rejected, the redirect is sent in the require permission method.
-        if (this.requirePermission(request, response, "readUser")
-            || (this.requirePermission(request, response, "readSelf") && key == currentUser.getKey())) {
+        if (  !(
+                this.userHasPermission(request, "readUser")
+            || (this.userHasPermission(request, "readSelf") && key == currentUser.getKey()) )) {
+            this.denyPermission(request, response);
             return;
         }
         

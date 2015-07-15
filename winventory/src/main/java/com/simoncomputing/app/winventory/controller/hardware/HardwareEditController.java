@@ -35,6 +35,12 @@ public class HardwareEditController extends BaseController {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // permission check
+        if (!this.userHasPermission(request, "updateHardware")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
@@ -119,6 +125,12 @@ public class HardwareEditController extends BaseController {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        // permission check
+        if (!this.userHasPermission(request, "updateHardware")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
@@ -168,9 +180,14 @@ public class HardwareEditController extends BaseController {
             if (conditions != null) {
                 request.setAttribute("conditions", conditions);
             }
-
+            
             // Redirect to the "hardware/view" page for this specific hardware
-            this.sendRedirect(request, response, "view?key=" + key);
+            if ((boolean)request.getAttribute("success")) {
+                this.sendRedirect(request, response, "view?key=" + key + "&success=true");
+            }
+            else {
+                this.sendRedirect(request, response, "view?key=" + key);
+            }
 
         } else {
             ArrayList<RefCondition> conditions = null;

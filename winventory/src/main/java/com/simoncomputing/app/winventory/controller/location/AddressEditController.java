@@ -1,6 +1,7 @@
 package com.simoncomputing.app.winventory.controller.location;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,6 +32,13 @@ public class AddressEditController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
 
+        // Check to see if the current User has the permissions to update
+        // Addresses, and returns if they do not
+        if (!this.userHasPermission(request, "updateAddress")) {
+            this.denyPermission(request, response);
+            return;
+        }
+        
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
 
@@ -74,6 +82,13 @@ public class AddressEditController extends BaseController {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
+        
+        // Check to see if the current User has the permissions to update
+        // Addresses, and redirects to permissionDenied if they do not
+        if (!this.userHasPermission(request, "updateAddress")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
@@ -102,21 +117,39 @@ public class AddressEditController extends BaseController {
             request.setAttribute("error", "Error code: " + error);
         }
 
-        // Get all of the potentially updated parameters from the request and
-        // set them for the Address
-        address.setName(request.getParameter("name"));
-        address.setStreet1(request.getParameter("street1"));
-        address.setStreet2(request.getParameter("street2"));
-        address.setCity(request.getParameter("city"));
-        address.setState(request.getParameter("state"));
-        address.setZipcode(request.getParameter("zipcode"));
-
-        // Use the BO to attempt updating the Address in the database
-        try {
-            bo.update(address);
-        } catch (BoException e) {
-            String error = logError(log, e);
-            request.setAttribute("error", "Error code: " + error);
+        // check if there are any errors that exist
+        ArrayList<String> errors = new ArrayList<String>();
+        errors = address.bindInsertForm(request);
+        
+        // Update if no errors, otherwise reload the page and inform the User
+        if (errors.size() == 0) {
+            
+            // Get all of the potentially updated parameters from the request and
+            // set them for the Address
+            address.setName(request.getParameter("name"));
+            address.setStreet1(request.getParameter("street1"));
+            address.setStreet2(request.getParameter("street2"));
+            address.setCity(request.getParameter("city"));
+            address.setState(request.getParameter("state"));
+            address.setZipcode(request.getParameter("zipcode"));
+            
+            // Use the BO to attempt updating the Address in the database
+            try {
+                bo.update(address);
+            } catch (BoException e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+            }
+        } else {
+            // Attach errors to the request
+            request.setAttribute("errors", errors);
+            
+            // Set the Address as an attribute for the request
+            request.setAttribute("address", address);
+            
+            // forward to jsp and return from method
+            request.getRequestDispatcher("/WEB-INF/flows/locations/edit-address.jsp").forward(request, response);
+            return;
         }
 
         // Set the key in the request

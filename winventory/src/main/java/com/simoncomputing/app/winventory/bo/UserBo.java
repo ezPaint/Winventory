@@ -258,5 +258,32 @@ public class UserBo {
 
         return list;
     }
+    
+    /**
+     * Returns a list of all the usernames in the db, up to the limit specified
+     * @return
+     * @throws BoException
+     */
+    public List<String> getAllUsernames(Integer limit) throws BoException {
+        SqlSession session = null;
+        List<String> usernames;
+
+        try {
+            session = SessionFactory.getSession();
+            UserDao mapper = session.getMapper(UserDao.class);
+            usernames = mapper.getAllUsernames(limit);
+            session.commit();
+
+        } catch (Exception e) {
+            session.rollback();
+            throw new BoException(e);
+
+        } finally {
+            if (session != null)
+                session.close();
+        }
+
+        return usernames;
+    }
 
 }

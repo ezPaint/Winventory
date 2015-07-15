@@ -220,11 +220,11 @@ $(function() {
                             <!-- Form submission -->
                             <div class="form-group">
                                 <div class="col-sm-10 col-sm-offset-2">
-                                    <button type="submit" value="Update" name="button" class="btn btn-primary">Submit Changes</button>
+                                    <button type="submit" value="Update" name="button" class="btn btn-primary">Submit</button>
                                     <button type="reset" class="btn btn-default">Reset</button>
                                     <a class="btn btn-default"
                                     href="${contextPath}/software/view?key=<%=software.getKey()%>" role="button">Cancel</a>
-                                    <button type="submit" value="Delete" name="button" class="btn btn-danger" onclick="return confirmDelete();">Delete</button>
+                             
                                     
                                 </div>
                                 <div class="col-sm-10 col-sm-offset-2">
@@ -233,10 +233,7 @@ $(function() {
                             </div>
                         </form>
                         
-                        <%
-                                            }
-                                            
-                                        %>
+                        <% } %>
                                         
                         <br>
                         <div>

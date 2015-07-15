@@ -29,5 +29,7 @@ public interface UserDao {
 	public List<String> getPermissionsByUser(User u);
 	
 	public List<User> getAll();
+	
+	public List<String> getAllUsernames(Integer limit);
 
 }

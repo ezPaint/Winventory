@@ -43,6 +43,8 @@ public class ResultsController extends BaseController {
             request.setAttribute("results", results);
         }
         
+        request.setAttribute("success", request.getParameter("success"));
+        request.setAttribute("deleted", request.getParameter("deleted")); //software was deleted
         forward(request, response, "/WEB-INF/flows/software/results.jsp");
     }
     

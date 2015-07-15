@@ -1,5 +1,6 @@
 package com.simoncomputing.app.winventory.dao;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,12 @@ public interface HardwareDao {
     public List<Hardware> searchAdvanced( @Param("columns") List<String> columns, 
             @Param("searches") ArrayList<ArrayList<String>> searches,
             @Param("stored") Boolean stored,
-            @Param("owned") Boolean owned) throws DaoException; 
+            @Param("owned") Boolean owned,
+            @Param("cost") Boolean cost,
+            @Param("minCost") double minCost,
+            @Param("maxCost") double maxCost,
+            @Param("date") Boolean date,
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate) throws DaoException; 
 
 }

@@ -75,6 +75,7 @@ public class TestAddressDao {
         address.setCity( randomString( "city", 50 ) );
         address.setState( randomString( "state", 50 ) );
         address.setZipcode( randomString( "zipcode", 10 ) );
+        address.setIsActive( true  );
 
         return address;
     }
@@ -87,6 +88,7 @@ public class TestAddressDao {
         assertEquals( address.getCity(), readRecord.getCity() );
         assertEquals( address.getState(), readRecord.getState() );
         assertEquals( address.getZipcode(), readRecord.getZipcode() );
+        assertEquals( address.getIsActive(), readRecord.getIsActive() );
 
     }
 
@@ -98,6 +100,7 @@ public class TestAddressDao {
         address.setCity( randomString( "city", 50 ) );
         address.setState( randomString( "state", 50 ) );
         address.setZipcode( randomString( "zipcode", 10 ) );
+        address.setIsActive( true  );
 
     }
 

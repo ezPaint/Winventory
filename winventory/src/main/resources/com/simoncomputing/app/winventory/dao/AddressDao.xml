@@ -11,6 +11,7 @@
         <result column ="CITY"                property = "city" />
         <result column ="STATE"               property = "state" />
         <result column ="ZIPCODE"             property = "zipcode" />
+        <result column ="IS_ACTIVE"           property = "isActive" />
     </resultMap>
 
     <select id="read" parameterType="map" resultMap="AddressMapper">
@@ -25,12 +26,12 @@
         insert into ADDRESS
         (
             KEY , NAME , STREET1 , STREET2 , CITY , 
-            STATE , ZIPCODE
+            STATE , ZIPCODE , IS_ACTIVE
         )
         values
         (
             #{key} , #{name} , #{street1} , #{street2} , #{city} , 
-            #{state} , #{zipcode}
+            #{state} , #{zipcode} , #{isActive}
         )
     </insert>
 
@@ -44,7 +45,8 @@
             STREET2                             = #{street2} ,
             CITY                                = #{city} ,
             STATE                               = #{state} ,
-            ZIPCODE                             = #{zipcode}
+            ZIPCODE                             = #{zipcode} ,
+            IS_ACTIVE                           = #{isActive}
         where KEY = #{key}
     </update>
 

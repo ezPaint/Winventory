@@ -13,9 +13,11 @@ import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.SoftwareBo;
+import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.Hardware;
+import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.util.BoException;
 
@@ -42,6 +44,8 @@ public class ViewController extends BaseController {
         Event event = null;
         List<Hardware> hardware = new ArrayList<Hardware>();
         List<Software> software = new ArrayList<Software>();
+        List<Location> locations = new ArrayList<Location>();
+        String username = "";
         
         if (key != null) {
             try {
@@ -58,21 +62,42 @@ public class ViewController extends BaseController {
             } catch (BoException e) {
                 logError(log, e);
             }
-        }
+            
+            try {
+                locations = EventBo.getInstance().getLocationOf(event); //get software obj from database
+            } catch (BoException e) {
+                logError(log, e);
+            }
+            
+           
+            try {
+            	username = UserBo.getInstance().read(event.getCreatorId()).getUsername();
+    		} catch (BoException e) {
+    			log.error("Error reading user of event id=" + event.getKey() + " with creator_id=" 
+    					+ event.getCreatorId() + ". The user may not exist?");
+    		}
         
-        if (event != null) {
+        
+       
             try {
                 software = EventBo.getInstance().getSoftwareOf(event); //get software obj from database
             } catch (BoException e) {
                 logError(log, e);
             }
+            request.setAttribute("validKey", true);
+        }
+        else
+        {
+        	request.setAttribute("validKey", false);
         }
         request.setAttribute("key", key);
 
         request.setAttribute("event", event); 
         
         request.setAttribute("hardware", hardware);
+        request.setAttribute("locations", locations);
         request.setAttribute("software", software);
+        request.setAttribute("username", username);
         
         forward(request, response, "/WEB-INF/flows/events/view.jsp");
 

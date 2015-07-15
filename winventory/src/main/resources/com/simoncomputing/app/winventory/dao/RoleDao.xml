@@ -47,5 +47,16 @@
     <select id="getAll" resultMap="RoleMapper">
 		select * from Role;
 	</select>
+	
+	<insert id="insert" parameterType="com.simoncomputing.app.winventory.domain.Role">
+        insert into ROLE
+        (
+            KEY , TITLE
+        )
+        values
+        (
+            #{key} , #{title}
+        )
+    </insert>
 
 </mapper>

@@ -1,10 +1,13 @@
 package com.simoncomputing.app.winventory.domain;
 import java.sql.Date;
 
+
+
+
 /**
 * The Software Table.
 */
-public class Software implements Item{
+public class Software  implements Item{
 
     private Long      key;
     private String    name;
@@ -35,6 +38,8 @@ public class Software implements Item{
     public Date      getExpirationDate() { return expirationDate; }
     public void      setExpirationDate( Date value ) { expirationDate = value; }
     // PROTECTED CODE -->
+    
+    /**
     /**
      * Two Software objects are equal if they have the same:
      *    key

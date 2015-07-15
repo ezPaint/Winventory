@@ -40,7 +40,8 @@ public class UserResultsController extends BaseController {
 	    
 	    
         // if the user is rejected, the redirect is sent in the require permission method.
-        if (this.requirePermission(request, response, "readUser")) {
+        if (!this.userHasPermission(request, "readUser")) {
+            this.denyPermission(request, response);
             return;
         }
         
@@ -64,6 +65,12 @@ public class UserResultsController extends BaseController {
         if (request.getParameter("success") != null) {
             request.setAttribute("success", request.getParameter("success"));
         }
+        
+        // check for success message (for redirects from edit/add/delete pages)
+        if (request.getParameter("error") != null) {
+            request.setAttribute("error", request.getParameter("error"));
+        }
+        
 	    
         //forward to users/results.jsp
 		request.getRequestDispatcher("/WEB-INF/flows/users/results.jsp").forward(request, response);

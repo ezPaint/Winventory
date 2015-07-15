@@ -42,12 +42,12 @@
 			<p>Due to recent changes in Chrome, DYMO's software has become out-of-date and will not 
 			function correctly within the Google Chrome browser.</p>
 			<p>If you would like to print directly from the page, please use another browser, such as
-			Safari or Firefox.</p>
+			Safari or Internet Explorer. Our apologies, but we aren't happy about it either.</p>
 		</div>
 		<div class="list-group-item">
 			<h4>Trust Us</h4>
-			<p>When attempting to print for the first time, the page should ask you to trust the DYMO plug-in.  If you do not,
-			the barcode will not print.</p>
+			<p>When attempting to print for the first time, the page should ask you to trust the DYMO plug-in.  If you elect
+			 not to trust the plug-in, the barcode will not print.</p>
 		</div>
 		<div class="list-group-item">
 			<h4>Ensure You have a DYMO Printer</h4>
@@ -57,7 +57,9 @@
 		<div class="list-group-item">
 			<h4>Ensure the DYMO Software is installed</h4>
 			<p>Most DYMO printers require DYMO drivers installed to run correctly.
-			Download the appropriate one from this <a href="http://www.dymo.com/en-US/dymo-user-guides" target="_blank">page</a>.</p>
+			Download the appropriate one for your Operating System from this <a href="http://www.dymo.com/en-US/dymo-user-guides" target="_blank">page</a>.</p>
+			<p>Please also note that DYMO drivers ask that the printer not be plugged into the machine until the installation software asks for it.
+			 We recommend that this instruction be carried out to ensure correct setup.</p>
 			<p>Keep in mind that, in some cases, the drivers distributed with purchase will be out of date and will not
 			work. Please be sure to download the latest version from the site above.</p>
 		</div>
@@ -65,8 +67,14 @@
 			<h4>Ensure that your machine recognizes your DYMO printer</h4>
 			<p>In some cases, even after the correct drivers have been installed, your DYMO printer will not appear on your printer list.</p>
 			<p>View your computer's printer page and manually add it to your printer list.</p>
-			<p>In some cases, the page still may not recognize the printer; in these cases, we recommend opening the DYMO application that comes with the driver and manually printing a label. In some cases, this fixes
-			the issue.</p>
+			<p>In some cases, the page still may not recognize the printer; in these cases, we recommend opening the DYMO application that comes with the driver and manually printing a label.
+			This may fix the issue.</p>
+		</div>
+		<div class="list-group-item">
+			<h4>Verify your machine is connected to an active Dymo Printer </h4>
+			<p>Despite having all the necessary software installed, the DYMO API is not complex enough to check if a printer is actually connected to your machine.</p>
+			<p> Open your print queue and see if the job is waiting to be printed. If so, it is likely your printer is not connected to the computer, or the printer is off.</p>
+			<p> Please connect the printer and check that it is on and see if it begins printing. If not, clear the print queue, and then attempt to print your job again</p>
 		</div>
 		<div class="list-group-item">
 			<h4>Contact the Developers</h4>

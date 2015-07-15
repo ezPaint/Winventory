@@ -43,6 +43,7 @@
 		document.getElementById("resultsTable").style.display = "table";
 	});
 </script>
+
 </head>
 <body>
 	<jsp:include page="/base.jsp" />
@@ -74,6 +75,8 @@
 								<thead>
 									<tr>
 										<th style="border-bottom: 0px">Role Name</th>
+										<th style="border-bottom: 0px">Permissions</th>
+										<th style="border-bottom: 0px">Delete</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -84,17 +87,16 @@
 											<th>
 												<form action="role/view-permissions" method="get"
 													role="form">
-													<button class="btn btn-default" type="submit"
-														name="permissions" value="${role.title}">View
-														Permissions</button>
+													<button class="btn btn-default" type="submit" name="key"
+														value="${role.key}">View Permissions</button>
 												</form>
 											</th>
-											<%-- <th> 
+											<th>
 												<form action="role" method="post" role="form">
 													<button class="btn btn-default" type="submit" name="delete"
-														value="${role.title}">Delete</button>
+														value="${role.key}">Delete</button>
 												</form>
-											</th> --%>
+											</th>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -104,86 +106,40 @@
 					<div class="boom">
 						<h2 class="center">Add a New Role</h2>
 					</div>
-
 					<div class="padme">
-						<br> <br>
 						<form action="role" method="post">
 							<div class="row">
 								<div class="form-group col-md-4" id="roleTitle">
 									<label for="role">Role Title:</label> <input type="text"
-										name="roleTitle" class="form-control">
+										name="roleTitle" class="form-control" pattern="^[a-zA-Z ]*$"
+										required>
 								</div>
-							</div>
-							<h4>Select the Permissions this role should have:</h4>
-							<div class="row">
 								<div class="col-md-4">
-									<div class="radio">
-										<label> <input type="radio" name="permType"
-											id="adminPerms" value="adminPerms"> Admin Permissions
-										</label>
-									</div>
-									<div class="radio">
-										<label> <input type="radio" name="permType"
-											id="customPerms" value="customPerms"> Custom
-											Permissions
-										</label>
-									</div>
+									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+							<h4>Select the permissions this role should have:</h4>
+							
 							<div id="checkboxes">
-								<div class="col-md-4" id="user_div">
-									<h5>User Permissions</h5>
+								<c:forEach var="permission" items="${refPerms}">
 									<div class="checkbox">
-										<label><input type="checkbox" value="createUser"
-											name="createUser">Create User</label>
+										<label><input type="checkbox" value="${permission.code}"
+											name="${permission.code}">${permission.description}</label>
 									</div>
-									<div class="checkbox">
-										<label><input type="checkbox" value="editUser"
-											name="editUser">Edit User</label>
-									</div>
-									<div class="checkbox">
-										<label><input type="checkbox" value="deleteUser"
-											name="deleteUser">Delete User</label>
-									</div>
+								</c:forEach>
+							</div>
+							<div class="row">
+								<div class="col-md-8">
+									<button type="submit" class="btn btn-default" name="create">Create
+										Role</button>
 								</div>
-								<div class="col-md-4" id="hardware_div">
-									<h5>Hardware Permissions</h5>
-									<div class="checkbox">
-										<label><input type="checkbox" value="createHardware"
-											name="createHardware">Create Hardware</label>
-									</div>
-									<div class="checkbox">
-										<label><input type="checkbox" value="editHardware"
-											name="editHardware">Edit Hardware</label>
-									</div>
-									<div class="checkbox">
-										<label><input type="checkbox" value="deleteHardware"
-											name="deleteHardware">Delete Hardware</label>
-									</div>
-								</div>
-								<div class="col-md-4" id="software_div">
-									<h5>Software Permissions</h5>
-									<div class="checkbox">
-										<label><input type="checkbox" value="createSoftware"
-											name="createSoftware">Create Software</label>
-									</div>
-									<div class="checkbox">
-										<label><input type="checkbox" value="editSoftware"
-											name="editSoftware">Edit Software</label>
-									</div>
-									<div class="checkbox">
-										<label><input type="checkbox" value="deleteSoftware"
-											name="deleteSoftware">Delete Software</label>
-									</div>
-								</div>
-								<button type="submit" class="btn btn-default">Create
-									Role</button>
 							</div>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-		<jsp:include page="/WEB-INF/includes/footer.jsp" />
+	</div>
+	<jsp:include page="/WEB-INF/includes/footer.jsp" />
 </body>
 </html>

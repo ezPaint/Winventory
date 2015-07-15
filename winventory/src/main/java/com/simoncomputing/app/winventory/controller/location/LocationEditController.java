@@ -34,6 +34,13 @@ public class LocationEditController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
 
+        // Check to see if the current User has the permissions to update
+        // Locations, and returns if they do not
+        if (!this.userHasPermission(request, "updateLocation")) {
+            this.denyPermission(request, response);
+            return;
+        }
+        
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
 
@@ -88,6 +95,13 @@ public class LocationEditController extends BaseController {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
+        
+        // Check to see if the current User has the permissions to update
+        // Locations, and returns if they do not
+        if (!this.userHasPermission(request, "updateLocation")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");

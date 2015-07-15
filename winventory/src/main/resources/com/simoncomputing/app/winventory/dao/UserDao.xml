@@ -117,7 +117,7 @@
 
 	<select id="getPermissionsByUser" parameterType="com.simoncomputing.app.winventory.domain.User"
 		resultType="String">
-		select REF_PERMISSION.DESCRIPTION from REF_PERMISSION
+		select REF_PERMISSION.CODE from REF_PERMISSION
 		inner
 		join REF_PERMISSION_TO_ROLE on
 		REF_PERMISSION_TO_ROLE.PERMISSION_ID=REF_PERMISSION.KEY
@@ -129,5 +129,9 @@
 	
 	<select id="getAll" parameterType="com.simoncomputing.app.winventory.domain.User" resultMap="UserMapper">
 		select * from USER;
+	</select>
+	
+	<select id="getAllUsernames" parameterType="int" resultType="String">
+		select USERNAME from USER LIMIT #{limit};
 	</select>
 </mapper>

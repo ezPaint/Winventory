@@ -21,4 +21,6 @@ public interface RoleDao {
     // PROTECTED CODE -->
 
     public List<Role> getAll();
+
+    public int insert(Role newRole);
 }

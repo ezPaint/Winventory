@@ -36,11 +36,6 @@
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
 
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#resultsTable').DataTable();
-	});
-</script>
 </head>
 
 <body>
@@ -57,6 +52,19 @@
 					</div>
 
 					<div class="padme">
+					
+					<c:if test="${not empty errors}">
+                    	<div class="alert alert-danger" role="alert">
+                    		<h3 class="error-header">Could not delete address:</h3>
+  							<span class="sr-only">Errors:</span>
+  							<c:forEach items="${errors}" var="error">
+  								<p class="error-msg">
+  									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  									${error}
+  								</p>
+  							</c:forEach>
+						</div>
+                    </c:if>
 
 
 						<%
@@ -130,6 +138,18 @@
 							<%-- <c:if test="${userInfo.hasPermission.deleteAddress}"> --%>
 							<input type="hidden" id="key" name="key"
 								value="<%=address.getKey()%>">
+							<input type="hidden" id="name" name="name"
+								value="<%=address.getName()%>">
+							<input type="hidden" id="street1" name="street1"
+								value="<%=address.getStreet1()%>">
+							<input type="hidden" id="street2" name="street2"
+								value="<%=address.getStreet2()%>">
+							<input type="hidden" id="city" name="city"
+								value="<%=address.getCity()%>">
+							<input type="hidden" id="state" name="state"
+								value="<%=address.getState()%>">
+							<input type="hidden" id="zipcode" name="zipcode"
+								value="<%=address.getZipcode()%>">
 							<button type="submit" class="btn btn-danger">Delete</button>
 							<%-- </c:if> --%>
 						<%-- <c:if test="${userInfo.hasPermission.updateAddress}"> --%>

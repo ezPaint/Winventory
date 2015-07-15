@@ -30,7 +30,6 @@ import com.simoncomputing.app.winventory.util.BoException;
 public class UserDeleteController extends BaseController {
 
     private static final long serialVersionUID = 1L;
-
     private Logger logger = Logger.getLogger(UserDeleteController.class);
     
     /**
@@ -62,7 +61,8 @@ public class UserDeleteController extends BaseController {
         }
         
         // if the user is rejected, the redirect is sent in the require permission method.
-        if (this.requirePermission(request, response, "deleteUser")) {
+        if (!this.userHasPermission(request, "deleteUser")) {
+            this.denyPermission(request, response);
             return;
         }
         

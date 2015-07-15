@@ -31,6 +31,12 @@ public class HardwareResultsController extends BaseController {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
+        
+        // permission check
+        if (!this.userHasPermission(request, "readHardware")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         // Attempt to get all hardware from database using a BO
         ArrayList<Hardware> results = null;
@@ -48,6 +54,16 @@ public class HardwareResultsController extends BaseController {
 
         // Sets the page header to "All Hardware"
         request.setAttribute("page_header", "All Hardware");
+        
+        // check for success message (for redirects from edit/add/delete pages)
+        if (request.getParameter("success") != null) {
+            request.setAttribute("success", request.getParameter("success"));
+        }
+        
+        // check for delete request, if so then the delete confirmation message will appear
+        if (request.getParameter("error") != null) {
+            request.setAttribute("error", request.getParameter("error"));
+        }
 
         // Forward the request to the "hardware/results" page
         request.getRequestDispatcher("/WEB-INF/flows/hardware/results.jsp").forward(request,
@@ -61,6 +77,12 @@ public class HardwareResultsController extends BaseController {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
+        
+        // permission check
+        if (!this.userHasPermission(request, "readHardware")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         @SuppressWarnings("unchecked")
         ArrayList<Hardware> results = (ArrayList<Hardware>) request.getAttribute("results");

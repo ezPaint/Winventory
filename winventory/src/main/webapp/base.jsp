@@ -1,14 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <div class="top-header">
-	<div class="media-right">
-		<br> <img src="${contextPath}/resources/images/SC-Logo.png"
-			height="50" width="50" alt="what">
+		<div class="media-right">
+		<br> 
+		<img src="${contextPath}/resources/images/win_logo.png" width="85" height="85"
+		style="margin-left: 5px;">
+		<br>
 	</div>
 	<div class="media-body">
-		<br>
-		<h4>The Winventory</h4>
-		<br>
+		<h2>The WINventory</h2>
+		<h5>Stop losing your items, <i>win them</i></h5>
 	</div>
 </div>
 <nav class="navbar navbar-default">

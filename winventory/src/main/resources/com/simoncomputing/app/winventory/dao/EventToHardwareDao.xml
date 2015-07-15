@@ -7,6 +7,7 @@
     <resultMap id="EventMapper" type="com.simoncomputing.app.winventory.domain.Event">
         <result column ="KEY"                 property = "key" />
         <result column ="DATE_CREATED"        property = "dateCreated" />
+        <result column ="CREATOR_ID"        property = "creatorId" />
         <result column ="DESCRIPTION"         property = "description" />
         <result column ="CATEGORY"            property = "category" />
     </resultMap>
@@ -53,7 +54,7 @@
 
     <delete id="unlink" parameterType="map">
         delete from EVENT_TO_HARDWARE
-        where hardwareId=#{param2} AND eventId=#{param1};
+        where hardware_ID=#{param2} AND event_ID=#{param1};
     </delete>
     
 </mapper>

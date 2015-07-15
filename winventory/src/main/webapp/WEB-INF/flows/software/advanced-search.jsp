@@ -48,7 +48,7 @@
 	type="text/javascript"></script>
 <script src='${contextPath}/resources/js/validator.js' type="text/javascript"></script>
 	
-
+<!-- Function that adds new box for single field OR search -->
 <script>
 	function addDiv(container, name, type) {
 		var newDiv = document.createElement('div');

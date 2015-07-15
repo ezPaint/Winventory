@@ -38,5 +38,4 @@ public class SessionFactory {
         ENVIRONMENT = "TESTING";
         setup();
     }
-    //PROTECTED CODE
 }

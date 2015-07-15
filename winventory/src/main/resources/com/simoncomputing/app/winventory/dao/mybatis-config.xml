@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
-    <environments default="H2">
+    <environments default="TESTING">
 
         <environment id="H2">
             <transactionManager type="JDBC" />
@@ -48,8 +48,6 @@
         <mapper resource="com/simoncomputing/app/winventory/dao/AccessTokenDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/AddressDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/EventDao.xml" />
-        <mapper resource="com/simoncomputing/app/winventory/dao/EventToHardwareDao.xml" />
-        <mapper resource="com/simoncomputing/app/winventory/dao/EventToSoftwareDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/GoogleClientDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/HardwareDao.xml" />
         <mapper resource="com/simoncomputing/app/winventory/dao/HardwareToSoftwareDao.xml" />

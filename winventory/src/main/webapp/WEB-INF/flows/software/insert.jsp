@@ -160,7 +160,7 @@ $(function() {
 								<div class="col-sm-9">
 									<input name="description" type="text" id="description"
 										class="form-control"
-										placeholder="Compatible with Windows XP/Vista/7/8/10" required>
+										placeholder="Compatible with Windows XP/Vista/7/8/10">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

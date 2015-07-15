@@ -26,6 +26,7 @@
 
 <body>
 	<jsp:include page="/base.jsp" />
+	<jsp:include page="eventBase.jsp" />
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-md-8">
@@ -34,123 +35,171 @@
 						<h2 class="center">Event Info</h2>
 					</div>
 					<div class="padme">
-					
-					 
-						<%@ page
-							import="com.simoncomputing.app.winventory.domain.Event"%>
-						<%@ page import="java.util.ArrayList"%>
+						<c:choose>
+							<c:when test="${validKey == true}">
+								<%@ page import="com.simoncomputing.app.winventory.domain.Event"%>
+								<%@ page import="java.util.ArrayList"%>
 
-						<%
-						    Event event = (Event) request.getAttribute("event");
+								<%
+								    Event event = (Event) request.getAttribute("event");
 
-						    if (event != null) {
-						%>
+								            if (event != null) {
+								%>
 
 
-						<div class="media">
-							<div class="media-left">
-							</div>
-							<div class="media-body">
-								<ul class="list-group">
-								
-								    <!-- Displays the software's key -->
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Key</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=event.getKey()%></p>
-										</div>
-									</li>
-									
-									<!-- Displays the software's name -->
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Description:</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=event.getDescription()%></p>
-										</div>
-									</li>
-									
-									<!--  Displays the software's serial number -->
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Date Created</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=event.getDateCreated()%></p>
-										</div>
-									</li>
-									
-									<!-- Displays the software's license key -->
-									<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Category</b>
-										</div>
-										<div class="col-md-9">
-											<p><%=event.getCategory()%></p>
-										</div>
-									</li>
-									
-									
-							<% }%> 
-							
-							<c:if test="${hardware != null && hardware.size() > 0}">
-								<li class="list-group-item row">
-										<div class="col-md-3">
-											<b>Associated Hardware</b>
-										</div>
-										<div class="col-md-3">
-											
-										
-										<b>
-										<c:forEach var="i" begin="0" end="${hardware.size() - 1}">
-											
-										
-											<a href="${contextPath}/hardware/view?key=
+								<div class="media">
+									<div class="media-left"></div>
+									<div class="media-body">
+										<ul class="list-group" style="word-wrap: break-word;">
+
+											<!-- Displays the software's key -->
+											<li class="list-group-item row">
+												<div class="col-md-3">
+													<b>Key</b>
+												</div>
+												<div class="col-md-9">
+													<p><%=event.getKey()%></p>
+												</div>
+											</li>
+
+											<!-- Displays the software's name -->
+											<li class="list-group-item row">
+												<div class="col-md-3">
+													<b>Description:</b>
+												</div>
+												<div class="col-md-9">
+													<p><%=event.getDescription()%></p>
+												</div>
+											</li>
+
+											<!--  Displays the software's serial number -->
+											<li class="list-group-item row">
+												<div class="col-md-3">
+													<b>Date Created</b>
+												</div>
+												<div class="col-md-9">
+													<p><%=event.getDateCreated()%></p>
+												</div>
+											</li>
+
+											<!-- Displays the software's license key -->
+											<li class="list-group-item row">
+												<div class="col-md-3">
+													<b>Category</b>
+												</div>
+												<div class="col-md-9">
+													<p><%=event.getCategory()%></p>
+												</div>
+											</li>
+
+											<li class="list-group-item row">
+												<div class="col-md-3">
+													<b>Created By</b>
+												</div>
+												<div class="col-md-9">
+													<p>
+														<a
+															href="${contextPath}/users/view?key=
+											<%=event.getCreatorId()%>">
+															${username}</a>
+													</p>
+												</div>
+											</li>
+
+
+											<%
+											    }
+											%>
+
+											<c:if test="${hardware != null && hardware.size() > 0}">
+												<li class="list-group-item row">
+													<div class="col-md-3">
+														<b>Associated Hardware</b>
+													</div>
+													<div class="col-md-3">
+
+
+														<b> <c:forEach var="i" begin="0"
+																end="${hardware.size() - 1}">
+
+
+																<a
+																	href="${contextPath}/hardware/view?key=
 											${hardware.get(i).getKey()}">
-											${hardware.get(i).getKey()}</a>
-											<c:if test="${i != hardware.size() - 1}">
+																	${hardware.get(i).getKey()}</a>
+																<c:if test="${i != hardware.size() - 1}">
 											,
 											</c:if>
-										
-										</c:forEach>
-										</b>
-										</div>
-										
-										
-										
-								</li>
-							</c:if>
-							
-							
-							<c:if test="${software != null && software.size() > 0}">
-								<li class="list-group-item row">
-						
-										<div class="col-md-3">
-											<b>Associated Software</b>
-										</div>
-										<div class="col-md-3">
-											
-										
-										<b>
-										<c:forEach var="i" begin="0" end="${software.size() - 1}">
-											<a href="${contextPath}/software/view?key=
+
+															</c:forEach>
+														</b>
+													</div>
+
+
+
+												</li>
+											</c:if>
+
+
+											<c:if test="${software != null && software.size() > 0}">
+												<li class="list-group-item row">
+
+													<div class="col-md-3">
+														<b>Associated Software</b>
+													</div>
+													<div class="col-md-3">
+
+
+														<b> <c:forEach var="i" begin="0"
+																end="${software.size() - 1}">
+																<a
+																	href="${contextPath}/software/view?key=
 											${software.get(i).getKey()}">
-											${software.get(i).getKey()}</a>
-											<c:if test="${i != software.size() - 1}">
+																	${software.get(i).getKey()}</a>
+																<c:if test="${i != software.size() - 1}">
 											,
 											</c:if>
-										
-										</c:forEach>
-										</b>
-										</div>
-								</li>
-							</c:if>
-								</ul>
-							</div>
-						</div>
+
+															</c:forEach>
+														</b>
+													</div>
+												</li>
+											</c:if>
+
+											<c:if test="${locations != null && locations.size() > 0}">
+												<li class="list-group-item row">
+
+													<div class="col-md-3">
+														<b>Associated Locations</b>
+													</div>
+													<div class="col-md-3">
+
+
+														<b> <c:forEach var="i" begin="0"
+																end="${locations.size() - 1}">
+																<a
+																	href="${contextPath}/location/view-location?key=
+											${locations.get(i).getKey()}">
+																	${locations.get(i).getKey()}</a>
+																<c:if test="${i != locations.size() - 1}">
+											,
+											</c:if>
+
+															</c:forEach>
+														</b>
+													</div>
+												</li>
+											</c:if>
+										</ul>
+									</div>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<h2>The requested event could not be found. Either the
+									event id is incorrect or the event no longer exists.</h2>
+							</c:otherwise>
+
+						</c:choose>
 					</div>
 				</div>
 			</div>

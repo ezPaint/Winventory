@@ -32,14 +32,13 @@
 							};
 
 							// Bloodhound for listing hardware type options
-							var hardwareTypeBloodhound = new Bloodhound(
-									{
+							var hardwareTypeBloodhound = new Bloodhound({
 
 									// array is in form:  [   "typeOne", "typeTwo", ... ]
 									datumTokenizer : Bloodhound.tokenizers.whitespace,
 									queryTokenizer : Bloodhound.tokenizers.whitespace,
 
-									// fetch types from resources/json/hardwareType.json
+									// fetch types from TypeaheadController.java
 									prefetch: {
 										url: '../typeahead?data=hardwareTypes',
 										filter: properCaseFilter
@@ -47,14 +46,9 @@
 
 							});
 							
+							// clear cache and initialize for bloodhound
 							hardwareTypeBloodhound.clearPrefetchCache();
 							hardwareTypeBloodhound.initialize();
-							
-							// random name for the data source acts as workaround for caching issue
-							// the caching issue: if new hardwareTypes are added, they don't show up because
-							// the browser caches the data source
-							var randLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
-							var randomUniqueId = randLetter + Date.now();
 
 							// set the typeahead function for the db input (id="db")
 							$('.search-hardware-type').typeahead({
@@ -68,4 +62,44 @@
 								source : hardwareTypeBloodhound, // Bloodhounds get the data
 								limit : 100 //max number of suggestions
 							});
+							
+							
+							
+							
+							// USERNAME TYPEAHEAD:
+							
+							// Bloodhound for listing usernames
+							var usernameBloodhound = new Bloodhound(
+									{
+										// array is in form: ["username1", "username2", ...]
+										datumTokenizer : Bloodhound.tokenizers.whitespace,
+										queryTokenizer : Bloodhound.tokenizers.whitespace,
+										
+										// fetch types from TypeaheadController.java
+										prefetch: '../typeahead?data=usernames'
+									}
+							);
+							
+							// clear cache and initialize for bloodhound
+							usernameBloodhound.clearPrefetchCache();
+							usernameBloodhound.initialize();
+							
+							// set the typeahead function for the db input (id="db")
+							$('.username-typeahead').typeahead({
+								hint : true,
+								highlight : true,
+								minLength : 1,
+							},
+
+							{ // sets hardwareTypeBloodhound as the data source
+								name: 'username',
+								source : usernameBloodhound, // Bloodhounds get the data
+								limit : 1000 //max number of suggestions
+							});
+							
+							
+							
+							
+							
+							
 						});

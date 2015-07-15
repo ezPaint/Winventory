@@ -1,5 +1,4 @@
 package com.simoncomputing.app.winventory.domain;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.AddressBo;
 import com.simoncomputing.app.winventory.util.BoException;
+
 
 
 /**
@@ -23,6 +23,7 @@ public class Address {
     private String    city;
     private String    state;
     private String    zipcode;
+    private Boolean   isActive;
 
     public Long      getKey() { return key; }
     public void      setKey( Long value ) { key = value; }
@@ -38,6 +39,8 @@ public class Address {
     public void      setState( String value ) { state = value; }
     public String    getZipcode() { return zipcode; }
     public void      setZipcode( String value ) { zipcode = value; }
+    public Boolean   getIsActive() { return isActive; }
+    public void      setIsActive( boolean value ) { isActive = value ? true : false; }
     // PROTECTED CODE -->
     private static Logger logger = Logger.getLogger(Address.class);
     
@@ -63,18 +66,18 @@ public class Address {
 		}
         
         
-        if (request.getParameter("addressName") == null) {
+        if (request.getParameter("name") == null) {
             errors.add("Address name field is required.");
         }
         //Address name must be unique since inserting a location
         //selects the address by address name
         for (Address a : existingAddresses) {
-        	if (a.getName().equalsIgnoreCase(request.getParameter("addressName"))) {
+        	if (a.getName().equalsIgnoreCase(request.getParameter("name"))) {
         		errors.add("Address name already exists");
         	}
         }
         
-        this.setName(request.getParameter("addressName"));
+        this.setName(request.getParameter("name"));
        
         if (request.getParameter("street1") == null) {
             errors.add("Street address field is required.");

@@ -1,6 +1,8 @@
 package com.simoncomputing.app.winventory.controller.location;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.AddressBo;
+import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.LocationBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Address;
+import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.Location;
+import com.simoncomputing.app.winventory.util.Barcoder;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -32,6 +37,13 @@ public class LocationViewController extends BaseController {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
+        
+        // Check to see if the current User has the permissions to update
+        // Locations, and returns if they do not
+        if (!this.userHasPermission(request, "readLocation")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         // Retrieve the key parameter from the request
         String key = request.getParameter("key");
@@ -62,6 +74,9 @@ public class LocationViewController extends BaseController {
             String error = logError(log, new NullPointerException());
             request.setAttribute("error", "Error code: " + error);
         } else if (location != null) {
+        	// get and assign barcode using Barcoder class
+            request.setAttribute("barcode", Barcoder.getBarcode(location));
+            
             // Get the Address information to display, if it exists
             if (location.getAddressId() != null) {
                 try {
@@ -74,11 +89,25 @@ public class LocationViewController extends BaseController {
                     log.error(e.getMessage());
                 }
             }
+            
+            // set the barcode attribute
+            request.setAttribute("barcode", Barcoder.getBarcode(location));
         }
 
         // Set the Location as an attribute for the request
         request.setAttribute("location", location);
 
+        EventBo eb = EventBo.getInstance();
+        List<Event> events = null;
+        try {
+            events = eb.getEventsOf(location);
+        } catch (BoException e) {
+            request.setAttribute("error", e.getMessage());
+            log.error(e.getMessage());
+        }
+        
+        request.setAttribute("events", events);
+        
         // Forward the request to the "location/view-location" page
         request.getRequestDispatcher("/WEB-INF/flows/locations/view-location.jsp").forward(request,
                         response);
@@ -94,7 +123,8 @@ public class LocationViewController extends BaseController {
 
         // Check to see if the current User has the permissions to delete
         // Locations, and returns if they do not
-        if (this.requirePermission(request, response, "deleteLocation")) {
+        if (!this.userHasPermission(request, "deleteLocation")) {
+            this.denyPermission(request, response);
             return;
         }
 
@@ -103,17 +133,49 @@ public class LocationViewController extends BaseController {
 
         // Retrieve the key for the Location to be deleted from the database
         LocationBo bo = LocationBo.getInstance();
+        Location location = null;
         Long long_key = null;
         if (key != null) {
             long_key = Long.parseLong(key);
         }
+        try {
+            // Retrieve the Location associated with it using a BO instance
+            location = bo.read(long_key);
+        } catch (BoException e) {
+            String error = logError(log, e);
+            request.setAttribute("error", "Error code: " + error);
+        }
+        
+        // If the Location is not found, log the error and report the problem to
+        // the user
+        if (location == null) {
+            String error = logError(log, new NullPointerException());
+            request.setAttribute("error", "Error code: " + error);
+        }
+        
+        // Used to display a deletion error to the User
+        ArrayList<String> errors = new ArrayList<String>();
 
-        // Attempt to delete the Location from the database using a BO
+        // Attempt to delete the Location from the database using a BO. This will fail if there is any Hardware linking to this Location
         try {
             bo.delete(long_key);
         } catch (BoException e) {
-            request.setAttribute("error", e.getMessage());
+            errors.add("There is currently hardware existing at this location.");
             log.error(e.getMessage());
+        }
+        
+        // If the deletion did not occur
+        if (errors.size() > 0) {
+            // Attach errors to the request
+            request.setAttribute("errors", errors);
+
+            // Set the Location as an attribute for the request
+            request.setAttribute("location", location);
+
+            // Forward back to the View Location page
+            request.getRequestDispatcher("/WEB-INF/flows/locations/view-location.jsp").forward(
+                            request, response);
+            return;
         }
 
         // Redirect to the results page, as the item no longer exists and does

@@ -38,11 +38,15 @@
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-				<c:choose>
-					<c:when test="${success}">
-					
-					</c:when>
-					<c:otherwise>
+
+				<div class="main">
+
+					<div class="boom">
+						<h2 class="center">Add Hardware</h2>
+					</div>
+					<div class="padme">
+						<br>
+						
 						<c:if test="${not empty errors}">
 							<div class="alert alert-danger" role="alert">
 								<h3 class="error-header">Could not insert hardware</h3>
@@ -55,18 +59,11 @@
 								</c:forEach>
 							</div>
 						</c:if>
-						<c:if test="${not empty error}">
+						
+							<!-- include confirmation/error messages -->
 							<jsp:include page="/WEB-INF/includes/error.jsp" />
-						</c:if>
-					</c:otherwise>
-				</c:choose>
-				<div class="main">
-
-					<div class="boom">
-						<h2 class="center">Insert Hardware</h2>
-					</div>
-					<div class="padme">
-						<br>
+							<jsp:include page="/WEB-INF/includes/success.jsp" />
+							
 						<form class="form-horizontal" action="insert"
 							data-toggle="validator" role="form" method="post">
 							<div class="form-group">
@@ -173,8 +170,8 @@
 							<div class="form-group">
 								<label for="date" class="col-sm-2 control-label">Username
 								</label>
-								<div class="col-sm-9">
-									<input name="username" type="text" class="form-control"
+								<div class="col-sm-9 search-field">
+									<input name="username" type="text" class="form-control username-typeahead"
 										placeholder="joe.shmo">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">

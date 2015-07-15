@@ -52,16 +52,33 @@
 			<div class="col-md-8">
 				<div class="main">
 					<div class="boom">
-						<h2 class="center">View Permissions</h2>
+						<h2 class="center">View Permissions for: ${role.title} </h2>
 					</div>
 					<div class="padme">
-					
+						<br>
+						<div class="table-responsive">
+							<table class="table table-striped" id="resultsTable">
+								<thead>
+									<tr>
+										<th style="border-bottom: 0px">Permission Name</th>
+										<th style="border-bottom: 0px">Description</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="i" items="${permissions}">
+										<tr>
+											<th style="padding-top: 10px"><c:out value="${i.code}" /></th>
+											<th style="padding-top: 10px"><c:out value="${i.description}" /></th>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
 	<jsp:include page="/WEB-INF/includes/footer.jsp" />
 </body>
 </html>

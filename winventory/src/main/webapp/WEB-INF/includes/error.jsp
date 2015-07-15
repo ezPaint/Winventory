@@ -10,7 +10,7 @@ if (error != null) {
 		aria-label="Close">
 		<span aria-hidden="true">&times;</span>
 	</button>
-	<strong>Oh snap!</strong> <%= error %>
+	<strong>Error:</strong> <%= error %>
 </div>
 
 <% } %>

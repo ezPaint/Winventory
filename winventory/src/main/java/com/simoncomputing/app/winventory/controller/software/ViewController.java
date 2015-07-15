@@ -16,6 +16,7 @@ import com.simoncomputing.app.winventory.bo.SoftwareBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.Software;
+import com.simoncomputing.app.winventory.util.Barcoder;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -42,13 +43,15 @@ public class ViewController extends BaseController {
 
         Software software = null;
         if (key != null) {
+        	// get and assign barcode using Barcoder class
             try {
                 Long long_key = Long.parseLong(key);
                 software = SoftwareBo.getInstance().read(long_key); //get software obj from database
             } catch (BoException e) {
                 logError(log, e);
             }
-            
+            request.setAttribute("barcode", Barcoder.getBarcode(software));
+
             EventBo eBo = EventBo.getInstance();
             try {
 				events = eBo.getEventsOf(software);
@@ -59,8 +62,13 @@ public class ViewController extends BaseController {
         request.setAttribute("key", key);
         request.setAttribute("software", software);
         
+        
         request.setAttribute("events", events); 
         this.key = key;
+        
+
+        request.setAttribute("delete", request.getParameter("delete"));   // delete was requested
+        request.setAttribute("success", request.getParameter("success")); // software was updated
         
         forward(request, response, "/WEB-INF/flows/software/view.jsp");
 

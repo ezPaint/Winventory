@@ -87,6 +87,7 @@ public class TestHardwareDao {
         hardware.setLocationId( (long) 0 );
         hardware.setUserId( (long) 0 );
         hardware.setPurchaseDate( new Date() );
+        hardware.setIsActive( true  );
 
         return hardware;
     }
@@ -101,6 +102,7 @@ public class TestHardwareDao {
         assertEquals( hardware.getLocationId(), readRecord.getLocationId() );
         assertEquals( hardware.getUserId(), readRecord.getUserId() );
         assertNotSame( hardware.getPurchaseDate(), readRecord.getPurchaseDate() );
+        assertEquals( hardware.getIsActive(), readRecord.getIsActive() );
 
     }
 
@@ -114,6 +116,7 @@ public class TestHardwareDao {
         hardware.setLocationId( (long) 0 );
         hardware.setUserId( (long) 0 );
         hardware.setPurchaseDate( new Date() );
+        hardware.setIsActive( true  );
 
     }
 

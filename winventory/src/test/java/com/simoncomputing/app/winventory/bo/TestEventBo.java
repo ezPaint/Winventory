@@ -32,6 +32,21 @@ public class TestEventBo {
 
         TestEventDao.compareRecords( event, readRecord );
 
+        List<Event> list1= eventBo.getListByCreatorId( event.getCreatorId() ) ; 
+        assertEquals( 1 , list1.size() );
+
+        List<Event> list2= eventBo.getListByUserId( event.getUserId() ) ; 
+        assertEquals( 1 , list2.size() );
+
+        List<Event> list3= eventBo.getListByHardwareId( event.getHardwareId() ) ; 
+        assertEquals( 1 , list3.size() );
+
+        List<Event> list4= eventBo.getListBySoftwareId( event.getSoftwareId() ) ; 
+        assertEquals( 1 , list4.size() );
+
+        List<Event> list5= eventBo.getListByLocationId( event.getLocationId() ) ; 
+        assertEquals( 1 , list5.size() );
+
         TestEventDao.modifyRecord( event );
         count = eventBo.update( event );
         assertEquals( 1, count );

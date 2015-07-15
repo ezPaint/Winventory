@@ -24,17 +24,19 @@ public class AdminController extends BaseController {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // require admin role
         if (getUserInfo(request).getRoleId() == 1) {
             try {
                 getCurrentInfo(request);
             } catch (BoException e) {
                 logger.error("Business Object exception");
             }
-
+            // if role is admin, forward to admin jsp
             request.getRequestDispatcher(adminJsp).forward(request, response);
-        }
-        else {
-            requirePermission(request, response, "view admin page");
+        } else {
+            // permission denied
+            this.denyPermission(request, response);
         }
     }
 
@@ -44,20 +46,32 @@ public class AdminController extends BaseController {
     }
 
     private void getCurrentInfo(HttpServletRequest request) throws BoException {
-        int totHw = (HardwareBo.getInstance().getAll().size());
-        request.setAttribute("totHw", totHw);
+        double totHw = (HardwareBo.getInstance().getAll().size());
+        int hwTot = (int) totHw;
+        request.setAttribute("totHw", hwTot);
 
-        // Eventually will get number of pieces of hardware in storage
-        // and use that value to calculate the percentage of hardware
-        // currently in use
-        // int hwInUse = 87;
-        // request.setAttribute("hwInUse", hwInUse);
+        if (totHw != 0) {
+            double hwInUse = (HardwareBo.getInstance().getInUse().size());
+            double hwUse = (hwInUse / totHw) * 100;
+            String usage = hwUse + "%";
+            request.setAttribute("usage", usage);
+
+            double hwInStorage = totHw - hwInUse;
+            double hwStore = (hwInStorage / totHw) * 100;
+            String storage = hwStore + "%";
+            request.setAttribute("storage", storage);
+        }
+        else{
+            request.setAttribute("usage", "0%");
+            request.setAttribute("storage", "0%");
+        }
 
         int numSw = (SoftwareBo.getInstance().getAll().size());
         request.setAttribute("numSw", numSw);
 
         int numUsers = (UserBo.getInstance().getAll().size());
         request.setAttribute("numUsers", numUsers);
+
     }
 
 }

@@ -38,10 +38,6 @@
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-				<c:choose>
-					<c:when test="${success}">
-					</c:when>
-					<c:otherwise>
 						<c:if test="${not empty errors}">
 							<div class="alert alert-danger" role="alert">
 								<h3 class="error-header">Could not insert hardware</h3>
@@ -56,9 +52,8 @@
 						</c:if>
 						<c:if test="${not empty error}">
 							<jsp:include page="/WEB-INF/includes/error.jsp" />
+							<jsp:include page="/WEB-INF/includes/success.jsp" />
 						</c:if>
-					</c:otherwise>
-				</c:choose>
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">Edit Hardware Info</h2>
@@ -181,8 +176,8 @@
 							<div class="form-group">
 								<label for="date" class="col-sm-2 control-label">Username
 								</label>
-								<div class="col-sm-9">
-									<input name="username" type="text" class="form-control"
+								<div class="col-sm-9 search-field">
+									<input name="username" type="text" class="form-control username-typeahead"
 										value="<%=request.getAttribute("username")%>">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
@@ -260,14 +255,13 @@
 
 							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2">
-									<button type="submit" class="btn btn-success">Submit
-										Changes</button>
-									<button type="reset" class="btn btn-warning"
-										onClick="reloadConditions(); return false;">Reset
-										Values</button>
+									<button type="submit" class="btn btn-primary">Submit
+									</button>
+									<button type="reset" class="btn btn-default"
+										onClick="reloadConditions(); return false;">Reset</button>
 									<a
 										href="${contextPath}/hardware/view?key=<%=hardware.getKey()%>"
-										class="btn btn-danger">Cancel</a>
+										class="btn btn-default">Cancel</a>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

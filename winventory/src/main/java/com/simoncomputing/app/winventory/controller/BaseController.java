@@ -19,11 +19,18 @@ import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 /**
  * A BaseController class that is to be the Parent Class for all other
  * Controllers. This class provides easier forward and send redirect methods as
- * well as a quick way to get the sessions current user. In the future, methods
- * for checking permissions could be placed in here to make authorization
- * easier.
+ * well as a quick way to get the sessions current user. Includes permission-checking method.
  */
 public class BaseController extends HttpServlet {
+    
+    /*
+     * In order to require permissions in a controller which extends the base controller:
+     * 
+     *  if (!this.userHasPermission(request, "updateLocation")) {
+     *      this.denyPermission(request, response); // this sends the redirect to '/permissionDenied'
+     *      return;
+     *  }
+     */
 
     private static final long serialVersionUID = 1L;
     private static Logger logger = Logger.getLogger(BaseController.class);
@@ -104,26 +111,19 @@ public class BaseController extends HttpServlet {
         // value associated with that permission in the map is true
         return permissionMap.containsKey(permission) && (permissionMap.get(permission));
     }
-
+    
     /**
-     * Checks the user's permissions and immediately redirects them to the
-     * permission-error page if necessary.
-     * 
-     * @param permission
-     *            Permission to check.
-     * @return false if user has permission, true if not.
+     * Redirect the user to the permissionDenied page.
+     * @param request
+     * @param response
+     * @throws IOException contains a redirect which throws this exception.
      */
-    public boolean requirePermission(HttpServletRequest request, HttpServletResponse response,
-            String permission) throws IOException {
-        
-        //If statement is true when the current user does NOT have permission
-        if (!this.userHasPermission(request, permission)) {
-            request.getSession().setAttribute("errMsg", permission);
-            response.sendRedirect(request.getContextPath() + "/permissionDenied");
-            return true;
-        }
-        return false;
+    public void denyPermission(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String next = request.getRequestURI();
+        response.sendRedirect(request.getContextPath() + "/permissionDenied?next=" + next);
+        return;
     }
+    
     
     public String logError(Logger errorLog , Exception e) {
         String errorCode = "";

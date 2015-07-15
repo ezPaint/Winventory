@@ -120,6 +120,7 @@ public class RoleBo {
     // PROTECTED CODE -->
     /**
      * Returns a list of all the Roles in the db
+     * 
      * @return
      * @throws BoException
      */
@@ -143,6 +144,38 @@ public class RoleBo {
         }
 
         return list;
+    }
+
+    /**
+     * Alternative function to create.
+     * 
+     * Acts as a work around for the problems caused by automatic sequence
+     * 
+     * @param newRole
+     *            the Role to insert into the db
+     * @return 1 if insert is successful
+     * @throws BoException
+     */
+    public int insert(Role newRole) throws BoException {
+        SqlSession session = null;
+        int result = 0;
+
+        try {
+            session = SessionFactory.getSession();
+            RoleDao mapper = session.getMapper(RoleDao.class);
+            result = mapper.insert(newRole);
+            session.commit();
+
+        } catch (Exception e) {
+            session.rollback();
+            throw new BoException(e);
+
+        } finally {
+            if (session != null)
+                session.close();
+        }
+
+        return result;
     }
 
 }

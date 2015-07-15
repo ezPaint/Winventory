@@ -8,6 +8,11 @@
         <result column ="DATE_CREATED"        property = "dateCreated" />
         <result column ="DESCRIPTION"         property = "description" />
         <result column ="CATEGORY"            property = "category" />
+        <result column ="CREATOR_ID"          property = "creatorId" />
+        <result column ="USER_ID"             property = "userId" />
+        <result column ="HARDWARE_ID"         property = "hardwareId" />
+        <result column ="SOFTWARE_ID"         property = "softwareId" />
+        <result column ="LOCATION_ID"         property = "locationId" />
     </resultMap>
 
     <select id="read" parameterType="map" resultMap="EventMapper">
@@ -21,14 +26,36 @@
         </selectKey>
         insert into EVENT
         (
-            KEY , DATE_CREATED , DESCRIPTION , CATEGORY
+            KEY , DATE_CREATED , DESCRIPTION , CATEGORY , CREATOR_ID , 
+            USER_ID , HARDWARE_ID , SOFTWARE_ID , LOCATION_ID
         )
         values
         (
-            #{key} , #{dateCreated} , #{description} , #{category}
+            #{key} , #{dateCreated} , #{description} , #{category} , #{creatorId} , 
+            #{userId} , #{hardwareId} , #{softwareId} , #{locationId}
         )
     </insert>
 
+    <select id="getListByCreatorId" parameterType="long" resultMap="EventMapper">
+        select * from EVENT
+        where CREATOR_ID = #{creatorId}
+    </select>
+    <select id="getListByUserId" parameterType="long" resultMap="EventMapper">
+        select * from EVENT
+        where USER_ID = #{userId}
+    </select>
+    <select id="getListByHardwareId" parameterType="long" resultMap="EventMapper">
+        select * from EVENT
+        where HARDWARE_ID = #{hardwareId}
+    </select>
+    <select id="getListBySoftwareId" parameterType="long" resultMap="EventMapper">
+        select * from EVENT
+        where SOFTWARE_ID = #{softwareId}
+    </select>
+    <select id="getListByLocationId" parameterType="long" resultMap="EventMapper">
+        select * from EVENT
+        where location_ID = #{locationId}
+    </select>
 
 
     <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Event">
@@ -36,7 +63,12 @@
             KEY                                 = #{key} ,
             DATE_CREATED                        = #{dateCreated} ,
             DESCRIPTION                         = #{description} ,
-            CATEGORY                            = #{category}
+            CATEGORY                            = #{category} ,
+            CREATOR_ID                          = #{creatorId} ,
+            USER_ID                             = #{userId} ,
+            HARDWARE_ID                         = #{hardwareId} ,
+            SOFTWARE_ID                         = #{softwareId} ,
+            LOCATION_ID                         = #{locationId}
         where KEY = #{key}
     </update>
 
@@ -48,4 +80,10 @@
 
     <!-- PROTECTED CODE -->
 
+
+	<select id="getListByDateRange" resultMap="EventMapper">
+		select * from EVENT  where DATE_CREATED >= #{start,jdbcType=DATE}
+		<!-- AND #{end,jdbcType=DATE} >= DATE_CREATED -->;
+		 
+	</select>
 </mapper>

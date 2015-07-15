@@ -45,7 +45,8 @@ public class UserInsertController extends BaseController {
         throws ServletException, IOException {
         
         // if the user is rejected, the redirect is sent in the require permission method.
-        if (this.requirePermission(request, response, "createUser")) {
+        if (!this.userHasPermission(request, "createUser")) {
+            this.denyPermission(request, response);
             return;
         }
         
@@ -71,7 +72,8 @@ public class UserInsertController extends BaseController {
         throws ServletException, IOException {
         
         // check for the create user permission
-        if (this.requirePermission(request, response, "createUser")) {
+        if (!this.userHasPermission(request, "createUser")) {
+            this.denyPermission(request, response);
             return;
         }
         

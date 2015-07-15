@@ -33,30 +33,35 @@
 <script
 	src='https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js'
 	type="text/javascript"></script>
-<script src="http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.latest.js"
-        type="text/javascript" charset="UTF-8"> </script>
+<script
+	src="http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.latest.js"
+	type="text/javascript" charset="UTF-8">
+	
+</script>
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
 </head>
 
 <script>
-function printBarcode() {
-	var text = document.getElementById("barcode").value;
-	text=text.substring(0,text.length-1)
-	try{
-		var labelXml = '<?xml version="1.0" encoding="utf-8"?> <DieCutLabel Version="8.0" Units="twips"> <PaperOrientation>Landscape</PaperOrientation> <Id>Address</Id> <PaperName>30252 Address</PaperName> <DrawCommands> <RoundRectangle X="0" Y="0" Width="1581" Height="5040" Rx="270" Ry="270"/> </DrawCommands> <ObjectInfo> <BarcodeObject> <Name>BARCODE</Name> <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/> <BackColor Alpha="255" Red="255" Green="255" Blue="255"/> <LinkedObjectName></LinkedObjectName> <Rotation>Rotation0</Rotation> <IsMirrored>False</IsMirrored> <IsVariable>False</IsVariable> <Text>'+text+'</Text> <Type>Ean13</Type> <Size>Small</Size> <TextPosition>Bottom</TextPosition> <TextFont Family=".Helvetica Neue DeskInterface" Size="10" Bold="False" Italic="False" Underline="False" Strikeout="False"/> <CheckSumFont Family=".Helvetica Neue DeskInterface" Size="10" Bold="False" Italic="False" Underline="False" Strikeout="False"/> <TextEmbedding>None</TextEmbedding> <ECLevel>0</ECLevel> <HorizontalAlignment>Center</HorizontalAlignment> <QuietZonesPadding Left="0" Right="0" Top="0" Bottom="0"/> </BarcodeObject> <Bounds X="331.2" Y="57.59995" Width="1796.513" Height="600"/> </ObjectInfo> </DieCutLabel>';
-		var label = dymo.label.framework.openLabelXml(labelXml);
-		var printers = dymo.label.framework.getPrinters();
-		if (printers.length==0){
-			document.getElementById("noPrinters").style.display="";
+	function printBarcode() {
+		var text = "${barcode}";
+		text = text.substring(0, text.length - 1)
+		try {
+			var labelXml = '<?xml version="1.0" encoding="utf-8"?> <DieCutLabel Version="8.0" Units="twips"> <PaperOrientation>Landscape</PaperOrientation> <Id>Address</Id> <PaperName>30252 Address</PaperName> <DrawCommands> <RoundRectangle X="0" Y="0" Width="1581" Height="5040" Rx="270" Ry="270"/> </DrawCommands> <ObjectInfo> <BarcodeObject> <Name>BARCODE</Name> <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/> <BackColor Alpha="255" Red="255" Green="255" Blue="255"/> <LinkedObjectName></LinkedObjectName> <Rotation>Rotation0</Rotation> <IsMirrored>False</IsMirrored> <IsVariable>False</IsVariable> <Text>'
+					+ text
+					+ '</Text> <Type>Ean13</Type> <Size>Small</Size> <TextPosition>Bottom</TextPosition> <TextFont Family=".Helvetica Neue DeskInterface" Size="10" Bold="False" Italic="False" Underline="False" Strikeout="False"/> <CheckSumFont Family=".Helvetica Neue DeskInterface" Size="10" Bold="False" Italic="False" Underline="False" Strikeout="False"/> <TextEmbedding>None</TextEmbedding> <ECLevel>0</ECLevel> <HorizontalAlignment>Center</HorizontalAlignment> <QuietZonesPadding Left="0" Right="0" Top="0" Bottom="0"/> </BarcodeObject> <Bounds X="331.2" Y="57.59995" Width="1796.513" Height="600"/> </ObjectInfo> </DieCutLabel>';
+			var label = dymo.label.framework.openLabelXml(labelXml);
+			var printers = dymo.label.framework.getPrinters();
+			if (printers.length == 0) {
+				document.getElementById("noPrinters").style.display = "";
+			}
+			var printer = printers[0];
+			var printerName = printer.name;
+			label.print(printerName);
+		} catch (err) {
+			document.getElementById("warning").style.display = "";
 		}
-		var printer = printers[0];
-		var printerName = printer.name;
-		label.print(printerName);
-	} catch (err) {
-		document.getElementById("warning").style.display="";
 	}
-}
 </script>
 
 <body>
@@ -65,7 +70,8 @@ function printBarcode() {
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
+
+
 
 				<div class="main">
 					<div class="boom">
@@ -73,6 +79,12 @@ function printBarcode() {
 					</div>
 					<br>
 					<div class="container-fluid">
+
+						<!-- Include the success/delete/error messages -->
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
+						<jsp:include page="/WEB-INF/flows/hardware/deleteConfirm.jsp" />
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+
 						<div class="row no-margin">
 
 
@@ -86,13 +98,15 @@ function printBarcode() {
 								<img
 									src="${contextPath}/getBarcodeImage?key=${hardware.getKey()}&table=2"
 									class="img img-responsive"><br>
-								<button onclick="printBarcode()" style="margin-left:40%" class="btn btn-success">Print</button>
-								<br><br>
-								<div id="noPrinters" class="text-center" style="display:none">
-									No valid DYMO printers were found.
-								</div>
-								<div id="warning" class="text-center" style="display:none">
-									If you are experiencing difficulties printing, please visit this <a href="${contextPath}/printerInstructions.jsp">link</a>.
+								<button onclick="printBarcode()" style="margin-left: 40%"
+									class="btn btn-success">Print</button>
+								<br>
+								<br>
+								<div id="noPrinters" class="text-center" style="display: none">
+									No valid DYMO printers were found.</div>
+								<div id="warning" class="text-center" style="display: none">
+									If you are experiencing difficulties printing, please visit
+									this <a href="${contextPath}/printerInstructions.jsp">link</a>.
 								</div>
 							</div>
 							<div class="col-md-8">
@@ -165,7 +179,7 @@ function printBarcode() {
 											<b>Cost</b>
 										</div>
 										<div class="col-md-8">
-											<p><%= String.format("%.2f", hardware.getCost()) %></p>
+											<p><%=String.format("%.2f", hardware.getCost())%></p>
 										</div>
 									</li>
 									<li class="list-group-item row">
@@ -183,39 +197,36 @@ function printBarcode() {
 											</div>
 											<div class="col-md-8">
 												<p>
-													<c:out value="${barcode}"/>
+													<c:out value="${barcode}" />
 												</p>
-												<input type="hidden" value="${barcode}" id="barcode"/>
 											</div>
 										</li>
 									</c:if>
 								</ul>
 							</div>
-
 						</div>
 						<div class="row">
 							<div class="col-md-12">
-								<form class="form-horizontal pull-right" action="view"
-									method="post">
-									<%-- <c:if test="${userInfo.hasPermission.deleteHardware}"> --%>
-									<input type="hidden" id="key" name="key"
-										value="<%=hardware.getKey()%>">
-									<button type="submit" class="btn btn-danger">Delete</button>
-									<%-- </c:if> --%>
+								<form class="form-horizontal pull-right"
+									action="${contextPath}/hardware/view" method="get">
+									<c:if test="${userInfo.hasPermission.updateHardware}">
+										<a class="btn btn-default"
+											href="edit?key=<%=hardware.getKey()%>" role="button">Edit</a>
+									</c:if>
 
-									<%-- <c:if test="${userInfo.hasPermission.updateHardware}"> --%>
-									<a class="btn btn-warning"
-										href="edit?key=<%=hardware.getKey()%>" role="button">Edit</a>
-									<%-- </c:if> --%>
+									<c:if test="${userInfo.hasPermission.deleteHardware}">
+										<input type="hidden" id="key" name="key"
+											value="<%=hardware.getKey()%>">
+										<input type="hidden" id="delete" name="delete" value="true">
+										<button type="submit" class="btn btn-danger">Delete</button>
+									</c:if>
 								</form>
-
-								<%
-								    }
-								%>
-
-								<jsp:include page="/WEB-INF/includes/events.jsp" />
 							</div>
 						</div>
+						<jsp:include page="/WEB-INF/includes/events.jsp" />
+						<%
+						    }
+						%>
 					</div>
 				</div>
 			</div>

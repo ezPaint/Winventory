@@ -45,6 +45,26 @@ public class TestEventDao {
 
             compareRecords( event, readRecord );
 
+            List<Event> list1= eventDao.getListByCreatorId( event.getCreatorId() ) ; 
+            assertEquals( 1, list1.size() );
+            compareRecords( event, list1.get( 0 ) );
+
+            List<Event> list2= eventDao.getListByUserId( event.getUserId() ) ; 
+            assertEquals( 1, list2.size() );
+            compareRecords( event, list2.get( 0 ) );
+
+            List<Event> list3= eventDao.getListByHardwareId( event.getHardwareId() ) ; 
+            assertEquals( 1, list3.size() );
+            compareRecords( event, list3.get( 0 ) );
+
+            List<Event> list4= eventDao.getListBySoftwareId( event.getSoftwareId() ) ; 
+            assertEquals( 1, list4.size() );
+            compareRecords( event, list4.get( 0 ) );
+
+            List<Event> list5= eventDao.getListByLocationId( event.getLocationId() ) ; 
+            assertEquals( 1, list5.size() );
+            compareRecords( event, list5.get( 0 ) );
+
             modifyRecord( event );
             count = eventDao.update( event );
             assertEquals( 1, count );
@@ -74,6 +94,11 @@ public class TestEventDao {
         event.setDateCreated( new Date() );
         event.setDescription( randomString( "description", 2000 ) );
         event.setCategory( randomString( "category", 50 ) );
+        event.setCreatorId( (long) 0 );
+        event.setUserId( (long) 0 );
+        event.setHardwareId( (long) 0 );
+        event.setSoftwareId( (long) 0 );
+        event.setLocationId( (long) 0 );
 
         return event;
     }
@@ -83,6 +108,11 @@ public class TestEventDao {
         assertNotSame( event.getDateCreated(), readRecord.getDateCreated() );
         assertEquals( event.getDescription(), readRecord.getDescription() );
         assertEquals( event.getCategory(), readRecord.getCategory() );
+        assertEquals( event.getCreatorId(), readRecord.getCreatorId() );
+        assertEquals( event.getUserId(), readRecord.getUserId() );
+        assertEquals( event.getHardwareId(), readRecord.getHardwareId() );
+        assertEquals( event.getSoftwareId(), readRecord.getSoftwareId() );
+        assertEquals( event.getLocationId(), readRecord.getLocationId() );
 
     }
 
@@ -91,6 +121,11 @@ public class TestEventDao {
         event.setDateCreated( new Date() );
         event.setDescription( randomString( "description", 2000 ) );
         event.setCategory( randomString( "category", 50 ) );
+        event.setCreatorId( (long) 0 );
+        event.setUserId( (long) 0 );
+        event.setHardwareId( (long) 0 );
+        event.setSoftwareId( (long) 0 );
+        event.setLocationId( (long) 0 );
 
     }
 

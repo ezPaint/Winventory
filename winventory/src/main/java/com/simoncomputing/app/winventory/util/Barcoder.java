@@ -8,6 +8,10 @@ import org.krysalis.barcode4j.impl.upcean.EAN13Bean;
 import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import org.krysalis.barcode4j.tools.UnitConv;
 
+import com.simoncomputing.app.winventory.bo.HardwareBo;
+import com.simoncomputing.app.winventory.bo.LocationBo;
+import com.simoncomputing.app.winventory.bo.SoftwareBo;
+import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.domain.*;
 
 /**
@@ -25,6 +29,10 @@ import com.simoncomputing.app.winventory.domain.*;
 public final class Barcoder {
 	
 	static Logger logger = Logger.getLogger(Barcoder.class);
+	static UserBo ub = UserBo.getInstance();
+	static LocationBo lb = LocationBo.getInstance();
+	static HardwareBo hb = HardwareBo.getInstance();
+	static SoftwareBo sb = SoftwareBo.getInstance();
 	/**
 	 * Getbarcode is an overloaded method that takes 1 of 4 different objects that require 
 	 * barcodes. Then due to the overloading, it will carry out the proper steps to build 
@@ -39,6 +47,8 @@ public final class Barcoder {
 	 * @return a 13 digit string representing the barcode with the right checksum 
 	 */
 	public static String getBarcode(User user) {
+		if(user == null || user.getKey() == null) return null;
+		
 		// prefix representing users added to start the string 
 		String result = "001";	
 		// take the key and pad it with 0s to fill the 9 digits needed 
@@ -56,6 +66,8 @@ public final class Barcoder {
 	 * @return a string result of the correct barcode 
 	 */
 	public static String getBarcode(Hardware hardware) {
+		if(hardware == null || hardware.getKey() == null) return null;
+		
 		String result = "002";
 		result = result + padZeroes(hardware.getKey().toString());
 		result = result + buildCheckSum(result);
@@ -69,6 +81,8 @@ public final class Barcoder {
 	 * @return a string result of the correct barcode 
 	 */
 	public static String getBarcode(Software software) {
+		if(software == null || software.getKey() == null) return null;
+		
 		String result = "003";
 		result = result + padZeroes(software.getKey().toString());
 		result = result + buildCheckSum(result);
@@ -82,6 +96,8 @@ public final class Barcoder {
 	 * @return a string result of the correct barcode 
 	 */
 	public static String getBarcode(Location location) {
+		if(location == null || location.getKey() == null) return null;
+		
 		String result = "004";
 		result = result + padZeroes(location.getKey().toString());
 		result = result + buildCheckSum(result);
@@ -184,4 +200,159 @@ public final class Barcoder {
 		return canvas.getBufferedImage();
 	}
 	
+	/**
+	 * get the object represented by the barcode
+	 * @param barcode the barcode representing an object
+	 * @return the Object; null if not in database
+	 */
+	
+	public static Object getObject(String barcode){
+		if (!isNumeric(barcode))
+			return null;
+		long pk = -1;	// store invalid pk before initialized
+		String tableIdentifier = "-1";	// store invalid  table identifier before initialized
+		try{
+			tableIdentifier = parseTableIdentifier(barcode);	// get actual table identifier
+			pk = parsePk(barcode);	// get actual pk
+		}
+		catch (NumberFormatException nfe) {
+			logger.error("Could not get a pk from " + barcode);
+		}
+		try{
+			switch(tableIdentifier){	// switch based on table identifier
+			case "1":	// a User barcode
+				logger.trace("returning user with pk " + pk);
+				return ub.read(pk);
+			case "2":	// a Hardware barcode
+				logger.trace("returning hardware with pk " + pk);
+				return hb.read(pk);
+			case "3":
+				logger.trace("returning software with pk " + pk);
+				return sb.read(pk);
+			case "4":	// if a Location barcode
+				logger.trace("returning location with pk " + pk);
+				return lb.read(pk);
+			default:	// invalid input
+				return null;
+			}
+		} catch (BoException be) {
+			logger.error("Could not get an object from table id:" + tableIdentifier + " with pk " + pk);
+			return null;
+		}
+	}
+	
+    /**
+     * get the table identifier from a barcode
+     * @param str the barcode
+     * @return the table identifier references
+     */
+    
+    private static String parseTableIdentifier(String str){
+    	if (str.length() < 3 || !isNumeric(str.substring(0, 3))){
+    		logger.debug("Attempted to parse table identifier from " + str);
+    		return "";
+    	}
+    	if(str.length()==12){
+    		str="0"+str;
+    	}
+    	String ret = str.substring(0,3);
+    	ret = removePaddingZeroes(ret);
+    	logger.trace("Parsed table identifier for " + str + " is " + ret);
+    	return ret;
+    }
+    
+    /**
+     * return true if the input is numeric
+     * @param str the input to be tested
+     * @return true if the input is numeric
+     */
+    
+    private static boolean isNumeric(String str)
+    {
+    	try
+    	{
+    		@SuppressWarnings("unused")
+			double d = Double.parseDouble(str);
+    	}
+    	catch(NumberFormatException nfe)
+    	{
+    		return false;
+    	}
+    	return true;
+    }
+    
+    /**
+     * remove padding zeroes from a String
+     * @param str the input to be modified
+     * @return the String without padding zeroes
+     */
+    
+    private static String removePaddingZeroes(String str){
+    	String ret = str;
+    	for (int x = 0; x < ret.length(); x++) {
+    		if (ret.charAt(x)!='0'){
+    			ret = ret.substring(x);
+    			break;
+    		}
+    	}
+    	return ret;
+    }
+    
+    /**
+     * parse a pk from a String
+     * @param str the String to be parsed
+     * @return the pk as a Long
+     */
+    
+    private static Long parsePk(String str){
+    	if (str.length() < 12 || str.length() > 13 || !isNumeric(str)){
+    		logger.debug("Attempted to parse pk from " + str);
+    		return (long) -1;
+    	}
+    	if (str.length()==12){
+    		str = "0"+str;
+    	}
+    	String ret = str.substring(3,str.length()-1);
+    	ret = removePaddingZeroes(ret);
+    	logger.trace("Parsed pk for " + str + " is " + ret);
+    	return Long.parseLong(ret);
+    }
+    
+    /**
+     * return the appropriate error message for input
+     * @return the appropriate error message for input; null if no error
+     */
+    
+    public static String barcodeErrorMessage(String barcode){
+    	if (!(barcode.length()==12 || barcode.length()==13)){
+    		return "Barcode is wrong length; must be 12 or 13 characters.";
+    	}
+    	String tabId = parseTableIdentifier(barcode);
+    	logger.trace("tabId parsed when checking errors is" + tabId);
+    	if (tabId.equals("")){
+    		return "Barcode does not contain a valid table identifier.";
+    	}
+    	Long pk = parsePk(barcode);
+    	try{
+	    	switch(tabId){
+	    	case "1":
+	    		if (ub.read(pk)==null)
+	    			return "Barcode references an invalid User.";
+	    		break;
+	    	case "2":
+	    		if (hb.read(pk)==null)
+	    			return "Barcode references an invalid Hardware.";
+	    		break;
+	    	case "4":
+	    		if (lb.read(pk)==null)
+	    			return "Barcode references an invalid Location.";
+	    		break;
+	    	default:
+	    		return "Barcode does not reference a valid table.";
+	    	}
+    	} catch (BoException be){
+    		return "Barcode references an invalid object.";
+    	}
+    	return null;
+    }
 }

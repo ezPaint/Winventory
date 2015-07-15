@@ -1,9 +1,14 @@
 /* style.css */
 /* Make sure to include this after the bootstrap.css, typeahead.css, etc. include lines
 as this stylesheet overrides some of their styles */
-
 body {
 	background-image: url(../images/greyzz.png);
+}
+
+.btn-brown {
+	color: #fff;
+	background-color: rgb(199, 140, 98);
+	border-color: rgb(199, 140, 98);
 }
 
 .extra-box {
@@ -23,7 +28,7 @@ body {
 }
 
 .padme {
-    min-height: 300px;
+	min-height: 300px;
 	padding: 7px;
 	background-color: #fff;
 }
@@ -58,61 +63,59 @@ body {
 }
 
 .account-wall {
-    margin-top: 40px;
-    margin-bottom: 60px;
-    padding: 5px 20px 40px 20px;
-    background-color: #fcfcfc;
-    -moz-box-shadow: 0px 3px 9px 3px rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: 0px 3px 9px 3px rgba(0, 0, 0, 0.3);
-    box-shadow: 0px 3px 9px 3px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
+	margin-top: 40px;
+	margin-bottom: 60px;
+	padding: 5px 20px 40px 20px;
+	background-color: #fcfcfc;
+	-moz-box-shadow: 0px 3px 9px 3px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0px 3px 9px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 3px 9px 3px rgba(0, 0, 0, 0.3);
+	border-radius: 8px;
 }
 
-.profile-img
-{
-    width:  98px;
-    height: 98px;
-    margin: 20px auto 20px;
-    display: block;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-    background-color: #ebebeb;
+.profile-img {
+	width: 98px;
+	height: 98px;
+	margin: 20px auto 20px;
+	display: block;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	background-color: #ebebeb;
 }
 
-.profile-img-big
-{
-    width:  144px;
-    height: 144px;
-    margin: 40px;
-    display: block;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
-    border-radius: 50%;
-    background-color: #ebebeb;
+.profile-img-big {
+	width: 144px;
+	height: 144px;
+	margin: 40px;
+	display: block;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	background-color: #ebebeb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+	position: relative;
+	min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 50px;
-  padding-bottom: 50px;
+	/* Margin bottom by footer height */
+	margin-bottom: 50px;
+	padding-bottom: 50px;
 }
 
 .footer {
-  font-size: 18px;
-  padding-top: 12px;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 50px;
-  background-color: #d6e4f0;
-    color: #0f0f0f;
+	font-size: 18px;
+	padding-top: 12px;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 50px;
+	background-color: #d6e4f0;
+	color: #0f0f0f;
 }
 
 .login-title {
@@ -120,31 +123,30 @@ body {
 	color: #0f0f0f;
 }
 
-.form-login .form-control
-{
-    position: relative;
-    font-size: 14px;
-    height: auto;
-    padding: 10px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+.form-login .form-control {
+	position: relative;
+	font-size: 14px;
+	height: auto;
+	padding: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
-.form-login .form-control:focus
-{
-    z-index: 2;
+
+.form-login .form-control:focus {
+	z-index: 2;
 }
-.form-login input[type="text"]
-{
-    margin-bottom: -1px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+
+.form-login input[type="text"] {
+	margin-bottom: -1px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
 }
-.form-login input[type="password"]
-{
-    margin-bottom: 10px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+
+.form-login input[type="password"] {
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 
 .form-login .checkbox {
@@ -161,78 +163,133 @@ body {
 	border-color: #cccccc;
 }
 
- /*  Loader visual effect (when table is loading)  */
-
+/*  Loader visual effect (when table is loading)  */
 #loader {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 30px;
-  height: 120px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-flow: column nowrap;
-      -ms-flex-flow: column nowrap;
-          flex-flow: column nowrap;
-  -webkit-transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 30px;
+	height: 120px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-flow: column nowrap;
+	-ms-flex-flow: column nowrap;
+	flex-flow: column nowrap;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
 }
+
 #loader .diamond {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 0 auto;
-  width: 30px;
-  height: 30px;
-  border-radius: 2px;
-  background: #1C78C5;
-  -webkit-transform: translateY(0) rotate(45deg) scale(0);
-      -ms-transform: translateY(0) rotate(45deg) scale(0);
-          transform: translateY(0) rotate(45deg) scale(0);
-  -webkit-animation: diamonds 1500ms linear infinite;
-          animation: diamonds 1500ms linear infinite;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: 0 auto;
+	width: 30px;
+	height: 30px;
+	border-radius: 2px;
+	background: #1C78C5;
+	-webkit-transform: translateY(0) rotate(45deg) scale(0);
+	-ms-transform: translateY(0) rotate(45deg) scale(0);
+	transform: translateY(0) rotate(45deg) scale(0);
+	-webkit-animation: diamonds 1500ms linear infinite;
+	animation: diamonds 1500ms linear infinite;
 }
+
 #loader .diamond:nth-child(1) {
-  -webkit-animation-delay: -1000ms;
-          animation-delay: -1000ms;
+	-webkit-animation-delay: -1000ms;
+	animation-delay: -1000ms;
 }
+
 #loader .diamond:nth-child(2) {
-  -webkit-animation-delay: -2000ms;
-          animation-delay: -2000ms;
+	-webkit-animation-delay: -2000ms;
+	animation-delay: -2000ms;
 }
+
 #loader .diamond:nth-child(3) {
-  -webkit-animation-delay: -3000ms;
-          animation-delay: -3000ms;
+	-webkit-animation-delay: -3000ms;
+	animation-delay: -3000ms;
 }
+
 #loader .diamond:nth-child(4) {
-  -webkit-animation-delay: -4000ms;
-          animation-delay: -4000ms;
+	-webkit-animation-delay: -4000ms;
+	animation-delay: -4000ms;
 }
 
-@-webkit-keyframes diamonds {
-  50% {
-    -webkit-transform: translateY(-50px) rotate(45deg) scale(1);
-            transform: translateY(-50px) rotate(45deg) scale(1);
-  }
-  100% {
-    -webkit-transform: translateY(-100px) rotate(45deg) scale(0);
-            transform: translateY(-100px) rotate(45deg) scale(0);
-  }
+@
+-webkit-keyframes diamonds { 50% {
+	-webkit-transform: translateY(-50px) rotate(45deg) scale(1);
+	transform: translateY(-50px) rotate(45deg) scale(1);
 }
 
-@keyframes diamonds {
-  50% {
-    -webkit-transform: translateY(-50px) rotate(45deg) scale(1);
-            transform: translateY(-50px) rotate(45deg) scale(1);
-  }
-  100% {
-    -webkit-transform: translateY(-100px) rotate(45deg) scale(0);
-            transform: translateY(-100px) rotate(45deg) scale(0);
-  }
+100%
+{
+-webkit-transform
+:
+ 
+translateY
+(-100px)
+ 
+rotate
+(45deg)
+ 
+scale
+(0);
+
+            
+transform
+:
+ 
+translateY
+(-100px)
+ 
+rotate
+(45deg)
+ 
+scale
+(0);
+
+  
+}
+}
+@
+keyframes diamonds { 50% {
+	-webkit-transform: translateY(-50px) rotate(45deg) scale(1);
+	transform: translateY(-50px) rotate(45deg) scale(1);
+}
+
+100%
+{
+-webkit-transform
+:
+ 
+translateY
+(-100px)
+ 
+rotate
+(45deg)
+ 
+scale
+(0);
+
+            
+transform
+:
+ 
+translateY
+(-100px)
+ 
+rotate
+(45deg)
+ 
+scale
+(0);
+
+  
+}
 }
 
 /* END LOADER */
@@ -248,90 +305,84 @@ body {
 	font-size: 18px !important;
 	height: 38px;
 } */
-
 .twitter-typeahead {
 	width: 100%;
 }
 
 .tt-query {
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
 .tt-hint {
-  color: #999;
+	color: #999;
 }
 
 .tt-menu {
-  height: 202px;
-  overflow-y: auto;
-  width: 100%; 
-  margin: 0;
-  padding: 4px 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  text-align: left;
-  -webkit-border-radius: 8px;
-     -moz-border-radius: 8px;
-          border-radius: 8px;
-  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	height: 202px;
+	overflow-y: auto;
+	width: 100%;
+	margin: 0;
+	padding: 4px 0;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	text-align: left;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+	box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
 }
-
-
 
 .tt-suggestion {
-  padding: 3px 10px;
-  font-size: 16px;
-  line-height: 24px;
+	padding: 3px 10px;
+	font-size: 16px;
+	line-height: 24px;
 }
 
-.tt-suggestion:hover, .tt-suggestion.tt-cursor{
-  cursor: pointer;
-  /* color: #fff; */
-  background-color: #f4e5d9;
+.tt-suggestion:hover, .tt-suggestion.tt-cursor {
+	cursor: pointer;
+	/* color: #fff; */
+	background-color: #f4e5d9;
 }
 
 .tt-suggestion p {
-  margin: 0;
+	margin: 0;
 }
 
 /* End Typeahead */
-
 
 /* .table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {
    background-color: #fefefe;
  } */
- 
+
 /*  .table-striped>tbody>tr:nth-child(even)>td, 
 .table-striped>tbody>tr:nth-child(even)>th {
    background-color: #f7f7f7;
  } */
- 
- .user-hardware-title {
- 	text-align: center;
- }
- 
- .user-hardware-message {
- 	text-align: center;
- 	margin-top: 25px;
- 	margin-bottom: 25px;
- 	font-size: 15px;
- }
- 
- /* designed for an h3 */
- .error-header {
- 	margin-top: 20px;
- 	margin-bottom: 30px;
- }
- 
- /* designed for a <p> element */
- .error-msg {
- 	padding-left: 40px;
- 	padding-bottom: 10px;
- }
- 
+.user-hardware-title {
+	text-align: center;
+}
+
+.user-hardware-message {
+	text-align: center;
+	margin-top: 25px;
+	margin-bottom: 25px;
+	font-size: 15px;
+}
+
+/* designed for an h3 */
+.error-header {
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+
+/* designed for a <p> element */
+.error-msg {
+	padding-left: 40px;
+	padding-bottom: 10px;
+}

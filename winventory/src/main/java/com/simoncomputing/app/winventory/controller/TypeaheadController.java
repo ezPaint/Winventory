@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 
 import com.simoncomputing.app.winventory.bo.HardwareBo;
+import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -39,7 +40,7 @@ public class TypeaheadController extends HttpServlet {
         response.setContentType("application/json");
         PrintWriter writer = response.getWriter();
 	    
-        // if url looks like typeahead?data=hardwareTypes
+        // data == hardware types
 		if (request.getParameter("data").equals("hardwareTypes")) {
 		    
 		    HardwareBo hardwareBo = HardwareBo.getInstance();
@@ -50,7 +51,7 @@ public class TypeaheadController extends HttpServlet {
 		        hardwareTypes = (ArrayList<String>) hardwareBo.getTopTypes(100);
 		        
 		    } catch (BoException e) {
-		        
+		        // typeahead won't work if this is reached
 		        return;
 		        
 		    }
@@ -58,6 +59,26 @@ public class TypeaheadController extends HttpServlet {
 		    // write the json array to the response body
 		    JSONArray typesJson = new JSONArray(hardwareTypes);
 		    writer.println(typesJson.toString());
+		    
+		}
+		
+		// data == usernames
+		if (request.getParameter("data").equals("usernames")) {
+		    
+		    UserBo userBo = UserBo.getInstance();
+		    ArrayList<String> usernames = new ArrayList<String>();
+		    
+		    try {
+		        // get 1000 usernames from the db
+		        usernames = (ArrayList<String>) userBo.getAllUsernames(1000);
+		    } catch (BoException e) {
+		        // if this is the case, then typeahead wont work
+		        return;
+		    }
+		    
+		    // write the json array to the response body
+            JSONArray usernamesJson = new JSONArray(usernames);
+            writer.println(usernamesJson.toString());
 		    
 		}
 		return;

@@ -54,11 +54,15 @@
 							data-toggle="validator" role="form" method="post">				
 							
 							<div class="form-group">
-								<label for="addressName" class="col-sm-2 control-label">Address Name
+								<label for="name" class="col-sm-2 control-label">Address Name
 								</label>
 								<div class="col-sm-9">
-									<input name="addressName" type="text" id="addressName" pattern="^[^\'\&quot]*$"
-										class="form-control" placeholder="Main Office" required>
+									<input name="name" type="text" id="name" pattern="^[^\'\&quot]*$"
+										class="form-control" placeholder="Main Office"
+										<%if(request.getParameterMap().containsKey("name")) {%>
+										value="<%=request.getAttribute("name")%>" 
+										<%}%>
+										required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -70,7 +74,11 @@
 								</label>
 								<div class="col-sm-9">
 									<input name="street1" type="text" id="street1" pattern="^[^\'\&quot]*$"
-										class="form-control" placeholder="123 Main St" required>
+										class="form-control" placeholder="123 Main St" 
+										<%if(request.getParameterMap().containsKey("street1")) {%>
+										value="<%=request.getAttribute("street1")%>" 
+										<%}%>
+										required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -82,7 +90,10 @@
 								</label>
 								<div class="col-sm-9">
 									<input name="street2" type="text" id="street2"
-										class="form-control" placeholder="Apt # 101">
+										class="form-control" placeholder="Apt # 101"
+										<%if(request.getParameterMap().containsKey("street2")) {%>
+										value="<%=request.getAttribute("street2")%>" 
+										<%}%>>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -94,7 +105,11 @@
 								</label>
 								<div class="col-sm-9">
 									<input name="city" type="text" id="city" pattern="^[^\'\&quot]*$"
-										class="form-control" placeholder="Anytown" required>
+										class="form-control" placeholder="Anytown" 
+										<%if(request.getParameterMap().containsKey("city")) {%>
+										value="<%=request.getAttribute("city")%>" 
+										<%}%>
+										required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -106,7 +121,8 @@
 								<label for="state" class="col-sm-2 control-label">State
 								</label>
 								<div class="col-sm-9">
-									<select name="state" class="form-control" required>
+									<select id = "state" name="state" class="form-control" required>
+									
 										<option value="AL">Alabama</option>
 										<option value="AK">Alaska</option>
 										<option value="AZ">Arizona</option>
@@ -164,14 +180,18 @@
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
-				
+    
 							<div class="form-group">
 								<label for="zipcode" class="col-sm-2 control-label">Zip Code
 								</label>
 								<div class="col-sm-9">
 									<input name="zipcode" type="text" id="zipcode" pattern="^\d{5}(?:[-\s]\d{4})?$" 
 									data-error="Please enter a valid zip code."
-										class="form-control" placeholder="12345" required>
+										class="form-control" placeholder="12345" 
+										<%if(request.getParameterMap().containsKey("zipcode")) {%>
+										value="<%=request.getAttribute("zipcode")%>" 
+										<%}%>
+										required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -198,6 +218,12 @@
 	</div>
 
 	<jsp:include page="/WEB-INF/includes/footer.jsp" />
+	
+	<script>
+		<%if(request.getParameterMap().containsKey("state")) {%>
+		document.getElementById('state').value = '<%=request.getAttribute("state")%>';
+		<%}%>
+	</script>
 
 </body>
 </html>

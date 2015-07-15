@@ -87,7 +87,7 @@
 									        for (int i = 0; i < results.size(); i++) {
 									%>
 									<tr>
-										<td><a href="view-location?key=<%=results.get(i).getKey()%>">
+										<td><a href="view-location?key=<%=results.get(i).getKey()%>"class="btn btn-primary">
 												<%=results.get(i).getKey()%></a></td>
 										<td><%=results.get(i).getDescription()%></td>
 										<td><%=results.get(i).getIsActive()%></td>

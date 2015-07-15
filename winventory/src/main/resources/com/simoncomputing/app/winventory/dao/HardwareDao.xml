@@ -13,6 +13,7 @@
         <result column ="LOCATION_ID"         property = "locationId" />
         <result column ="USER_ID"             property = "userId" />
         <result column ="PURCHASE_DATE"       property = "purchaseDate" />
+        <result column ="IS_ACTIVE"           property = "isActive" />
     </resultMap>
 
     <select id="read" parameterType="map" resultMap="HardwareMapper">
@@ -27,12 +28,12 @@
         insert into HARDWARE
         (
             KEY , TYPE , DESCRIPTION , COST , SERIAL_NO , 
-            CONDITION , LOCATION_ID , USER_ID , PURCHASE_DATE
+            CONDITION , LOCATION_ID , USER_ID , PURCHASE_DATE , IS_ACTIVE
         )
         values
         (
             #{key} , #{type} , #{description} , #{cost} , #{serialNo} , 
-            #{condition} , #{locationId} , #{userId} , #{purchaseDate}
+            #{condition} , #{locationId} , #{userId} , #{purchaseDate} , #{isActive}
         )
     </insert>
 
@@ -56,7 +57,8 @@
             CONDITION                           = #{condition} ,
             LOCATION_ID                         = #{locationId} ,
             USER_ID                             = #{userId} ,
-            PURCHASE_DATE                       = #{purchaseDate}
+            PURCHASE_DATE                       = #{purchaseDate} ,
+            IS_ACTIVE                           = #{isActive}
         where KEY = #{key}
     </update>
 
@@ -89,15 +91,30 @@
 		SELECT *
 		FROM HARDWARE
 		WHERE
-		<foreach item="column" index="i" collection="columns" open="("
-			separator="AND" close=")">
 
-			<foreach item="search" index="s" collection="searches.get(i)"
-				open="(" separator="OR" close=")">
-				UPPER(${column}) LIKE '%${search}%'
+		1=1
+
+		<if test="columns.size() > 0">
+			AND
+			<foreach item="column" index="i" collection="columns" open="("
+				separator="AND" close=")">
+
+				<foreach item="search" index="s" collection="searches.get(i)"
+					open="(" separator="OR" close=")">
+					UPPER(${column}) LIKE '%${search}%'
+				</foreach>
+
 			</foreach>
 
-		</foreach>
+		</if>
+
+		<if test="cost">
+			AND (COST BETWEEN ${minCost} AND ${maxCost})
+		</if>
+
+		<if test="date">
+			AND (PURCHASE_DATE BETWEEN #{startDate} AND #{endDate})
+		</if>
 
 		<if test="stored">
 			AND (user_id IS NULL)

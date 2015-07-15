@@ -45,6 +45,19 @@
 					</div>
 					<br>
 					<div class="padme">
+					
+					<c:if test="${not empty errors}">
+                    	<div class="alert alert-danger" role="alert">
+                    		<h3 class="error-header">Could not edit address:</h3>
+  							<span class="sr-only">Errors:</span>
+  							<c:forEach items="${errors}" var="error">
+  								<p class="error-msg">
+  									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  									${error}
+  								</p>
+  							</c:forEach>
+						</div>
+                    </c:if>
 
 						<%@ page
 							import="com.simoncomputing.app.winventory.domain.Address"%>
@@ -182,14 +195,14 @@
 							</div>
 							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2">
-									<button type="submit" class="btn btn-success">Submit
+									<button type="submit" class="btn btn-primary">Submit
 										Changes</button>
-									<button type="reset" class="btn btn-warning"
+									<button type="reset" class="btn btn-default"
 										onClick="reloadConditions(); return false;">Reset
 										Values</button>
 									<a
 										href="${contextPath}/location/view-address?key=<%=address.getKey()%>"
-										class="btn btn-danger">Cancel</a>
+										class="btn btn-default">Cancel</a>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

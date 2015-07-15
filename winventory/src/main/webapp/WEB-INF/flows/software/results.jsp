@@ -53,9 +53,17 @@
             <div class="col-md-8">
                 <div class="main">
                     <div class="boom">
-                        <h2 class="center">Applications</h2>
+
+						
+
+						<h2 class="center">Applications</h2>
                     </div>
                     <div class="padme">
+                    
+                    	<!-- include confirmation/error messages -->
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
+                    
                         <div id='loader'>
                             <div class='diamond'></div>
                             <div class='diamond'></div>
@@ -92,14 +100,14 @@
                                         for (int i = 0; i < results.size(); i++) {
                                 %>
                                 <tr>
-                                    <td><a href="${contextPath}/software/view?key=<%=results.get(i).getKey()%>"> <%=results.get(i).getKey()%></a>
+                                    <td><a href="${contextPath}/software/view?key=<%=results.get(i).getKey()%>" class="btn btn-primary"> <%=results.get(i).getKey()%> </a>
                                     </td>
                                     <td><%=results.get(i).getName()%></td>
                                     <td><%=results.get(i).getSerialNo()%></td>
                                     <td><%=results.get(i).getDescription()%></td>
                                     <td><%=results.get(i).getVersion()%></td>
                                     <td><%=results.get(i).getLicenseKey()%></td>
-                                    <td><%=results.get(i).getCost()%></td>
+                                    <td><%= String.format("%.2f", results.get(i).getCost()) %></td>
                                     <td><%=results.get(i).getPurchasedDate()%></td>
                                     <td><%=results.get(i).getExpirationDate()%></td>
                                 </tr>
@@ -112,7 +120,6 @@
                         </div>
                     </div>
                 </div>
-                <br> <br> <br> <br>
             </div>
         </div>
     </div>

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.*;
 
@@ -461,7 +462,7 @@ public class SoftwareBo {
             throw new BoException( e );
     	}
     	
-    	return costs;
+    	return returnedResults;
     }
     
     /**
@@ -477,7 +478,7 @@ public class SoftwareBo {
      * @throws BoException 
      */
     public List<Software> searchDateRange(List<Software> results, ArrayList<String> dates) throws BoException {
-        //Holds software objects between date ranges
+        //Holds ALL software objects between date ranges
         List<Software> list = new ArrayList<Software>();
 
         if (dates.get(0).equals("") && dates.get(1).equals("") && dates.get(2).equals("")
@@ -487,6 +488,8 @@ public class SoftwareBo {
 
         List<Software> purchased = new ArrayList<Software>();
         List<Software> expired = new ArrayList<Software>();
+        
+        //Holds software based on search constraints
         List<Software> ret = new ArrayList<Software>();
         
         try {
@@ -511,7 +514,7 @@ public class SoftwareBo {
                 expired = getListByExpirationRange(Date.valueOf(dates.get(2)),
                         Date.valueOf(dates.get(3)));
                 
-                //Calculate the intersection of 'purchased' and 'expired'
+                //Calculates ALL software objects within the dates 'purchased' and 'expired' (intersected together)
                 for (Software p : purchased){
                     for (Software e : expired){
                         if (p.compareDates(e)) {
@@ -522,6 +525,8 @@ public class SoftwareBo {
                 }
             }
             
+            //Narrows down software results in 'list' to include other search constrains (in addition to
+            //the dates)
             for (Software p : results){
                 for (Software e : list){
                     if (p.equals(e)) {

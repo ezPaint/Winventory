@@ -30,20 +30,20 @@
 <script
 	src='https://cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js'
 	type="text/javascript"></script>
+<script src="http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.latest.js"
+	type="text/javascript" charset="UTF-8"> </script>
 <script
 	src='https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js'
 	type="text/javascript"></script>
+<script src="http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.latest.js"
+        type="text/javascript" charset="UTF-8"> </script>
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
 
 <script type="text/javascript">
-	$(document).ready(function() {
-		$('#resultsTable').DataTable();
-	});
-</script>
-<script>
+
 function printBarcode() {
-	var text = document.getElementById("barcode").value;
+	var text = '${barcode}';
 	text=text.substring(0,text.length-1);
 	try{
 		var labelXml = '<?xml version="1.0" encoding="utf-8"?> <DieCutLabel Version="8.0" Units="twips"> <PaperOrientation>Landscape</PaperOrientation> <Id>Address</Id> <PaperName>30252 Address</PaperName> <DrawCommands> <RoundRectangle X="0" Y="0" Width="1581" Height="5040" Rx="270" Ry="270"/> </DrawCommands> <ObjectInfo> <BarcodeObject> <Name>BARCODE</Name> <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/> <BackColor Alpha="255" Red="255" Green="255" Blue="255"/> <LinkedObjectName></LinkedObjectName> <Rotation>Rotation0</Rotation> <IsMirrored>False</IsMirrored> <IsVariable>False</IsVariable> <Text>'+text+'</Text> <Type>Ean13</Type> <Size>Small</Size> <TextPosition>Bottom</TextPosition> <TextFont Family=".Helvetica Neue DeskInterface" Size="10" Bold="False" Italic="False" Underline="False" Strikeout="False"/> <CheckSumFont Family=".Helvetica Neue DeskInterface" Size="10" Bold="False" Italic="False" Underline="False" Strikeout="False"/> <TextEmbedding>None</TextEmbedding> <ECLevel>0</ECLevel> <HorizontalAlignment>Center</HorizontalAlignment> <QuietZonesPadding Left="0" Right="0" Top="0" Bottom="0"/> </BarcodeObject> <Bounds X="331.2" Y="57.59995" Width="1796.513" Height="600"/> </ObjectInfo> </DieCutLabel>';
@@ -77,7 +77,19 @@ function printBarcode() {
 					</div>
 
 					<div class="padme">
-
+					
+					<c:if test="${not empty errors}">
+                    	<div class="alert alert-danger" role="alert">
+                    		<h3 class="error-header">Could not delete location:</h3>
+  							<span class="sr-only">Errors:</span>
+  							<c:forEach items="${errors}" var="error">
+  								<p class="error-msg">
+  									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+  									${error}
+  								</p>
+  							</c:forEach>
+						</div>
+                    </c:if>
 
 						<%
 						    Location location = (Location) request.getAttribute("location");
@@ -90,6 +102,7 @@ function printBarcode() {
 								class="img img-responsive">
 								<br>
 								<button onclick="printBarcode();" style="margin-left:40%" class="btn btn-success">Print</button>
+								<br>
 								<br>
 								<div id="noPrinters" class="text-center" style="display:none">
 									No valid DYMO printers were found.
@@ -149,7 +162,7 @@ function printBarcode() {
 										<b>Barcode</b>
 									</div>
 									<div class="col-md-8">
-										<p><%=Barcoder.getBarcode(location)%></p>
+										<p>${barcode}</p>
 									</div>
 								</li>
 							</ul>

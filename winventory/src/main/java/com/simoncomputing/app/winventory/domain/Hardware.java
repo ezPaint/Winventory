@@ -1,5 +1,4 @@
 package com.simoncomputing.app.winventory.domain;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,95 +15,68 @@ import com.simoncomputing.app.winventory.bo.RoleBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.util.BoException;
 
+
+
 /**
- * The Hardware Table.
- */
+* The Hardware Table.
+*/
 public class Hardware implements Item{
 
-    private Long key;
-    private String type; // LAPTOP, DESKTOP, MONTIOR, etc. Links to
-                         // RefHardwareType
-    private String description;
-    private Double cost;
-    private String serialNo;
-    private String condition; // GOOD, FAIR, NEW, etc. Links to RefCondition
-    private Long locationId;
-    private Long userId;
-    private Date purchaseDate;
+    private Long      key;
+    private String    type;                 //LAPTOP, DESKTOP, MONTIOR, etc. Links to RefHardwareType
+    private String    description;
+    private Double    cost;
+    private String    serialNo;
+    private String    condition;            //GOOD, FAIR, NEW, etc. Links to RefCondition
+    private Long      locationId;
+    private Long      userId;
+    private Date      purchaseDate;
+    private Boolean   isActive;
 
-    public Long getKey() {
-        return key;
-    }
-
-    public void setKey(Long value) {
-        key = value;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String value) {
-        type = value;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String value) {
-        description = value;
-    }
-
-    public Double getCost() {
-        return cost;
-    }
-
-    public void setCost(Double value) {
-        cost = value;
-    }
-
-    public String getSerialNo() {
-        return serialNo;
-    }
-
-    public void setSerialNo(String value) {
-        serialNo = value;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public void setCondition(String value) {
-        condition = value;
-    }
-
-    public Long getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(Long value) {
-        locationId = value;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long value) {
-        userId = value;
-    }
-
-    public Date getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public void setPurchaseDate(Date value) {
-        purchaseDate = value;
-    }
-
+    public Long      getKey() { return key; }
+    public void      setKey( Long value ) { key = value; }
+    public String    getType() { return type; }
+    public void      setType( String value ) { type = value; }
+    public String    getDescription() { return description; }
+    public void      setDescription( String value ) { description = value; }
+    public Double    getCost() { return cost; }
+    public void      setCost( Double value ) { cost = value; }
+    public String    getSerialNo() { return serialNo; }
+    public void      setSerialNo( String value ) { serialNo = value; }
+    public String    getCondition() { return condition; }
+    public void      setCondition( String value ) { condition = value; }
+    public Long      getLocationId() { return locationId; }
+    public void      setLocationId( Long value ) { locationId = value; }
+    public Long      getUserId() { return userId; }
+    public void      setUserId( Long value ) { userId = value; }
+    public Date      getPurchaseDate() { return purchaseDate; }
+    public void      setPurchaseDate( Date value ) { purchaseDate = value; }
+    public Boolean   getIsActive() { return isActive; }
+    public void      setIsActive( boolean value ) { isActive = value ? true : false; }
     // PROTECTED CODE -->
+    
+    public User getUser() {
+        User u = null;
+        try {
+             u = UserBo.getInstance().read(this.userId);
+        } catch (BoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return u;
+    }
+    
+    public Location getLocation() {
+        Location l = null;
+        try {
+             l = LocationBo.getInstance().read(this.locationId);
+        } catch (BoException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return l;
+    }
+    
     public String getShortDescription() {
         if (description.length() > 22)
             return description.substring(0, 20);

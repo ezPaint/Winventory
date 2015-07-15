@@ -1,5 +1,4 @@
 package com.simoncomputing.app.winventory.domain;
-
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,10 +10,11 @@ import com.simoncomputing.app.winventory.bo.LocationBo;
 import com.simoncomputing.app.winventory.util.BoException;
 
 
+
 /**
 * The Location Table.
 */
-public class Location implements Item{
+public class Location  implements Item{
 
     private Long      key;
     private String    description;          //Specific location of item at specified address (e.g. suite 200, desk #3)
@@ -50,24 +50,12 @@ public class Location implements Item{
         }
         this.setDescription(request.getParameter("description"));
         
+        // isActive is true if true, false if null
         this.setIsActive(request.getParameter("isActive") != null);
         
-        // Set address, given address title:
-        // Start by getting all addresses
-        ArrayList<Address> addresses = new ArrayList<Address>();
-        try {
-            addresses = (ArrayList<Address>) AddressBo.getInstance().getAll();
-        } catch (BoException e) {
-            logger.error("BoException in LocationInsertController when trying to get roles");
-        }
-        
         // find the address id for the specified address name, and set location's address id to match
-        String addressName = request.getParameter("addressName");
-        for (Address a : addresses) {
-            if (a.getName().equals(addressName)) {
-                this.setAddressId( a.getKey().intValue() );
-            }
-        }
+        String addressKey = request.getParameter("address");
+        this.setAddressId( Integer.parseInt(addressKey) );
         
         // Done, return the empty errors ArrayList
         return errors;

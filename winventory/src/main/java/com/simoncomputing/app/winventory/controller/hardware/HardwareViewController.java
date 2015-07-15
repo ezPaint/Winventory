@@ -109,7 +109,6 @@ public class HardwareViewController extends BaseController {
             try {
                 events = eb.getEventsOf(hardware);
             } catch (BoException e) {
-                // TODO Auto-generated catch block
                 request.setAttribute("error", e.getMessage());
                 log.error(e.getMessage());
             }
@@ -120,6 +119,22 @@ public class HardwareViewController extends BaseController {
 
         // Set the list of events as an attribute
         request.setAttribute("events", events);
+        //log.error(events.get(0).getCreatorId());
+        
+        // check for success message (for redirects from edit/add/delete pages)
+        if (request.getParameter("success") != null) {
+            request.setAttribute("success", request.getParameter("success"));
+        }
+        
+        // check for delete request, if so then the delete confirmation message will appear
+        if (request.getParameter("delete") != null) {
+            request.setAttribute("delete", request.getParameter("delete"));
+        }
+        
+        // check for error on request param, if so then the error confirmation message will appear
+        if (request.getParameter("error") != null) {
+            request.setAttribute("error", request.getParameter("error"));
+        }
 
         // Forward the request to the "hardware/view" page
         request.getRequestDispatcher("/WEB-INF/flows/hardware/view.jsp").forward(request, response);
@@ -127,45 +142,10 @@ public class HardwareViewController extends BaseController {
     }
 
     /**
-     * Runs when the "delete" button is selected on the "hardware/view" page
+     * No posts on this page currently.
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        // Check to see if the current User has the permissions to delete
-        // Hardware items, and returns if they do not
-        if (this.requirePermission(request, response, "deleteHardware")) {
-            return;
-        }
-
-        // Retrieve the key parameter from the request
-        String key = request.getParameter("key");
-
-        // Retrieve the key for the Hardware item to be deleted from the
-        // database
-        HardwareBo bo = HardwareBo.getInstance();
-        Long long_key = null;
-        if (key != null) {
-            try {
-                long_key = Long.parseLong(key);
-            } catch (Exception e) {
-                String error = logError(log, e);
-                request.setAttribute("error", "Error code: " + error);
-            }
-        }
-
-        // Attempt to delete the Hardware item from the database using a BO
-        try {
-            bo.delete(long_key);
-        } catch (BoException e) {
-            request.setAttribute("error", e.getMessage());
-            log.error(e.getMessage());
-        }
-
-        // Redirect to the results page, as the item no longer exists and does
-        // not have a page
-        this.sendRedirect(request, response, "results");
-
+        // no posts on this page
     }
-
 }

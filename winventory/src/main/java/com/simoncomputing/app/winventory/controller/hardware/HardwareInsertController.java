@@ -14,6 +14,7 @@ import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
+import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.util.BoException;
@@ -34,6 +35,12 @@ public class HardwareInsertController extends BaseController {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // permission check
+        if (!this.userHasPermission(request, "createHardware")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         // Create an ArrayList of all the valid Ref_Conditions, which will be
         // used to prevent the user from entering
@@ -64,6 +71,12 @@ public class HardwareInsertController extends BaseController {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // permission check
+        if (!this.userHasPermission(request, "createHardware")) {
+            this.denyPermission(request, response);
+            return;
+        }
 
         // Create a new Hardware and set its parameters based on the values from
         // the request
@@ -120,21 +133,39 @@ public class HardwareInsertController extends BaseController {
             if (conditions != null) {
                 request.setAttribute("conditions", conditions);
             }
-            
-            
-            
+
             request.setAttribute("success", false);
             request.setAttribute("errors", errors);
         }
 
-        //Add an event to this hardware that describing its creation.
+        // Add an event to this hardware that describing its creation.
         if (request.getAttribute("success").equals(true)) {
-        	try {
-				EventBo.getInstance().createSystemEvent("This hardware was created", h);
-			} catch (BoException e) {
-				errors.add(e.getMessage());
-				request.setAttribute("success", false);
-			}
+            try {
+
+                if (h.getUserId() != null) {
+                    String strang = "Inserted into DB and assigned to " + h.getUser().getUsername();
+                    EventBo.getInstance().createSystemEvent(strang,
+                            getUserInfo(request), EventType.ADMIN, h);
+                } else if (h.getLocationId() != null) {
+                    String strang = "Inserted into DB and stored at " + h.getLocation().getDescription();
+                    EventBo.getInstance().createSystemEvent(strang,
+                            getUserInfo(request), EventType.ADMIN, h);
+                } else {
+                    log.error("Hardware was somehow almost inserted into DB with no user or location ID");
+                    errors.add("Hardware was somehow almost inserted into DB with no user or location ID.");
+                    request.setAttribute("success", false);
+                }
+
+            } catch (BoException e) {
+                log.error(e.getMessage());
+                errors.add(e.getMessage());
+                request.setAttribute("success", false);
+            }
+        }
+        if (request.getAttribute("success") != null) {
+            if ((boolean) request.getAttribute("success")) {
+                request.setAttribute("success", "true");
+            }
         }
         // Forward the request to the "hardware/insert" page to allow the user
         // to enter more items

@@ -1,9 +1,11 @@
 package com.simoncomputing.app.winventory.bo;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+import java.sql.Date;
 
 import org.apache.ibatis.session.*;
 
@@ -346,7 +348,9 @@ public class HardwareBo {
      * @throws BoException
      */
     public List<Hardware> searchAdvanced(ArrayList<String> columns,
-                    ArrayList<ArrayList<String>> searches, Boolean stored, Boolean owned)
+                    ArrayList<ArrayList<String>> searches, Boolean stored, Boolean owned,
+                    Boolean cost, double minCost, double maxCost,
+                    Boolean date, Date startDate, Date endDate)
                     throws BoException {
         SqlSession session = null;
         List<Hardware> list;
@@ -359,7 +363,8 @@ public class HardwareBo {
         try {
             session = SessionFactory.getSession();
             HardwareDao mapper = session.getMapper(HardwareDao.class);
-            list = mapper.searchAdvanced(columns, searches, stored, owned);
+            list = mapper.searchAdvanced(columns, searches, stored, owned,
+                    cost, minCost, maxCost, date, startDate, endDate);
             session.commit();
         } catch (Exception e) {
             session.rollback();

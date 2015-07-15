@@ -58,13 +58,12 @@
 									Hardware in Use
 									<div class="progress">
 										<div class="progress-bar" role="progressbar" aria-valuemin="0"
-											aria-valuemax="100" style="width: 87%;"></div>
+											aria-valuemax="100" style="width: ${usage};">${usage}</div>
 									</div>
-									Software in Use
+									Hardware in Storage
 									<div class="progress">
-										<div class="progress-bar" role="progressbar"
-											aria-valuenow="{numSw}" aria-valuemin="0" aria-valuemax="100"
-											style="width: 70%;"></div>
+										<div class="progress-bar" role="progressbar" aria-valuemin="0"
+											aria-valuemax="100" style="width: ${storage};">${storage}</div>
 									</div>
 								</div>
 							</div>

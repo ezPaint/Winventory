@@ -17,7 +17,7 @@ import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
- * Servlet to handle the add user functionality, or insert user page.
+ * Servlet to handle the add location functionality, or insert location page.
  * 
  */
 
@@ -27,16 +27,18 @@ public class LocationInsertController extends BaseController {
     private static final long serialVersionUID = 1L;
     private static Logger logger = Logger.getLogger(LocationInsertController.class);
 
-
+    // Occurs when the user tries to access the insert-location page
     protected void doGet( HttpServletRequest request, HttpServletResponse response ) 
         throws ServletException, IOException {
         
-        // if the user is rejected, the redirect is sent in the require permission method.
-       /* if (this.requirePermission(request, response, "createUser")) {
+    	// check for the create location permission
+        if (!this.userHasPermission(request, "createLocation")) {
+            this.denyPermission(request, response);
             return;
-        }*/
+        }
         
-    	
+    	// Set up the list of addresses to be used in the dropdown for
+    	// the location insert form   	
     	 ArrayList<Address> addresses = new ArrayList<Address>();
          try {
         	 addresses = (ArrayList<Address>) AddressBo.getInstance().getAll();
@@ -50,14 +52,15 @@ public class LocationInsertController extends BaseController {
         request.getRequestDispatcher("/WEB-INF/flows/locations/insert-location.jsp").forward(request, response);  
     }
 
-
+    // Occurs when the user submits the insert-location form
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) 
         throws ServletException, IOException {
         
-        // check for the create user permission
-        /*if (this.requirePermission(request, response, "createUser")) {
+        // check for the create location permission
+        if (!this.userHasPermission(request, "createLocation")) {
+            this.denyPermission(request, response);
             return;
-        }*/
+        }
     	
     	Location location = new Location();
     	
@@ -74,14 +77,20 @@ public class LocationInsertController extends BaseController {
         if (errors.size() > 0) {
             // attach errors to the request
             request.setAttribute("errors", errors);
+            // set the previously inserted attributes so user won't
+            // have to re-enter them
+            request.setAttribute("address", location.getAddressId());
+            request.setAttribute("description", location.getDescription());
+            request.setAttribute("isActive", location.getIsActive());
             
             // forward to jsp and return from method
             request.getRequestDispatcher("/WEB-INF/flows/locations/insert-location.jsp").forward(request, response);
             return;
         }
         
+        // redirect back to location if the insert was successful
     	response.sendRedirect(request.getContextPath() + "/location/results-location");
-       
+ 
     }
 
 }

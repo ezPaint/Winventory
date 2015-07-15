@@ -10,6 +10,15 @@ CLASS		Event
 DATE		dateCreated
 STRING(2000)	description		//Either a user specified description of an event, or a system specified description
 STRING(50)		category  			//For now either USER or SYSTEM depending on if it was manually or automatically made
+LONG(10)  	creatorId	CREATOR_ID?  //The user that created this object
+LONG(10)  	userId	USER_ID? 
+LONG(10)  	hardwareId	HARDWARE_ID? 
+LONG(10)  	softwareId	SOFTWARE_ID? 
+LONG(10)  	locationId	location_ID? 
 
 [ForeignKeys]
-
+creatorId constrainsTo User.key
+userId constrainsTo User.key
+hardwareId constrainsTo Hardware.key
+softwareId constrainsTo Software.key
+locationId constrainsTo Location.key

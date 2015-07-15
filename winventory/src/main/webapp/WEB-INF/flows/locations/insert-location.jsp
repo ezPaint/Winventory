@@ -54,11 +54,11 @@
 							data-toggle="validator" role="form" method="post">			
 							
 							<div class="form-group">
-								<label for="addressName" class="col-sm-2 control-label">Address
+								<label for="address" class="col-sm-2 control-label">Address
 								</label>
 								<div class="col-sm-9">
 
-									<select name="addressName" class="form-control" required>
+									<select id="address" name="address" class="form-control" required>
 
 										<%@ page
 											import="com.simoncomputing.app.winventory.domain.Address"%>
@@ -73,7 +73,7 @@
 										        for (int i = 0; i < addresses.size(); i++) {
 										%>
 
-										<option><%=addresses.get(i).getName()%></option>
+										<option value="<%=addresses.get(i).getKey()%>"><%=addresses.get(i).getName()%></option>
 
 										<%
 										    }
@@ -94,7 +94,11 @@
 								</label>
 								<div class="col-sm-9">
 									<input name="description" type="text" id="description"
-										class="form-control" placeholder="Description" required>
+										class="form-control" placeholder="Description" 
+										<%if(request.getParameterMap().containsKey("description")) {%>
+										value="<%=request.getAttribute("description")%>" 
+										<%}%>
+										required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -135,6 +139,12 @@
 	</div>
 
 	<jsp:include page="/WEB-INF/includes/footer.jsp" />
+	
+	<script>
+		<%if(request.getParameterMap().containsKey("address")) {%>
+		document.getElementById('address').value = '<%=request.getAttribute("address")%>';
+		<%}%>
+	</script>
 
 </body>
 </html>

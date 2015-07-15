@@ -23,7 +23,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 /**
 * The User Table.
 */
-public class User implements Item {
+public class User  implements Item{
 
     private Long      key;
     private String    username;

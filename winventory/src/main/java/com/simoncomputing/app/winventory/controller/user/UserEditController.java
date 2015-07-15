@@ -75,9 +75,11 @@ public class UserEditController extends BaseController {
 	    
 	    
 	    
-	    // if the user is rejected, the redirect is sent in the require permission method.
-        if (this.requirePermission(request, response, "updateUser")
-            || (this.requirePermission(request, response, "updateSelf") && key == currentUser.getKey())) {
+	    // if the user is rejected, the redirect is sent in the deny permission method.
+        if (       ! this.userHasPermission(request, "updateUser") 
+                && !(this.userHasPermission(request, "updateSelf") && key == currentUser.getKey()) 
+                ) {
+            this.denyPermission(request, response);
             return;
         }
 	    
@@ -131,9 +133,11 @@ public class UserEditController extends BaseController {
             return;
         }
         
-        // if the user is rejected, the redirect is sent in the require permission method.
-        if (this.requirePermission(request, response, "updateUser")
-            || (this.requirePermission(request, response, "updateSelf") && key == currentUser.getKey())) {
+        // if the user is rejected, the redirect is sent in the deny permission method.
+        if (       ! this.userHasPermission(request, "updateUser") 
+                && !(this.userHasPermission(request, "updateSelf") && key == currentUser.getKey()) 
+                ) {
+            this.denyPermission(request, response);
             return;
         }
         

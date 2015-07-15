@@ -56,6 +56,7 @@
 						<h2 class="center">Users</h2>
 					</div>
 					<div class="padme">
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
 						<jsp:include page="/WEB-INF/includes/success.jsp" />
 						<div id='loader'>
 							<div class='diamond'></div>
@@ -92,8 +93,8 @@
 								        for (int i = 0; i < results.size(); i++) {
 								%>
 								<tr>
-									<td><%=results.get(i).getKey()%></td>
-									<td><a href="view?key=<%=results.get(i).getKey()%>"> <%=results.get(i).getUsername()%></a></td>
+									<td><a href="view?key=<%=results.get(i).getKey()%>"class="btn btn-primary"><%=results.get(i).getKey()%></a></td>
+									<td> <%=results.get(i).getUsername()%></td>
 									<td><%=results.get(i).getFirstName()%></td>
 									<td><%=results.get(i).getLastName()%></td>
 									<td><%=results.get(i).getEmail()%></td>

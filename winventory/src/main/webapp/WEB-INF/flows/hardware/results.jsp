@@ -51,12 +51,15 @@
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
+				
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">${page_header}</h2>
 					</div>
 					<div class="padme">
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
+				
 						<div id='loader'>
 							<div class='diamond'></div>
 							<div class='diamond'></div>
@@ -90,10 +93,10 @@
 									        for (int i = 0; i < results.size(); i++) {
 									%>
 									<tr>
-										<td><a href="view?key=<%=results.get(i).getKey()%>" class="btn btn-success">
+										<td><a href="view?key=<%=results.get(i).getKey()%>" class="btn btn-primary">
 										<%=results.get(i).getKey()%></a></td>
 										<td><%=results.get(i).getType()%></td>
-										<td><%=results.get(i).getCost()%></td>
+										<td><%= String.format("%.2f", results.get(i).getCost()) %></td>
 										<td><%=results.get(i).getCondition()%></td>
 										<td><%=results.get(i).getPurchaseDate()%></td>
 										<td><%=results.get(i).getDescription()%></td>

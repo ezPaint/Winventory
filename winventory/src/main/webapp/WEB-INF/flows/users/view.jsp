@@ -31,6 +31,9 @@
 <script
 	src='https://cdn.datatables.net/plug-ins/1.10.7/integration/bootstrap/3/dataTables.bootstrap.js'
 	type="text/javascript"></script>
+<script src="http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.latest.js"
+	type="text/javascript" charset="UTF-8"> </script>
+	
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
 
@@ -46,6 +49,25 @@
 		});
 	});
 </script>
+<script>
+function printBarcode() {
+	var text = '${barcode}';
+	text=text.substring(0,text.length-1);
+	try{
+		var labelXml = '<?xml version="1.0" encoding="utf-8"?> <DieCutLabel Version="8.0" Units="twips"> <PaperOrientation>Landscape</PaperOrientation> <Id>Address</Id> <PaperName>30252 Address</PaperName> <DrawCommands> <RoundRectangle X="0" Y="0" Width="1581" Height="5040" Rx="270" Ry="270"/> </DrawCommands> <ObjectInfo> <BarcodeObject> <Name>BARCODE</Name> <ForeColor Alpha="255" Red="0" Green="0" Blue="0"/> <BackColor Alpha="255" Red="255" Green="255" Blue="255"/> <LinkedObjectName></LinkedObjectName> <Rotation>Rotation0</Rotation> <IsMirrored>False</IsMirrored> <IsVariable>False</IsVariable> <Text>'+text+'</Text> <Type>Ean13</Type> <Size>Small</Size> <TextPosition>Bottom</TextPosition> <TextFont Family=".Helvetica Neue DeskInterface" Size="10" Bold="False" Italic="False" Underline="False" Strikeout="False"/> <CheckSumFont Family=".Helvetica Neue DeskInterface" Size="10" Bold="False" Italic="False" Underline="False" Strikeout="False"/> <TextEmbedding>None</TextEmbedding> <ECLevel>0</ECLevel> <HorizontalAlignment>Center</HorizontalAlignment> <QuietZonesPadding Left="0" Right="0" Top="0" Bottom="0"/> </BarcodeObject> <Bounds X="331.2" Y="57.59995" Width="1796.513" Height="600"/> </ObjectInfo> </DieCutLabel>';
+		var label = dymo.label.framework.openLabelXml(labelXml);
+		var printers = dymo.label.framework.getPrinters();
+		if (printers.length==0){
+			document.getElementById("noPrinters").style.display="";
+		}
+		var printer = printers[0];
+		var printerName = printer.name;
+		label.print(printerName);
+	} catch (err) {
+		document.getElementById("warning").style.display="";
+	}
+}
+</script>
 </head>
 
 <body>
@@ -60,13 +82,15 @@
 					<div class="boom">
 						<h2 class="center">User Info</h2>
 					</div>
-
-					<div class="padme" style="margin-bottom: 200px;">
+					<br>
+					<div class="container-fluid">
 					
-					<!-- Include the success message (only shows if success != null -->
-					<jsp:include page="/WEB-INF/includes/success.jsp" />
-					<jsp:include page="/WEB-INF/flows/users/deleteConfirm.jsp"/>
-					<jsp:include page="/WEB-INF/includes/error.jsp"/>
+						<!-- Include the success/delete/error messages -->
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
+						<jsp:include page="/WEB-INF/flows/users/deleteConfirm.jsp"/>
+						<jsp:include page="/WEB-INF/includes/error.jsp"/>
+					
+						<div class="row no-margin">
 					
 				
 						<%@ page
@@ -184,21 +208,25 @@
 								</ul>
 							</div>
 						<!-- </div> -->
-						<form method="get" action="${contextPath}/users/view">
-							<c:set var="isSelf" value="${userInfo.key == param.key }"/>
-							<c:if test="${userInfo.hasPermission.deleteUser || (userInfo.hasPermission.deleteSelf && isSelf) }">
-								<input type="hidden" id="key" name="key"
-									value="<%=user.getKey()%>">
-						    	<input type="hidden" id="delete" name="delete"
-									value="true">
-							<button type="submit" class="btn btn-danger pull-right">Delete</button>
-							</c:if>
-						</form>
-						     <c:if test="${userInfo.hasPermission.updateUser || (userInfo.hasPermission.updateSelf && isSelf)}">
-								<a class="btn btn-default pull-right"
-									href="edit?key=<%=user.getKey()%>" role="button">Edit</a> 
-						     </c:if>
-
+						<div class="row">
+							<div class="col-md-12">
+								<form method="get" action="${contextPath}/users/view" class="form-horizontal pull-right">
+									<c:set var="isSelf" value="${userInfo.key == param.key }"/>
+									
+									<c:if test="${userInfo.hasPermission.updateUser || (userInfo.hasPermission.updateSelf && isSelf)}">
+										<a class="btn btn-default"
+											href="edit?key=<%=user.getKey()%>" role="button">Edit</a> 
+								     </c:if>
+								     
+									<c:if test="${userInfo.hasPermission.deleteUser || (userInfo.hasPermission.deleteSelf && isSelf) }">
+ 										<input type="hidden" id="key" name="key" value="<%=user.getKey()%>">
+								    	<input type="hidden" id="delete" name="delete" value="true">
+									<button type="submit" class="btn btn-danger">Delete</button>
+									</c:if>
+									
+								</form>
+							</div>
+						</div>
 						<%
 						    }
 						%>
@@ -277,18 +305,17 @@
 					    	else {
 						%>
 						<p class="user-hardware-message">This user owns no hardware.</p>
-						</div>
+						
 						<%
 					    	}
 						%>
-						
+						</div> <!-- end padme -->
 					</div>
 					
 					
 				</div>
 			</div>
 		</div>
-	</div>
 	<br>
 	<br>
 	<br>
