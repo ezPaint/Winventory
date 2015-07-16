@@ -286,7 +286,8 @@
 
 
 
-
+							<br> <br>
+							<h3>Events</h3>
 							<jsp:include page="/WEB-INF/includes/events.jsp" />
 
 						</div>

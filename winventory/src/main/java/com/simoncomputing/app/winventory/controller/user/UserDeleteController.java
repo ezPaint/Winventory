@@ -92,12 +92,16 @@ public class UserDeleteController extends BaseController {
 
         // Attempt to delete the User from the database using a BO
         try {
-            bo.delete(key);
-            EventBo.getInstance().createSystemEvent("Delete Software " + key 
-                    + ": Deleting software with key of " + key + ": " 
-                    + user.toString(), 
-                getUserInfo(request), EventType.SYSTEM, null, null, null, null);
+            
+            bo.delete(key); // also deletes all events for the user
+            
+            //Record event 
+            String description = "Deleted User with username " + user.getUsername() + " and all of its "
+                    + "associated events. User: " + user.toString();
+            EventBo.getInstance().createSystemEvent(description, getUserInfo(request), 
+                    EventType.SYSTEM, null, null, null, null);
             logger.info("Deleted user " + user.getUsername() + ".");
+            
         } catch (BoException e) {
             String error = "User " + user.getUsername() + " could not be deleted at this time.";
             logger.error("Attempt to delete user " + user.getUsername() + " failed.");

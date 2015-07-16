@@ -31,4 +31,11 @@ public interface EventDao {
             @Param("end") Date end) throws DaoException;
     
     public int deleteAllWithSoftwareId(@Param("param1")Long key) throws DaoException;
+    
+    public int deleteAllWithHardwareId(@Param("param1")Long key) throws DaoException;
+    
+    public int deleteAllWithLocationId(@Param("param1")Long key) throws DaoException;
+    
+    public int deleteAllWithUserId(@Param("param1")Long key) throws DaoException;
+    
 } 

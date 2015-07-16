@@ -34,7 +34,7 @@
 	$(document).ready(
 			function() {
 				var table = $('#hardwares').DataTable({
-					"scrollY" : "1000px",
+					"scrollY" : "500px",
 					"scrollCollapse" : true,
 					"paging" : false,
 					"dom" : '<"top">rt<"bottom"flp><"clear">'
@@ -101,6 +101,15 @@
 	}
 </script>
 </head>
+
+<style>
+body.noscroll
+{
+    position: relative;
+    overflow: hidden;
+}
+</style>
+
 <body>
 	<jsp:include page="/base.jsp" />
 	<div class="container-fluid">
@@ -157,7 +166,8 @@
 									value="${location.description}" readonly />
 							</div>
 							<c:if test="${not empty hardware}">
-								<div class="col-xs-12">
+								<div onmouseover="$('body').addClass('noscroll');"
+									onmouseout="$('body').removeClass('noscroll');" class="col-xs-12">
 									<label for="hardwares">Associated Hardware</label>
 									<table id="hardwares" class="table" style="width: 100%">
 										<thead>

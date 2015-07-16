@@ -102,6 +102,7 @@ public class Event implements Item {
         String softwareString = request.getParameter("software");
         String locString = request.getParameter("location");
         String userString = request.getParameter("user");
+        
         long hkey = 0, skey = 0, lkey = 0, ukey = 0;
         
         if (!hardwareString.isEmpty())
@@ -177,10 +178,17 @@ public class Event implements Item {
 	        }
 	        
 	        // end form validation, return if errors exist
-	        if (errors.size() != 0) {
-	            return errors;
-	        }
+
         }
+        
+        if (request.getParameter("description").length() > 2000)
+        {
+        	errors.add("Description must be less than 2000 chars.");
+        }
+        if (errors.size() != 0) {
+            return errors;
+        }
+        
         // if no errors, set the values and link the keys
 
         this.setDescription(request.getParameter("description"));

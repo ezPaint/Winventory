@@ -83,6 +83,21 @@
         delete from EVENT
         where SOFTWARE_ID = #{param1};
     </delete>
+    
+    <delete id="deleteAllWithHardwareId" parameterType="long">
+        delete from EVENT
+        where HARDWARE_ID = #{param1};
+    </delete>
+    
+    <delete id="deleteAllWithUserId" parameterType="long">
+        delete from EVENT
+        where USER_ID = #{param1} OR CREATOR_ID = #{param1};
+    </delete>
+    
+    <delete id="deleteAllWithLocationId" parameterType="long">
+        delete from EVENT
+        where LOCATION_ID = #{param1};
+    </delete>
 
 	<select id="getListByDateRange" resultMap="EventMapper">
 		select * from EVENT <!--  where DATE_CREATED >= #{start,jdbcType=DATE}

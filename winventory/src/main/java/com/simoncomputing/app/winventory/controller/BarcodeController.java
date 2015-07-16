@@ -64,6 +64,7 @@ public class BarcodeController extends BaseController {
     
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	logger.trace("in barcode controller POST");
     	bean.bind(request);
     	String barcode = bean.getBarcode();
     	boolean update = bean.shouldUpdate();
@@ -81,6 +82,7 @@ public class BarcodeController extends BaseController {
 					bean.setHardwareIds(updateDatabase(pkList, hwList, bean.getLocation(),getUserInfo(request)));	// update the database
 				logger.trace("updating database");
 				request.setAttribute("success", "Successfully updated.");
+				bean.setRemovalIds(new ArrayList<Long>());
 			} catch (BoException bo) {
 				logger.error("Could not update database");
 				request.setAttribute("error", "Database not updated.  Errors occurred.");
@@ -102,7 +104,11 @@ public class BarcodeController extends BaseController {
 			 * a precondition for calling the processBarcode() method is
 			 * that the input be valid (as determined by the BarcodeBean class)
 			 */
-			request.setAttribute("error", bean.processBarcode());
+			String message = bean.processBarcode();
+			if (message.startsWith("error"))
+				request.setAttribute("error", message.replaceFirst("error:", ""));
+			else if (message.startsWith("success"))
+				request.setAttribute("success", message.replaceFirst("success:", ""));
 		}
 		
 		/*
@@ -112,17 +118,6 @@ public class BarcodeController extends BaseController {
 		
 		request.setAttribute("user", bean.getUser());
 		request.setAttribute("location", bean.getLocation());
-
-		
-		/*
-		 * if the post was submitted without a user or location, and we're not clearing, return error 
-		 */
-		
-		if (request.getAttribute("error")==null && !clear && request.getAttribute("user")==null && request.getAttribute("location")==null){
-    		bean.setHardwareIds(new ArrayList<Long>());
-    		request.setAttribute("error","You must enter an Owner or Location first");
-    		logger.error("Attempted to add hardware before a user or location.");
-    	}
 		
 		/*
 		 * set hardware, hardwareKeys, and removeHw appropriately
@@ -174,10 +169,11 @@ public class BarcodeController extends BaseController {
 					}
 				}
 				rem.setUserId(null);	// null the userid of the hardware removed no matter what
-				hb.update(rem);	//update the hw in the database
-				// log event of hardware dissociation
-				if (newId.equals(oldId))
+				if (newId.equals(oldId)){	
+					hb.update(rem);	//update the hw in the database
+					// log event of hardware dissociation
 					EventBo.getInstance().createSystemEvent("Hardware with serial no. " + rem.getSerialNo() + " was dissociated from " + oldUser.getUsername(), need,  EventType.ADMIN, rem,null,null,oldUser);
+				}
 			} catch (NumberFormatException e) {
 				logger.error("Cannot dissociate hardware with pk " + pk + " because pk is not a number");
 			} catch (BoException e) {
@@ -246,10 +242,11 @@ public class BarcodeController extends BaseController {
 			 */
 			
 			try {
-				hb.update(hw);
 				//log event of hardware association
-				if (!newId.equals(oldId))
+				if (!newId.equals(oldId)){
+					hb.update(hw);
 					EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was associated with " + ub.read(oldId).getUsername(), need,  EventType.ADMIN, hw,null,null,user);
+				}
 			} catch (BoException e) {
 				logger.error("Could not update Hardware with pk " + hw.getKey());
 			}
@@ -294,11 +291,12 @@ public class BarcodeController extends BaseController {
 				oldId = rem.getLocationId();
 				hwList.remove(rem);								// remove it from the overall hardware list
 				rem.setLocationId(null);	// null the locationId of the hardware removed no matter what
-				hb.update(rem);	//update the hw in the database
-				//log hardware dissociation event
-				if(newId.equals(oldId))
+				if(newId.equals(oldId)){
+					hb.update(rem);	//update the hw in the database
+					//log hardware dissociation event
 					logger.debug("newId " + newId + " oldId " + oldId);
 					EventBo.getInstance().createSystemEvent("Hardware with serial no " + rem.getSerialNo() + "was dissociated from Location with address " + lb.read(oldId).getAddress(), need,  EventType.ADMIN, rem,lb.read(oldId),null,null);
+				}
 			} catch (NumberFormatException e) {
 				logger.error("Cannot dissociate hardware with pk " + pk + " because pk is not a number");
 			} catch (BoException e) {
@@ -319,18 +317,17 @@ public class BarcodeController extends BaseController {
 			 */
 			
 			try {
-				hb.update(hw);
-				
 				/*
 				 * if the ids are different, log a dissociation event if there is an old id
 				 * always log an association event
 				 */
 				
 				if(!newId.equals(oldId)){
+					hb.update(hw);
 					if(oldId != null){
-						EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was dissociated from Location with adress " + lb.read(oldId).getAddress(), need,  EventType.ADMIN, hw,lb.read(oldId),null,null);
+						EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was dissociated from Location with address " + lb.read(oldId).getAddress(), need,  EventType.ADMIN, hw,lb.read(oldId),null,null);
 					}
-					EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was associated with Location with adress " + lb.read(oldId).getAddress(), need,  EventType.ADMIN, hw,location,null,null);
+					EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was associated with Location with address " + lb.read(oldId).getAddress(), need,  EventType.ADMIN, hw,location,null,null);
 				}
 			} catch (BoException e) {
 				logger.error("Could not update Hardware with pk " + hw.getKey());

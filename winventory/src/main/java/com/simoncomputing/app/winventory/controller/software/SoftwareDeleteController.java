@@ -65,10 +65,11 @@ public class SoftwareDeleteController extends BaseController {
             SoftwareBo.getInstance().delete(Long.valueOf(key)); 
             
             //Record event 
-            EventBo.getInstance().createSystemEvent("Delete Software " + key 
-            		+ ": Deleting software with key of " + key + ": " 
-            		+ sw.toString(), 
-                getUserInfo(request), EventType.SYSTEM, null, null, null, null);
+            String description = "Deleted Software with id " + key + " and all of its "
+                    + "associated events. Software: " + sw.toString();
+            EventBo.getInstance().createSystemEvent(description, getUserInfo(request), 
+                    EventType.SYSTEM, null, null, null, null);
+            
         } catch (Exception e) {
             logError(logger, e);
         }

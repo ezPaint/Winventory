@@ -160,7 +160,7 @@ public class BarcodeBean extends BaseBean{
     /**
      * @precondition the barcode must be valid input
      * assign userId, locationId, and hardwareIds based on the barcode entered
-     * @return an error message if fails, return null otherwise
+     * @return an error message if fails or a success message if it succeeds
      */
     
 	public String processBarcode(){
@@ -180,9 +180,10 @@ public class BarcodeBean extends BaseBean{
 			this.setLocationId(null);	// ensure no location id
 			try {
 				this.setHardwareIds(getHardwareKeys(hb.getListByUserId(pk)));
+				return "success:Successfully preloaded for " + user.getUsername();
 			} catch (BoException e) {
 				logger.error("Could not get list of hardware for user with pk " + pk);
-				return "Could not load Hardware for " + user.getUsername();
+				return "error:Could not load Hardware for " + user.getUsername();
 			}
 		} else if (obj instanceof Hardware){	// a Hardware barcode
 			
@@ -193,15 +194,34 @@ public class BarcodeBean extends BaseBean{
 			 */
 			Hardware h = (Hardware)obj;
 			pk = h.getKey();
-			logger.trace("adding to hardware list in barcode page");
-			logger.debug("hardwareIds before processing is " + hardwareIds);
-			if (!hardwareIds.contains(pk))				// check if that reference is already in the list
-				hardwareIds.add(pk);						// add the piece of hardware if not already present
-			else {
-				logger.trace("attempted to add duplicate hardware in barcode page");
-				return "That hardware is already in the list.";
+			if (getUserId()==null && getLocationId()==null){
+				if (h.getUserId()==null)
+					return "error:Hardware is in storage. Please begin by entering a user or location.";
+				setUserId(h.getUserId());
+				try {
+					this.setHardwareIds(getHardwareKeys(hb.getListByUserId(getUserId())));
+					List<Long> added = this.getRemovalIds();
+					added.add(h.getKey());
+					this.setRemovalIds(added);
+					return "success:Successfully preloaded for hardware with key " + pk;
+				} catch (BoException e) {
+					logger.error("Could not get list of hardware for user with pk " + pk);
+					return "error:Could not preload for hardware with key " + pk;
+				}
 			}
-			logger.trace("hardwareIds after processing is " + hardwareIds);
+			else {
+				logger.trace("adding to hardware list in barcode page");
+				logger.debug("hardwareIds before processing is " + hardwareIds);
+				if (!hardwareIds.contains(pk)){				// check if that reference is already in the list
+					hardwareIds.add(pk);						// add the piece of hardware if not already present
+					logger.trace("hardwareIds after processing is " + hardwareIds);
+					return "success:Hardware with key " + pk + " sucessfully added";
+				}
+				else {
+					logger.trace("attempted to add duplicate hardware in barcode page");
+					return "error:Hardware with key " + pk + " is already in the list.";
+				}
+			}
 		}else if (obj instanceof Location) {	// if a Location barcode
 			
 			/*
@@ -215,11 +235,12 @@ public class BarcodeBean extends BaseBean{
 			this.setLocationId(pk);	// put correct location on the session
 			try {
 				this.setHardwareIds(getHardwareKeys(hb.getListByLocationId(pk)));
+				return "success:Successfully preloaded for " + loc.getDescription();
 			} catch (BoException e) {
 				logger.error("Could not get list of hardware for location with pk " + pk);
-				return "Could not load Hardware for " + loc.getDescription();
+				return "error:Could not load Hardware for " + loc.getDescription();
 			}
-		}else if (obj == null){	// entered a username
+		}else{// if (obj == null){	// entered a username
 			
 			/*
 			 * this is why there is a precondition of valid input
@@ -234,12 +255,12 @@ public class BarcodeBean extends BaseBean{
 			this.setUserId(pk);	// set user attribute appropriately
 			try {
 				this.setHardwareIds(getHardwareKeys(hb.getListByUserId(pk)));
+				return "success:Successfully preloaded for " + user.getUsername();
 			} catch (BoException e) {
 				logger.error("Could not get list of hardware for user with pk " + pk);
-				return "Could not load Hardware for " + user.getUsername();
+				return "error:Could not load Hardware for " + user.getUsername();
 			}
 		}
-		return null;
 	}
     
 	public BarcodeBean() {}

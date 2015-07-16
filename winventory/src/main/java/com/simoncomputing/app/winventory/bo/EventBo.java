@@ -337,26 +337,90 @@ public class EventBo {
         return list;
     }
     
+    /**
+     * Deletes all events associated with the item. Used for hard-deletes.
+     * @param type the item type of which to delete events
+     * @param id the id of the item of which to delete events
+     * @throws BoException
+     */
     public void deleteEventsOf(ItemType type, long id) throws BoException
     {
+        SqlSession session = null;
+        session = SessionFactory.getSession();
+        
     	switch (type)
     	{
-    	case SOFTWARE:
-    		SqlSession session = null;
+    	
+    	    case SOFTWARE:
+    	        
+    	        
+    	        try {
+                    
+                    EventDao mapper = session.getMapper( EventDao.class );
+                    mapper.deleteAllWithSoftwareId(id);
+                    session.commit();
+                    break;
+    
+                } catch ( Exception e ) {
+                    session.rollback();
+                    throw new BoException( e );
+                    
+                } finally { 
+                    if ( session != null )
+                        session.close();
+                }
+    	        
+    	    case HARDWARE:
+    	        
+    	        try {
 
-            try {
-                session = SessionFactory.getSession();
-                EventDao mapper = session.getMapper( EventDao.class );
-                mapper.deleteAllWithSoftwareId(id);
-                session.commit();
+    	            EventDao mapper = session.getMapper( EventDao.class );
+    	            mapper.deleteAllWithHardwareId(id);
+    	            session.commit();
+                    break;
+                    
+    	        } catch ( Exception e ) {
+                    session.rollback();
+                    throw new BoException( e );
+                } finally { 
+                    if ( session != null )
+                        session.close();
+                }
+    	        
+    	    case USER:
+                
+                try {
 
-            } catch ( Exception e ) {
-                session.rollback();
-                throw new BoException( e );
-            } finally { 
-                if ( session != null )
-                    session.close();
-            }
+                    EventDao mapper = session.getMapper( EventDao.class );
+                    mapper.deleteAllWithUserId(id);
+                    session.commit();
+                    break;
+                    
+                } catch ( Exception e ) {
+                    session.rollback();
+                    throw new BoException( e );
+                } finally { 
+                    if ( session != null )
+                        session.close();
+                }
+                
+    	    case LOCATION:
+                
+                try {
+
+                    EventDao mapper = session.getMapper( EventDao.class );
+                    mapper.deleteAllWithLocationId(id);
+                    session.commit();
+                    break;
+                    
+                } catch ( Exception e ) {
+                    session.rollback();
+                    throw new BoException( e );
+                } finally { 
+                    if ( session != null )
+                        session.close();
+                }
+    	        
     	}
     }
  

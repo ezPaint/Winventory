@@ -71,6 +71,11 @@
 </nav>
 
 <script>
-	pathArray = location.href.replace('#', '').split('/');
-	document.getElementById(pathArray[4]).className = "active";
+	tabsArray = ["software", "hardware", "barcodes", "users", "location", "event"]
+	var x = 0;
+	for (x; x < tabsArray.length; x++){
+		if (location.href.includes(tabsArray[x])){
+			document.getElementById(tabsArray[x]).className="list-group-element active";
+		}
+	}
 </script>

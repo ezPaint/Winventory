@@ -10,6 +10,7 @@ import org.apache.ibatis.session.*;
 
 import com.simoncomputing.app.winventory.dao.*;
 import com.simoncomputing.app.winventory.domain.Hardware;
+import com.simoncomputing.app.winventory.domain.ItemType;
 import com.simoncomputing.app.winventory.util.BoException;
 
 public class HardwareBo {
@@ -67,30 +68,30 @@ public class HardwareBo {
         return result;
     }
 
-    public int delete( Long key ) throws BoException {
-        SqlSession session = null;
-        int result = 0;
-        String where = "KEY='" + key + "' ";
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put( "where", where );
-
-        try {
-            session = SessionFactory.getSession();
-            HardwareDao mapper = session.getMapper( HardwareDao.class );
-            result = mapper.delete( map );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
+//    public int delete( Long key ) throws BoException {
+//        SqlSession session = null;
+//        int result = 0;
+//        String where = "KEY='" + key + "' ";
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put( "where", where );
+//
+//        try {
+//            session = SessionFactory.getSession();
+//            HardwareDao mapper = session.getMapper( HardwareDao.class );
+//            result = mapper.delete( map );
+//            session.commit();
+//
+//        } catch ( Exception e ) {
+//            session.rollback();
+//            throw new BoException( e );
+//
+//        } finally { 
+//            if ( session != null )
+//                session.close();
+//        }
+//
+//        return result;
+//    }
 
     public Hardware read( Long key ) throws BoException {
         SqlSession session = null;
@@ -399,5 +400,37 @@ public class HardwareBo {
 
         return list;
     }
+    
+    /**
+     * USE THIS INSTEAD OF THE BATGEN DELETE
+     * It also deletes associated events of the object.s
+     */
+    public int delete( Long key ) throws BoException {
+      SqlSession session = null;
+      int result = 0;
+      String where = "KEY='" + key + "' ";
+      Map<String, Object> map = new HashMap<String, Object>();
+      map.put( "where", where );
+      
+      //first delete all events associated with this object
+      EventBo.getInstance().deleteEventsOf(ItemType.HARDWARE, key);
+
+      try {
+          session = SessionFactory.getSession();
+          HardwareDao mapper = session.getMapper( HardwareDao.class );
+          result = mapper.delete( map );
+          session.commit();
+
+      } catch ( Exception e ) {
+          session.rollback();
+          throw new BoException( e );
+
+      } finally { 
+          if ( session != null )
+              session.close();
+      }
+
+      return result;
+  }
 
 }

@@ -100,5 +100,11 @@ public class Location implements Item {
 			return null;
 		}
     }
+    
+    @Override
+    public String toString() {
+        return "Location [key=" + key + ", description=" + description + ", isActive=" + isActive
+                + ", addressId=" + addressId + "]";
+    }
 
 }

@@ -95,8 +95,10 @@
 											</th>
 											<th>
 												<form action="role" method="post" role="form">
-													<button class="btn btn-default" type="submit" name="delete"
-														value="${role.key}">Delete</button>
+													<c:if test="${role.key != 1}">
+														<button class="btn btn-default" type="submit"
+															name="delete" value="${role.key}">Delete</button>
+													</c:if>
 												</form>
 											</th>
 										</tr>
@@ -121,12 +123,12 @@
 								</div>
 							</div>
 							<h4>Select the permissions this role should have:</h4>
-							
+
 							<div id="checkboxes">
 								<c:forEach var="permission" items="${refPerms}">
 									<div class="checkbox">
-										<label><input type="checkbox" value="${permission.code}"
-											name="${permission.code}">${permission.description}</label>
+										<label><input type="checkbox"
+											value="${permission.code}" name="${permission.code}">${permission.description}</label>
 									</div>
 								</c:forEach>
 							</div>

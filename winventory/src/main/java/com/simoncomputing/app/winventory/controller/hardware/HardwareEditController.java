@@ -409,7 +409,7 @@ public class HardwareEditController extends BaseController {
                 request.setAttribute("error", "Error code: " + error);
             }
 
-            // went from storage to user
+        // went from storage to user
         } else if (originalOwner == null && updatedOwner != null && originalLoc != null
                 && updatedLoc == null) {
 

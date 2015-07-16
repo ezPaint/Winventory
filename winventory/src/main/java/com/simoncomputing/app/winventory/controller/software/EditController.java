@@ -104,6 +104,8 @@ public class EditController extends BaseController {
 
 			// Get Associated Hardware
 			// -------------------------------------------------------------
+            String newAssociated = ""; //will contain hw keys user input after processing duplicates/incorrect keys
+
 			// Gather user input
 			String hardwareString = request.getParameter("associate");
 			if (hardwareString != null) {
@@ -113,6 +115,7 @@ public class EditController extends BaseController {
 
 					// Find hardware based on key entered by user and add it to
 					// 'hardwareList'
+		            ArrayList<Long> HWkeys = new ArrayList<Long>();
 					for (String str : hwStr) {
 						try {
 							long key1 = Long.parseLong(str.trim());
@@ -120,6 +123,9 @@ public class EditController extends BaseController {
 								Hardware hw = HardwareBo.getInstance().read(key1);
 								if (hw != null) {
 									hardwareList.add(hw);
+									if (!HWkeys.contains(key1)){
+									    HWkeys.add(key1);
+									}
 								}
 							} catch (BoException e) {
 								logError(log, e);
@@ -129,8 +135,17 @@ public class EditController extends BaseController {
 							logError(log, e);
 						}
 					}
+					
+					//Retrieve new hardware
+	                for (int i = 0; i < HWkeys.size(); i++){
+	                    if (i < HWkeys.size() - 1){
+	                        newAssociated += HWkeys.get(i) + ", ";
+	                    } else {
+	                        newAssociated += HWkeys.get(i);
+	                    }
+	                }
 				}
-
+				
 				// Get all hardware currently associated with this software
 				ArrayList<Hardware> hardware = new ArrayList<Hardware>();
 				try {
@@ -248,11 +263,11 @@ public class EditController extends BaseController {
 				changes.add("" + isActive);
 			}
 			String hwUpdate = "";
-			if (!oldAssociated.equals(hardwareString)) {
-				if (hardwareString.equals("")) {
+			if (!newAssociated.equals(oldAssociated)) {
+				if (newAssociated.equals("")) {
 					hwUpdate = "This software no longer has any associated hardwares.";
 				} else {
-					hwUpdate = "Associated hardware was updated to " + hardwareString + ".";
+					hwUpdate = "Associated hardware was updated to " + newAssociated + ".";
 				}
 			}
 
@@ -271,6 +286,6 @@ public class EditController extends BaseController {
 			logError(log, e);
 		}
 
-		sendRedirect(request, response, "/winventory/software/view?key=" + key + "&success=true");
+		sendRedirect(request, response, request.getContextPath() + "/software/view?key=" + key + "&success=true");
 	}
 }

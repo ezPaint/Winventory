@@ -101,7 +101,7 @@ $(function() {
             <div class="col-md-8">
                 <div class="main">
                     <div class="boom">
-                        <h2 class="center">Edit Application Info</h2>
+                        <h2 class="center">Edit Software Info</h2>
                     </div>
                     <br>
                     <div class="padme">

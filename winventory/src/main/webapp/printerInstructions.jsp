@@ -79,7 +79,7 @@
 		<div class="list-group-item">
 			<h4>No valid DYMO printers were found?</h4>
 			<h5>Check your browser</h5>
-			<p style="padding-left:3em">Only Safari and Internet Explorer are support page to printer functionality. If you would like to print directly from the page, please use another browser, such as
+			<p style="padding-left:3em">Only Safari and Internet Explorer are support print from page functionality. If you would like to print directly from the page, please use another browser, such as
 			Safari or Internet Explorer. Our apologies, but we aren't happy about it either.</p>
 			<p style="padding-left:3em">If either of those browsers is unacceptable, just copy and paste the image into the DYMO application or download and open it in the app.</p>
 			<h5>Ensure You have a DYMO Printer</h5>

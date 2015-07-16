@@ -107,10 +107,10 @@ public class AdvancedSearchController extends BaseController {
             logError(log, e);
         }
 
-        // Narrow down list by Cost
+        // Narrow down list by Cost, if two values entered
         // -----------------------------------------------------------------
         try {
-            if (costs.size() > 1){
+            if (costs.size() == 2){
                 // Reduce list by cost
                 results = (ArrayList<Software>) bo.searchCostRange(results, costs.get(0), costs.get(1)); 
             }
@@ -151,7 +151,11 @@ public class AdvancedSearchController extends BaseController {
             columns.add("license_Key");
             searches.add(keys);
         }
-
+        //Only if one cost value is entered (min or max)
+        if (costs.size() == 1){
+            columns.add("cost");
+            searches.add(costs);
+        }
         // Get array of just the user's chosen software name, serial no,
         // version, license key
         ArrayList<Software> temp = new ArrayList<Software>();

@@ -388,5 +388,12 @@ public class User implements Item {
             return null;
         }
     }
+    @Override
+    public String toString() {
+        return "User [key=" + key + ", username=" + username + ", password=" + password
+                + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+                + ", cellPhone=" + cellPhone + ", workPhone=" + workPhone + ", isActive="
+                + isActive + ", roleId=" + roleId + "]";
+    }
 
 }

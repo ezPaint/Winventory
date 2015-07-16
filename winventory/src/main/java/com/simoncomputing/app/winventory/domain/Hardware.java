@@ -238,4 +238,12 @@ public class Hardware implements Item {
             return false;
         return true;
     }
+    
+    @Override
+    public String toString() {
+        return "Hardware [key=" + key + ", type=" + type + ", description=" + description
+                + ", cost=" + cost + ", serialNo=" + serialNo + ", condition=" + condition
+                + ", locationId=" + locationId + ", userId=" + userId + ", purchaseDate="
+                + purchaseDate + ", isActive=" + isActive + "]";
+    }
 }

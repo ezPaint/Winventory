@@ -46,8 +46,6 @@
 </script>
 
 <div class="table-responsive">
-	<br> <br>
-	<h3>Events</h3>
 
 	<br>
 	<table class="table table-striped" id="resultsTable"

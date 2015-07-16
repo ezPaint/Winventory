@@ -13,11 +13,14 @@ import org.apache.log4j.Logger;
 import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.LocationBo;
+import com.simoncomputing.app.winventory.bo.SoftwareBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Event;
+import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.Location;
+import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.Barcoder;
 import com.simoncomputing.app.winventory.util.BoException;
@@ -60,11 +63,25 @@ public class HardwareDeleteController extends BaseController {
                 request.setAttribute("error", "Error code: " + error);
             }
         }
+        
+        
 
-        // Attempt to delete the Hardware item from the database using a BO
+        // Attempt to get and delete the Hardware item from the database using a BO
         try {
+            
+            // Get hardware info
+            Hardware hw = HardwareBo.getInstance().read(Long.valueOf(key));
+            
+            // delete the hardware (and its events, included in bo.delete() )
             bo.delete(long_key);
             log.info("Deleted hardware #" + long_key + ".");
+            
+            //Record event 
+            String description = "Deleted Hardware with id " + key + " and all of its "
+                    + "associated events. Hardware: " + hw.toString();
+            EventBo.getInstance().createSystemEvent(description, getUserInfo(request), 
+                    EventType.SYSTEM, null, null, null, null);
+            
         } catch (BoException e) {
             String error = "Hardware item could not be deleted at this time.";
             log.error("Attempt to delete hardware item #" + long_key + " failed.");

@@ -40,11 +40,32 @@
 								<div class="panel-heading">
 									<h3 class="panel-title">General Information</h3>
 								</div>
-								<div class="panel-body">${totHw} pieces of Hardware on
-									record</div>
-								<div class="panel-body">${numSw} pieces of Software on
-									record</div>
+								<c:choose>
+								<c:when test="${totHw == 1}">
+									<div class="panel-body">${totHw} piece of Hardware on record</div>
+								</c:when>
+								<c:otherwise>
+								<div class="panel-body">${totHw} pieces of Hardware on record</div>
+								</c:otherwise>
+								</c:choose>
+								
+								<c:choose>
+								<c:when test="${numSw == 1}">
+									<div class="panel-body">${numSw} piece of Software on record</div>
+								</c:when>
+								<c:otherwise>
+									<div class="panel-body">${numSw} pieces of Software on record</div>
+								</c:otherwise>
+								</c:choose>
+								
+								<c:choose>
+								<c:when test="${numUsers == 1}">
+									<div class="panel-body">${numUsers} User on record</div>
+								</c:when>
+								<c:otherwise>
 								<div class="panel-body">${numUsers} Users on record</div>
+								</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 

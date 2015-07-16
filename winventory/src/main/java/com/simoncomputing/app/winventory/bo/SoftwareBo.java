@@ -405,12 +405,13 @@ public class SoftwareBo {
     public List<Software> searchAdvanced(ArrayList<String> columns,
             ArrayList<ArrayList<String>> searches) throws BoException {
         SqlSession session = null;
-        List<Software> list = null; 
+        List<Software> list = new ArrayList<Software>(); 
 
-        if (columns.equals("") || searches == null) {
-            return null;
+        
+        if(columns.size() == 0 && searches.size() == 0){ 
+            return SoftwareBo.getInstance().getAll(); 
         }
-
+        
         try {
             session = SessionFactory.getSession();
             SoftwareDao mapper = session.getMapper(SoftwareDao.class);
