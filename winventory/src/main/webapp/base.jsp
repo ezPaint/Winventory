@@ -43,8 +43,9 @@
 				<c:if test="${userInfo.hasPermission.readLocation}">
 				<li id="location"><a href="${contextPath}/location/results-location" target="_top">Location</a></li>
 				</c:if>
-				
+				<c:if test="${userInfo.hasPermission.readEvent }">
 				<li id="event"><a href="${contextPath}/event/insert" target="_top">Events</a></li>
+				</c:if>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 
@@ -55,14 +56,11 @@
 				<!--Only display admin button if user is admin -->
 				<c:if test="${userInfo.roleId == 1}">
 					<li><a href="${contextPath}/admin" target="_top"
-						class="btn btn-link"> <span class="glyphicon glyphicon-user"
+						class="btn btn-link"> <span class="glyphicon glyphicon-cog"
 							aria-hidden="true"></span>
 					</a></li>
 				</c:if>
 
-				<li><a href="#" target="_top" class="btn btn-link"> <span
-						class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-				</a></li>
 				<li><a href="${contextPath}/logout" target="_top"
 					class="btn btn-link"> <span class="glyphicon glyphicon-log-out"
 						aria-hidden="true"></span>

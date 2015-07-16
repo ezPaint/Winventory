@@ -65,43 +65,55 @@ public class Address {
 			logger.error("Error getting all Addresses from AddressBo");
 		}
         
-        
+        // Ensure name field is not null
         if (request.getParameter("name") == null) {
             errors.add("Address name field is required.");
         }
-        //Address name must be unique since inserting a location
-        //selects the address by address name
+        
+        // Address name must be unique since inserting a location
+        // selects the address by address name
         for (Address a : existingAddresses) {
         	if (a.getName().equalsIgnoreCase(request.getParameter("name"))) {
         		errors.add("Address name already exists");
         	}
         }
         
+        // set the name of the address
         this.setName(request.getParameter("name"));
        
+        // Ensure street 1 field is not null
         if (request.getParameter("street1") == null) {
             errors.add("Street address field is required.");
         }
+        // set the street1 field of the address
         this.setStreet1(request.getParameter("street1"));
+        
+        // set the street2 field of the address (not required)
         this.setStreet2(request.getParameter("street2"));
         
+        // Ensure the city field is not null
         if (request.getParameter("city") == null) {
             errors.add("City field is required.");
         }
+        // set the city field of the address
         this.setCity(request.getParameter("city"));
         
+        // Ensure the state field is not null
         if (request.getParameter("state") == null) {
             errors.add("State field is required.");
         }
+        // set the state field of the address (2 letter abbreviation)
         this.setState(request.getParameter("state"));
         
+        // Ensure the zipcode field of the address is not null
         if (request.getParameter("zipcode") == null) {
             errors.add("Zipcode field is required.");
         }
+        // set the zipcode field of the address
         this.setZipcode(request.getParameter("zipcode"));
         
-        // addresses will be assumed to be active when inserted
-        this.setIsActive(true);
+        // isActive is true if true, false if null
+        this.setIsActive(request.getParameter("isActive") != null);
 
         // Done, return the empty errors ArrayList
         return errors;
@@ -176,8 +188,8 @@ public class Address {
     }
     
     /**
-     * Saves the location to the db
-     * if empty arraylist is returned, the location was saved. else, not saved.
+     * Saves the address to the db
+     * if empty arraylist is returned, the address was saved. else, not saved.
      * @return errors array list of error messages when saving.
      */
     public ArrayList<String> create() {

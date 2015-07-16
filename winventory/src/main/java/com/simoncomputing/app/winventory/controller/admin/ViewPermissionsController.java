@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,12 +28,14 @@ public class ViewPermissionsController extends BaseController {
     private static final String PermissionsJsp = "/WEB-INF/flows/admin/viewPermissions.jsp";
     private static Logger logger = Logger.getLogger(ViewPermissionsController.class);
 
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (getUserInfo(request).getRoleId() != 1) {
-            this.denyPermission(request, response);
-        } else {
+        if (getUserInfo(request).getRoleId() == 1) {
             // Get the key for the role the user wants to view permissions of
             String key = request.getParameter("key");
 
@@ -45,6 +48,7 @@ public class ViewPermissionsController extends BaseController {
                 Long long_key = (long) Integer.parseInt(key);
                 role = RoleBo.getInstance().read(long_key);
             } catch (BoException e) {
+                logError(logger, e);
                 logger.error("No role associated with key: " + key, e);
             }
 
@@ -63,8 +67,10 @@ public class ViewPermissionsController extends BaseController {
                         permissionList.add(refPerm);
                     }
                 } catch (NumberFormatException e) {
+                    logError(logger, e);
                     logger.error("Invalid key specified.", e);
                 } catch (BoException e) {
+                    logError(logger, e);
                     logger.error("No role associated with key: " + key, e);
                 }
 
@@ -73,11 +79,17 @@ public class ViewPermissionsController extends BaseController {
             request.setAttribute("role", role);
             request.setAttribute("permissions", permissionList);
             this.forward(request, response, PermissionsJsp);
+        } else {
+            this.denyPermission(request, response);
+            return;
         }
     }
 
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-        this.forward(request, response, PermissionsJsp);
     }
 }

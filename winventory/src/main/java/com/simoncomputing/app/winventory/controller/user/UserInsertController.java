@@ -18,10 +18,13 @@ import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.authentication.EmailService;
+import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
 import com.simoncomputing.app.winventory.bo.RoleBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
+import com.simoncomputing.app.winventory.domain.Event;
+import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.domain.Role;
@@ -96,6 +99,9 @@ public class UserInsertController extends BaseController {
             if (saveErrors.size() == 0) {
                 try {
                     user.sendEmailInvite(request);
+                    Event event = EventBo.getInstance().createSystemEvent(
+                            user.getUsername() + " was created.", getUserInfo(request), EventType.SYSTEM,
+                            null, null, null, user);
                 }
                 catch (Exception e) {
                     errors.add("Must be logged in to send this email invite.");

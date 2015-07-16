@@ -1,5 +1,7 @@
 package com.simoncomputing.app.winventory.bo;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 import org.junit.*;
 
@@ -27,6 +29,9 @@ public class TestAddressBo {
         assertNotNull( readRecord.getKey() );
 
         TestAddressDao.compareRecords( address, readRecord );
+
+        List<Address> list1= addressBo.getListByIsActive( address.getIsActive() ) ; 
+        assertEquals( 1 , list1.size() );
 
         TestAddressDao.modifyRecord( address );
         count = addressBo.update( address );

@@ -7,7 +7,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Applications Inventory</title>
+<title>Winventory | Software Inventory</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <!-- Include Required Prerequisites for Date Range Picker -->
 <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
@@ -120,7 +122,7 @@ $(function() {
 							<div class="form-group">
 								<label for="cost" class="col-sm-2 control-label">Cost $</label>
 								<div class="col-sm-9">
-									<input name="cost" type="number" step="any" min="0" id="version"
+									<input name="cost" type="text" step="any" min="0" id="version" pattern="^[0-9]+(\.[0-9][0-9]?)*$"
 										class="form-control" placeholder="89.99" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
@@ -166,6 +168,19 @@ $(function() {
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>
+							
+							<div class="form-group">
+								<label for="isActive" class="col-sm-2 control-label">Activate item?
+									</label>
+								<div class="col-sm-9">
+									<input name="isActive" type="checkbox" id="isActive"
+										class="" style="margin-top: 12px;" value="true" checked> Yes, this item will be active immediately.
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							
 							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2">
 									<button type="submit" class="btn btn-default">Add</button>

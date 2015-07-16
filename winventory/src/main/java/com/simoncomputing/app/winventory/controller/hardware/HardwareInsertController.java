@@ -12,11 +12,15 @@ import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
+import com.simoncomputing.app.winventory.bo.LocationBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
+import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Hardware;
+import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.RefCondition;
+import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
@@ -143,12 +147,32 @@ public class HardwareInsertController extends BaseController {
 
                 if (h.getUserId() != null) {
                     String strang = "Inserted into DB and assigned to " + h.getUser().getUsername();
-                    EventBo.getInstance().createSystemEvent(strang,
-                            getUserInfo(request), EventType.ADMIN, h, null, null, null);
+                    EventBo.getInstance().createSystemEvent(strang, getUserInfo(request),
+                            EventType.ADMIN, h, null, null, null);
+
+                    User u = UserBo.getInstance().read(h.getUserId());
+
+                    if (u != null) {
+                        strang = "Acquired hardware " + h.getDescription() + " with key "
+                                + h.getKey();
+                        EventBo.getInstance().createSystemEvent(strang, getUserInfo(request),
+                                EventType.ADMIN, null, null, null, u);
+                    }
+
                 } else if (h.getLocationId() != null) {
-                    String strang = "Inserted into DB and stored at " + h.getLocation().getDescription();
-                    EventBo.getInstance().createSystemEvent(strang,
-                            getUserInfo(request), EventType.ADMIN, h, null, null, null);
+                    String strang = "Inserted into DB and stored at "
+                            + h.getLocation().getDescription();
+                    EventBo.getInstance().createSystemEvent(strang, getUserInfo(request),
+                            EventType.ADMIN, h, null, null, null);
+                    
+                    Location l = LocationBo.getInstance().read(h.getLocationId());
+
+                    if (l != null) {
+                        strang = "Hardware " + h.getDescription() + " with key "
+                                + h.getKey() + " was put here";
+                        EventBo.getInstance().createSystemEvent(strang, getUserInfo(request),
+                                EventType.ADMIN, null, l, null, null);
+                    }
                 } else {
                     log.error("Hardware was somehow almost inserted into DB with no user or location ID");
                     errors.add("Hardware was somehow almost inserted into DB with no user or location ID.");
@@ -161,9 +185,9 @@ public class HardwareInsertController extends BaseController {
                 request.setAttribute("success", false);
             }
         }
-        
+
         request.setAttribute("errors", errors);
-        
+
         // Forward the request to the "hardware/insert" page to allow the user
         // to enter more items
         request.getRequestDispatcher("/WEB-INF/flows/hardware/insert.jsp").forward(request,

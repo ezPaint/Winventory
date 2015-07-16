@@ -25,8 +25,8 @@ public class TestHardwareToSoftwareBo {
         int count = hardwareToSoftwareBo.create( hardwareToSoftware );
         assertEquals( 1, count );
 
-        HardwareToSoftware readRecord = hardwareToSoftwareBo.read( hardwareToSoftware.getKey() );
-        assertNotNull( readRecord.getKey() );
+        HardwareToSoftware readRecord = hardwareToSoftwareBo.read( hardwareToSoftware.getHardwareId(), hardwareToSoftware.getSoftwareId() );
+        assertNotNull( readRecord.getHardwareId() );
 
         TestHardwareToSoftwareDao.compareRecords( hardwareToSoftware, readRecord );
 
@@ -40,10 +40,10 @@ public class TestHardwareToSoftwareBo {
         count = hardwareToSoftwareBo.update( hardwareToSoftware );
         assertEquals( 1, count );
 
-        count = hardwareToSoftwareBo.delete( hardwareToSoftware.getKey());
+        count = hardwareToSoftwareBo.delete( hardwareToSoftware.getHardwareId(), hardwareToSoftware.getSoftwareId());
         assertEquals( 1, count );
 
-        readRecord = hardwareToSoftwareBo.read( hardwareToSoftware.getKey());
+        readRecord = hardwareToSoftwareBo.read( hardwareToSoftware.getHardwareId(), hardwareToSoftware.getSoftwareId());
         assertNull( readRecord );
 
     }

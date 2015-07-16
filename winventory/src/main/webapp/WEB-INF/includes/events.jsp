@@ -6,6 +6,9 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
+<c:if test="${userInfo.hasPermission.readEvent}">
+
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 
@@ -66,9 +69,8 @@
 			<c:if test="${events != null && events.size() > 0}">
 				<c:forEach var="i" begin="0" end="${events.size() - 1}">
 					<tr>
-						<td><a
-							href="${contextPath}/event/view?key=${events.get(i).getKey()}"
-							class="btn btn-default">
+						<td><a href="${contextPath}/event/view?key=${events.get(i).getKey()}"
+							class="btn btn-primary">
 								${events.get(i).getKey()}</a></td>
 						<td>${fn:substring(events.get(i).getDescription(), 0, 90)}<c:if
 								test="${fn:length(events.get(i).getDescription()) > 90}">...</c:if>
@@ -86,3 +88,4 @@
 		</tbody>
 	</table>
 </div>
+</c:if>

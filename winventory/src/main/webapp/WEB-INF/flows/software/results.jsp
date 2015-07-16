@@ -9,7 +9,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Software</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <link type="text/css" rel="stylesheet"
     href='${contextPath}/resources/css/normalize.css' />
@@ -56,7 +58,7 @@
 
 						
 
-						<h2 class="center">Applications</h2>
+						<h2 class="center">Software</h2>
                     </div>
                     <div class="padme">
                     

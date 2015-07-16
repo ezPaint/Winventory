@@ -3,18 +3,18 @@ package com.simoncomputing.app.winventory.controller.software;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
-
 import com.simoncomputing.app.winventory.bo.EventBo;
+import com.simoncomputing.app.winventory.bo.HardwareToSoftwareBo;
 import com.simoncomputing.app.winventory.bo.SoftwareBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Event;
+import com.simoncomputing.app.winventory.domain.Hardware;
+import com.simoncomputing.app.winventory.domain.HardwareToSoftware;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.util.Barcoder;
 import com.simoncomputing.app.winventory.util.BoException;
@@ -56,19 +56,36 @@ public class ViewController extends BaseController {
                 } catch (BoException e) {
                     logError(log, e);
                 }
+
+                // if there was no software found
+                if (software == null) {
+                    log.info("Invalid key for HTTP GET /software/view. Redirecting to software/results.");
+                    String error = "No software exists with key " + key
+                            + ". The software may have been deleted or "
+                            + "that may be the wrong key.";
+                    response.sendRedirect(request.getContextPath() + "/software/results?error="
+                            + error);
+                    return;
+                }
+
                 request.setAttribute("barcode", Barcoder.getBarcode(software));
 
                 EventBo eBo = EventBo.getInstance();
                 try {
-                    events = eBo.getEventsOf(software);
+                    if (software.getKey() != null)
+                    {
+                        events = eBo.getListBySoftwareId(software.getKey());
+                    }
                 } catch (BoException e) {
                     logError(log, e);
                 }
             }
+
             request.setAttribute("key", key);
             request.setAttribute("software", software);
-
-            request.setAttribute("events", events);
+            
+            
+            request.setAttribute("events", events); 
             this.key = key;
 
             request.setAttribute("delete", request.getParameter("delete")); // delete
@@ -77,10 +94,23 @@ public class ViewController extends BaseController {
             request.setAttribute("success", request.getParameter("success")); // software
                                                                               // was
                                                                               // updated
+            
+            //Find associated hardware
+            ArrayList<Hardware> hardware = null;
+            try {
+                 hardware = new ArrayList<Hardware>(
+                        HardwareToSoftwareBo.getInstance().getHardwareBySoftwareId(software.getKey()));
+            } catch (BoException e) {
+                String error = logError(log, e);
+                request.setAttribute("error", "Error code: " + error);
+            }
+            
+            request.setAttribute("hardware", hardware);
 
             forward(request, response, "/WEB-INF/flows/software/view.jsp");
         } else {
             denyPermission(request, response);
+            return;
         }
 
     }

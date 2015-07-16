@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
-<title>Winventory</title>
+<title>Winventory | Location</title>
     <meta charset="UTF-8">
     
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/style.css' />
@@ -36,6 +36,10 @@
 					</div>
 					
 					<div class="padme">
+					
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
+						
 						<br>
 						<c:if test="${not empty errors}">
                     	<div class="alert alert-danger" role="alert">
@@ -95,7 +99,7 @@
 								</label>
 								<div class="col-sm-9">
 									<input name="description" type="text" id="description"
-										class="form-control" placeholder="Description" 
+										class="form-control" placeholder="Description" pattern="^[^\'\&quot]*$"
 										<%if(request.getParameterMap().containsKey("description")) {%>
 										value="<%=request.getAttribute("description")%>" 
 										<%}%>
@@ -112,7 +116,7 @@
 									</label>
 								<div class="col-sm-9">
 									<input name="isActive" type="checkbox" id="isActive"
-										class="" style="margin-top: 24px;" value="true" checked> Yes, the location is currently active.
+										class="" style="margin-top: 12px;" value="true" checked> Yes, the location is currently active.
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

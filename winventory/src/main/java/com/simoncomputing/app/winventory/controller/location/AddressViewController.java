@@ -46,6 +46,7 @@ public class AddressViewController extends BaseController {
         // with the key value (assuming there is a key parameter in the request)
         Address address = null;
         Long long_key = null;
+        String error = null;
 
         if (key != null) {
             // Cast the key to the correct type
@@ -57,19 +58,25 @@ public class AddressViewController extends BaseController {
             // Retrieve the Address associated with it using a BO instance
             address = AddressBo.getInstance().read(long_key);
         } catch (BoException e) {
-            String error = logError(log, e);
-            request.setAttribute("error", "Error code: " + error);
+            log.info("Invalid key for HTTP GET /location/view-address. The page will show no results." + logError(log, e));
+            error = "No address key was entered";
         }
 
         // If the Address is not found, this will throw an error (i.e. the url
         // contains a key that does not exist at "location/view-address?key=")
-        if (address == null) {
-            String error = logError(log, new NullPointerException());
-            request.setAttribute("error", "Error code: " + error);
+        if (address == null && error == null) {
+            log.info("Invalid key for HTTP GET /location/view-address. The page will show no results." + log, new NullPointerException());
+            error = "No address exists with key " + key + ". The address may have been deleted or that may be the wrong key.";
         }
 
         // Set the Address as an attribute for the request
         request.setAttribute("address", address);
+        
+        request.setAttribute("error", error);
+        
+        request.setAttribute("delete", request.getParameter("delete"));
+        
+        request.setAttribute("success", request.getParameter("success"));
 
         // Forward the request to the "location/view-address" page
         request.getRequestDispatcher("/WEB-INF/flows/locations/view-address.jsp").forward(request,
@@ -78,8 +85,7 @@ public class AddressViewController extends BaseController {
     }
 
     /**
-     * Runs when the "delete" button is selected on the "location/view-address"
-     * page
+     * NO LONGER ACTIVE - used to be used for deletes
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {

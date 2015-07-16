@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.bo.AddressBo;
+import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Address;
+import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.util.BoException;
 
@@ -44,6 +46,7 @@ public class LocationInsertController extends BaseController {
         	 addresses = (ArrayList<Address>) AddressBo.getInstance().getAllActive();
          } catch (BoException e) {
              logger.error("BoException in LocationInsertController when trying to get locations");
+             request.setAttribute("error", "Unable to retrieve a list of valid addresses");
          }
          if (addresses != null) {
              request.setAttribute("addresses", addresses);
@@ -71,15 +74,38 @@ public class LocationInsertController extends BaseController {
         // Create the new location in the db, if no errors exist
         if (errors.size() == 0) {
             location.create();
+            try {
+            	AddressBo addressBo = AddressBo.getInstance();
+                Address atAddress = addressBo.read(Long.valueOf(location.getAddressId()));
+				EventBo.getInstance().createSystemEvent("Location " + location.getDescription() + " at " + atAddress.getName() + " was created.", 
+						getUserInfo(request), EventType.SYSTEM, null, location, null, null);
+			} catch (BoException e) {
+				logger.error("EventBo exception when creating a system event.");
+			}
+
         }
     	
         // if errors, return to add location page and display errors
         if (errors.size() > 0) {
             // attach errors to the request
             request.setAttribute("errors", errors);
+     
+            // Set up the list of addresses to be used in the dropdown for
+        	// the location insert form   	
+        	ArrayList<Address> addresses = new ArrayList<Address>();
+            try {
+            	addresses = (ArrayList<Address>) AddressBo.getInstance().getAllActive();
+            } catch (BoException e) {
+                logger.error("BoException in LocationInsertController when trying to get locations");
+                request.setAttribute("error", "Unable to retrieve a list of valid addresses");
+            }
+            if (addresses != null) {
+                request.setAttribute("addresses", addresses);
+            }
+            
             // set the previously inserted attributes so user won't
             // have to re-enter them
-            request.setAttribute("address", location.getAddressId());
+            request.setAttribute("address", location.getAddressId() + "");
             request.setAttribute("description", location.getDescription());
             request.setAttribute("isActive", location.getIsActive());
             
@@ -89,7 +115,7 @@ public class LocationInsertController extends BaseController {
         }
         
         // redirect back to location if the insert was successful
-    	response.sendRedirect(request.getContextPath() + "/location/results-location");
+    	response.sendRedirect(request.getContextPath() + "/location/results-location?success=true");
  
     }
 

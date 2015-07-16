@@ -37,6 +37,7 @@ public class HardwareAdvancedSearchController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        if(userHasPermission(request, "readHardware")){
         // Create an ArrayList of all the valid Ref_Conditions, which will be
         // used to prevent the user from entering
         // or choosing a non-valid condition
@@ -58,6 +59,10 @@ public class HardwareAdvancedSearchController extends BaseController {
         // Forward the request to the "hardware/advanced-search" page
         request.getRequestDispatcher("/WEB-INF/flows/hardware/advanced-search.jsp").forward(
                 request, response);
+        } else {
+            denyPermission(request, response);
+            return;
+        }
 
     }
 

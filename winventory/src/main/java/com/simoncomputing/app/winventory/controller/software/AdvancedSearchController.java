@@ -32,6 +32,7 @@ public class AdvancedSearchController extends BaseController {
             forward(request, response, "/WEB-INF/flows/software/advanced-search.jsp");
         } else {
             denyPermission(request, response);
+            return;
         }
     }
     /**
@@ -109,10 +110,10 @@ public class AdvancedSearchController extends BaseController {
         // Narrow down list by Cost
         // -----------------------------------------------------------------
         try {
-            results = (ArrayList<Software>) bo.searchCostRange(results, costs.get(0), costs.get(1)); // Reduce
-                                                                                                     // list
-                                                                                                     // by
-                                                                                                     // cost
+            if (costs.size() > 1){
+                // Reduce list by cost
+                results = (ArrayList<Software>) bo.searchCostRange(results, costs.get(0), costs.get(1)); 
+            }
         } catch (BoException e) {
             logError(log, e);
         }

@@ -29,4 +29,6 @@ public interface EventDao {
     // PROTECTED CODE -->
     public List<Event> getListByDateRange(@Param("start") Date start,
             @Param("end") Date end) throws DaoException;
-}
+    
+    public int deleteAllWithSoftwareId(@Param("param1")Long key) throws DaoException;
+} 

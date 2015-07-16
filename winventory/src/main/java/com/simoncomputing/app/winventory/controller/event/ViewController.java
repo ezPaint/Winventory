@@ -19,10 +19,11 @@ import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.Software;
+import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
- * Single software item view controller.
+ * Single event item view controller.
  * @author megan.rigsbee
  *
  */
@@ -33,7 +34,13 @@ public class ViewController extends BaseController {
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
+        // ensure the user can read events
+        if(!userHasPermission(request, "readEvent")){
+            denyPermission(request, response);
+            return;
+        }
+        
         //Use the key the user clicked on to retrieve the corresponding software object from
         //the database
         String key = request.getParameter("key");
@@ -42,9 +49,10 @@ public class ViewController extends BaseController {
         //initialized to a new list to avoid null pointer exception
 
         Event event = null;
-        List<Hardware> hardware = new ArrayList<Hardware>();
-        List<Software> software = new ArrayList<Software>();
-        List<Location> locations = new ArrayList<Location>();
+        Hardware hardware = new Hardware();
+        Software software = new Software();
+        Location location = new Location();
+        User user = new User();
         String username = "";
         
         if (key != null) {
@@ -57,34 +65,56 @@ public class ViewController extends BaseController {
         }
         
         if (event != null) {
-            try {
-                hardware = EventBo.getInstance().getHardwareOf(event); //get software obj from database
-            } catch (BoException e) {
-                logError(log, e);
+            if (event.getHardwareId() != null)
+            {
+            	try {
+                    hardware = EventBo.getInstance().getHardwareOf(event); //get software obj from database
+                } catch (BoException e) {
+                    logError(log, e);
+                }
+            }
+
+            
+            if (event.getLocationId() != null)
+            {
+            	try {
+                    location = EventBo.getInstance().getLocationOf(event); //get software obj from database
+                } catch (BoException e) {
+                    logError(log, e);
+                }
             }
             
-            try {
-                locations = EventBo.getInstance().getLocationOf(event); //get software obj from database
-            } catch (BoException e) {
-                logError(log, e);
+            
+            if (event.getUserId() != null) {
+	            try {
+	                user = EventBo.getInstance().getUserOf(event); //get software obj from database
+	            } catch (BoException e) {
+	                logError(log, e);
+	            }
             }
             
-           
-            try {
-            	username = UserBo.getInstance().read(event.getCreatorId()).getUsername();
-    		} catch (BoException e) {
-    			log.error("Error reading user of event id=" + event.getKey() + " with creator_id=" 
-    					+ event.getCreatorId() + ". The user may not exist?");
-    		}
-        
-        
-       
-            try {
-                software = EventBo.getInstance().getSoftwareOf(event); //get software obj from database
-            } catch (BoException e) {
-                logError(log, e);
+            if (event.getCreatorId() != null)
+            {
+                try {
+                	username = UserBo.getInstance().read(event.getCreatorId()).getUsername();
+        		} catch (BoException e) {
+        			log.error("Error reading user of event id=" + event.getKey() + " with creator_id=" 
+        					+ event.getCreatorId() + ". The user may not exist?");
+        		}
             }
-            request.setAttribute("validKey", true);
+
+        
+        
+	       if (event.getSoftwareId() != null)
+	       {
+	    	   try {
+	               software = EventBo.getInstance().getSoftwareOf(event); //get software obj from database
+	           } catch (BoException e) {
+	               logError(log, e);
+	           }
+	          
+	       }
+	       request.setAttribute("validKey", true);
         }
         else
         {
@@ -95,8 +125,9 @@ public class ViewController extends BaseController {
         request.setAttribute("event", event); 
         
         request.setAttribute("hardware", hardware);
-        request.setAttribute("locations", locations);
+        request.setAttribute("location", location);
         request.setAttribute("software", software);
+        request.setAttribute("user", user);
         request.setAttribute("username", username);
         
         forward(request, response, "/WEB-INF/flows/events/view.jsp");

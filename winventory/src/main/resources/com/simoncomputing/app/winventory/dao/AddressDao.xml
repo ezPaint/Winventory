@@ -35,6 +35,10 @@
         )
     </insert>
 
+    <select id="getListByIsActive" parameterType="boolean" resultMap="AddressMapper">
+        select * from ADDRESS
+        where IS_ACTIVE = #{isActive}
+    </select>
 
 
     <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Address">

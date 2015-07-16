@@ -120,6 +120,7 @@ public class BaseController extends HttpServlet {
      */
     public void denyPermission(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String next = request.getRequestURI();
+        logger.info("User " + this.getUserInfo(request).getUsername() + " tried to access resource " + request.getRequestURI() + " and was denied permission.");
         response.sendRedirect(request.getContextPath() + "/permissionDenied?next=" + next);
         return;
     }

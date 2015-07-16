@@ -79,11 +79,15 @@
 
 
     <!-- PROTECTED CODE -->
-
+    <delete id="deleteAllWithSoftwareId" parameterType="long">
+        delete from EVENT
+        where SOFTWARE_ID = #{param1};
+    </delete>
 
 	<select id="getListByDateRange" resultMap="EventMapper">
-		select * from EVENT  where DATE_CREATED >= #{start,jdbcType=DATE}
-		<!-- AND #{end,jdbcType=DATE} >= DATE_CREATED -->;
-		 
+		select * from EVENT <!--  where DATE_CREATED >= #{start,jdbcType=DATE}
+		AND #{end,jdbcType=DATE} >= DATE_CREATED -->;
 	</select>
+	
+
 </mapper>

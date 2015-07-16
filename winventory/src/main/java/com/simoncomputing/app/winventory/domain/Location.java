@@ -1,5 +1,6 @@
 package com.simoncomputing.app.winventory.domain;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,7 +15,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 /**
 * The Location Table.
 */
-public class Location  implements Item{
+public class Location implements Item {
 
     private Long      key;
     private String    description;          //Specific location of item at specified address (e.g. suite 200, desk #3)
@@ -31,6 +32,7 @@ public class Location  implements Item{
     public void      setAddressId( Integer value ) { addressId = value; }
     // PROTECTED CODE -->
     private static Logger logger = Logger.getLogger(Location.class);
+    private static AddressBo ab = AddressBo.getInstance();
     
     /**
      * Binds a post request containing the insertlocation form
@@ -57,6 +59,19 @@ public class Location  implements Item{
         String addressKey = request.getParameter("address");
         this.setAddressId( Integer.parseInt(addressKey) );
         
+        LocationBo locationBo = LocationBo.getInstance();
+        try {
+			List<Location> locations = locationBo.getAll();
+			for(Location l : locations) {
+				if (l.getAddress().getKey().equals(Long.valueOf(addressKey))) {
+					if (l.getDescription().equals(description)) {
+						errors.add("Address / Description pair already exists");
+					}
+				}
+			}
+		} catch (BoException e) {
+			logger.error("error getting all locations from location BO");
+		}
         // Done, return the empty errors ArrayList
         return errors;
     }
@@ -76,6 +91,14 @@ public class Location  implements Item{
             logger.error("BoException when inserting location");
         } 
         return errors;
+    }
+    
+    public Address getAddress(){
+    	try {
+			return ab.read(addressId.longValue());
+		} catch (BoException e) {
+			return null;
+		}
     }
 
 }

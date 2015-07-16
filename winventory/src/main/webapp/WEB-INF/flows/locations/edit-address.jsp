@@ -10,7 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
-<title>Winventory</title>
+<title>Winventory | Location</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
@@ -39,13 +39,16 @@
 		<div class="row">
 			<jsp:include page="locationBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
+				
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">Edit Address Info</h2>
 					</div>
 					<br>
 					<div class="padme">
+					
+					<jsp:include page="/WEB-INF/includes/error.jsp" />
+					<jsp:include page="/WEB-INF/includes/success.jsp" />
 					
 					<c:if test="${not empty errors}">
                     	<div class="alert alert-danger" role="alert">
@@ -195,6 +198,20 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label for="isActive" class="col-sm-2 control-label">Is Active
+								</label>
+								<div class="col-sm-9">
+									<select name="isActive" class="form-control" required>
+										<option title="true" value="true">True</option>
+										<option title="false" value="false">False</option>
+									</select>
+
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="form-group">
 								<div class="col-sm-10 col-sm-offset-2">
 									<button type="submit" class="btn btn-primary">Submit
 										Changes</button>
@@ -212,6 +229,23 @@
 							<input type="hidden" id="key" name="key"
 								value="<%=address.getKey()%>">
 						</form>
+						
+						<br>
+                         <br>
+                         <br>
+                         <br>
+                         <hr>
+                         <br>
+                         
+                          	<form action="${contextPath}/location/view-address" role="form" method="get" class="form-group">
+
+								<c:if test="${userInfo.hasPermission.deleteAddress }">
+                                    <input type="hidden" id="key" name="key" value="<%=address.getKey()%>">
+                                        <input type="hidden" id="delete" name="delete" value="true">
+                                    <button type="Submit" name="button" value="Delete" class="btn btn-danger btn-lg btn-center">Delete Forever</button>
+                                    
+								</c:if>
+						 	</form>
 
 						<%
 						    }
@@ -230,6 +264,8 @@
 	<script>
 		var state = '${pageContext.request.getAttribute("address").getState()}';
 		$('select[name=state]').val(state);
+		var isActive = '${pageContext.request.getAttribute("address").getIsActive()}';
+		$('select[name=isActive]').val(isActive);
 	</script>
 	<script>
 		function reloadConditions() {
@@ -246,6 +282,8 @@
 			$('select[name=state]').val(state);
 			var zipcode = '${pageContext.request.getAttribute("address").getZipcode()}';
 			$("#zipcode").val(zipcode);
+			var isActive = '${pageContext.request.getAttribute("address").getIsActive()}';
+			$('select[name=isActive]').val(isActive);
 		}
 	</script>
 

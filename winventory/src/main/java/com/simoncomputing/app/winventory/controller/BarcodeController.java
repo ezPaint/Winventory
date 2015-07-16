@@ -15,13 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.authentication.EmailService;
+import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.LocationBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
+import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.formbean.BarcodeBean;
+import com.simoncomputing.app.winventory.formbean.UserInfoBean;
 import com.simoncomputing.app.winventory.util.Barcoder;
 import com.simoncomputing.app.winventory.util.BoException;
 
@@ -34,13 +37,14 @@ import com.simoncomputing.app.winventory.util.BoException;
  */
 
 @WebServlet("/barcodes/barcode")
-public class BarcodeController extends HttpServlet {
+public class BarcodeController extends BaseController {
     private static final long serialVersionUID = 1L;
     private BarcodeBean bean = new BarcodeBean();
     static Logger logger = Logger.getLogger(BarcodeController.class);
     static EmailService emailer;
 	private static UserBo ub = UserBo.getInstance();			// User business object
 	private static HardwareBo hb = HardwareBo.getInstance();	// Hardware business object
+	private static LocationBo lb = LocationBo.getInstance();	// Location business object
 	
 	/**
 	 * simply load the jsp on a GET
@@ -72,15 +76,15 @@ public class BarcodeController extends HttpServlet {
 			logger.debug("pkList is " + pkList);
 			try {
 				if (bean.getLocation()==null)
-					bean.setHardwareIds(updateDatabase(pkList, hwList, bean.getUser()));	// update the database
+					bean.setHardwareIds(updateDatabase(pkList, hwList, bean.getUser(),getUserInfo(request)));	// update the database
 				else
-					bean.setHardwareIds(updateDatabase(pkList, hwList, bean.getLocation()));	// update the database
+					bean.setHardwareIds(updateDatabase(pkList, hwList, bean.getLocation(),getUserInfo(request)));	// update the database
 				logger.trace("updating database");
+				request.setAttribute("success", "Successfully updated.");
 			} catch (BoException bo) {
 				logger.error("Could not update database");
 				request.setAttribute("error", "Database not updated.  Errors occurred.");
 			}
-			request.setAttribute("success", "Successfully updated.");
 		} else if (clear){	// if want to clear previous input (start a new search)
 	    	// simply do a get
 			request.setAttribute("success", "Successfully cleared");
@@ -141,15 +145,20 @@ public class BarcodeController extends HttpServlet {
      * @throws BoException when cannot get valid emails to notify users
      */
     
-    private ArrayList<Long> updateDatabase(List<Long> pkList, ArrayList<Hardware> hwList, User user) throws BoException {
+    private ArrayList<Long> updateDatabase(List<Long> pkList, ArrayList<Hardware> hwList, User user, UserInfoBean need) throws BoException {
     	Map<String,String> recipients = new HashMap<String,String>();	// map of recipients to their messages
+		User oldUser = null;							//temporary user object for convenience
+		Long oldId = null;
+		Long newId = null;
     	for (Long pk: pkList) {
 			try {
 				Hardware rem = hb.read(pk);		// get the hardware with correct pk
+				newId=user.getKey();
+				oldId=rem.getUserId();
 				hwList.remove(rem);								// remove it from the overall hardware list
 				if (!(rem.getUserId()==null)){	// if userid is not null
-					User tmp = ub.read(rem.getUserId().longValue());	// get correct user
-					String email = tmp.getEmail();						// get that user's email
+					oldUser = ub.read(rem.getUserId().longValue());	// get correct user
+					String email = oldUser.getEmail();						// get that user's email
 					/*
 					 * add onto email message apprporiately based on whether one exists currently or not
 					 * tell the user what of their hardware is no longer associated with them
@@ -159,13 +168,16 @@ public class BarcodeController extends HttpServlet {
 						recipients.put(email, newMessage);
 					}
 					else{
-						recipients.put(email, "Hello " + tmp.getFirstName() + ",\n\n"
+						recipients.put(email, "Hello " + oldUser.getFirstName() + ",\n\n"
 								+ "This email is to update you on the ownership of your Hardware "
 								+ "with serial number(s):\n\n" + rem.getKey() + " (no longer yours)\n");
 					}
 				}
 				rem.setUserId(null);	// null the userid of the hardware removed no matter what
 				hb.update(rem);	//update the hw in the database
+				// log event of hardware dissociation
+				if (newId.equals(oldId))
+					EventBo.getInstance().createSystemEvent("Hardware with serial no. " + rem.getSerialNo() + " was dissociated from " + oldUser.getUsername(), need,  EventType.ADMIN, rem,null,null,oldUser);
 			} catch (NumberFormatException e) {
 				logger.error("Cannot dissociate hardware with pk " + pk + " because pk is not a number");
 			} catch (BoException e) {
@@ -181,9 +193,8 @@ public class BarcodeController extends HttpServlet {
 			/*
 			 * append to email notifying user of change if user exists and is different (i.e. there IS a change to notify)
 			 */
-			Long oldId = hw.getUserId();		//id of previous owner,null if none
-			Long newId = user.getKey();			//id of new owner, cannot be null
-			User tmp;							//temporary user object for convenience
+			oldId = hw.getUserId();		//id of previous owner,null if none
+			newId = user.getKey();			//id of new owner, cannot be null
 			String email;						//email address to send to
 			ids.add(hw.getKey());
 			if(!newId.equals(oldId)){			//if the owner changes
@@ -195,17 +206,19 @@ public class BarcodeController extends HttpServlet {
 					 * if there isn't one already
 					 */
 					
-					tmp = ub.read(oldId.longValue());
-					email = tmp.getEmail();
+					oldUser = ub.read(oldId);
+					email = oldUser.getEmail();
 					if (recipients.containsKey(email)){
 						String newMessage = recipients.get(email)+"\n"+hw.getKey() + "(no longer yours)\n";
 						recipients.put(email, newMessage);
 					}
 					else{
-						recipients.put(email, "Hello " + tmp.getFirstName() + ",\n "
+						recipients.put(email, "Hello " + oldUser.getFirstName() + ",\n "
 								+ "This email is to update you on the ownership of your Hardware"
 								+ " with serial number(s):\n\n" + hw.getKey() + "(no longer yours)\n");
 					}
+					//log event of hardware dissociation
+					EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was dissociated from " + oldUser.getUsername(), need,  EventType.ADMIN, hw,null,null,oldUser);
 				}
 				
 				/*
@@ -215,26 +228,28 @@ public class BarcodeController extends HttpServlet {
 				 * isn't one already 
 				 */
 				
-				tmp = ub.read(newId);
-				email = tmp.getEmail();
+				oldUser = ub.read(newId);
+				email = oldUser.getEmail();
 				if (recipients.containsKey(email)){
 					String newMessage = recipients.get(email)+"\n"+hw.getKey() + "(newly yours)\n";
 					recipients.put(email, newMessage);
 				}
 				else{
-					recipients.put(email, "Hello " + tmp.getFirstName() + ",\n "
+					recipients.put(email, "Hello " + oldUser.getFirstName() + ",\n "
 							+ "This email is to update you on the ownership of your Hardware"
 							+ " with serial number(s):\n\n" + hw.getKey() + "(newly yours)\n");
 				}
 			}
 			hw.setUserId(newId);	// always update userid
-			
 			/*
 			 * try updating hardware. log error if unable to 
 			 */
 			
 			try {
 				hb.update(hw);
+				//log event of hardware association
+				if (!newId.equals(oldId))
+					EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was associated with " + ub.read(oldId).getUsername(), need,  EventType.ADMIN, hw,null,null,user);
 			} catch (BoException e) {
 				logger.error("Could not update Hardware with pk " + hw.getKey());
 			}
@@ -270,13 +285,20 @@ public class BarcodeController extends HttpServlet {
      * @throws BoException when cannot get valid emails to notify users
      */
     
-    private ArrayList<Long> updateDatabase(List<Long> pkList, ArrayList<Hardware> hwList, Location location) throws BoException {
+    private ArrayList<Long> updateDatabase(List<Long> pkList, ArrayList<Hardware> hwList, Location location, UserInfoBean need) throws BoException {
+    	Long oldId = null;
+    	Long newId = location.getKey();
     	for (Long pk: pkList) {
 			try {
 				Hardware rem = hb.read(pk);		// get the hardware with correct pk
+				oldId = rem.getLocationId();
 				hwList.remove(rem);								// remove it from the overall hardware list
 				rem.setLocationId(null);	// null the locationId of the hardware removed no matter what
 				hb.update(rem);	//update the hw in the database
+				//log hardware dissociation event
+				if(newId.equals(oldId))
+					logger.debug("newId " + newId + " oldId " + oldId);
+					EventBo.getInstance().createSystemEvent("Hardware with serial no " + rem.getSerialNo() + "was dissociated from Location with address " + lb.read(oldId).getAddress(), need,  EventType.ADMIN, rem,lb.read(oldId),null,null);
 			} catch (NumberFormatException e) {
 				logger.error("Cannot dissociate hardware with pk " + pk + " because pk is not a number");
 			} catch (BoException e) {
@@ -289,6 +311,7 @@ public class BarcodeController extends HttpServlet {
     	 */
 		ArrayList<Long> ids = new ArrayList<Long>();
 		for (Hardware hw: hwList) {
+			oldId = hw.getLocationId();
 			hw.setLocationId(location.getKey());	// always update userid
 			ids.add(hw.getKey());
 			/*
@@ -297,6 +320,18 @@ public class BarcodeController extends HttpServlet {
 			
 			try {
 				hb.update(hw);
+				
+				/*
+				 * if the ids are different, log a dissociation event if there is an old id
+				 * always log an association event
+				 */
+				
+				if(!newId.equals(oldId)){
+					if(oldId != null){
+						EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was dissociated from Location with adress " + lb.read(oldId).getAddress(), need,  EventType.ADMIN, hw,lb.read(oldId),null,null);
+					}
+					EventBo.getInstance().createSystemEvent("Hardware with serial number " + hw.getSerialNo() + " was associated with Location with adress " + lb.read(oldId).getAddress(), need,  EventType.ADMIN, hw,location,null,null);
+				}
 			} catch (BoException e) {
 				logger.error("Could not update Hardware with pk " + hw.getKey());
 			}

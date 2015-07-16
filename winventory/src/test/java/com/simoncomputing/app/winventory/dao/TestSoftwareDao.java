@@ -65,6 +65,10 @@ public class TestSoftwareDao {
             assertEquals( 1, list5.size() );
             compareRecords( software, list5.get( 0 ) );
 
+            List<Software> list6= softwareDao.getListByIsActive( software.getIsActive() ) ; 
+            assertEquals( 1, list6.size() );
+            compareRecords( software, list6.get( 0 ) );
+
             modifyRecord( software );
             count = softwareDao.update( software );
             assertEquals( 1, count );
@@ -99,6 +103,7 @@ public class TestSoftwareDao {
         software.setCost( (double) randomNumber() );
         software.setPurchasedDate( new Date(0) );
         software.setExpirationDate( new Date(0) );
+        software.setIsActive( true  );
 
         return software;
     }
@@ -113,6 +118,7 @@ public class TestSoftwareDao {
         assertEquals( software.getCost(), readRecord.getCost() );
         assertNotSame( software.getPurchasedDate(), readRecord.getPurchasedDate() );
         assertNotSame( software.getExpirationDate(), readRecord.getExpirationDate() );
+        assertEquals( software.getIsActive(), readRecord.getIsActive() );
 
     }
 
@@ -126,6 +132,7 @@ public class TestSoftwareDao {
         software.setCost( (double) randomNumber() );
         software.setPurchasedDate( new Date(0) );
         software.setExpirationDate( new Date(0) );
+        software.setIsActive( true  );
 
     }
 

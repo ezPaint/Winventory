@@ -1,17 +1,16 @@
 package com.simoncomputing.app.winventory.bo;
 
-import java.sql.Date;
+import java.sql.Date; // note: delete java.util.Date if batgen adds it. we use sql date
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.*;
 
 import com.simoncomputing.app.winventory.dao.SessionFactory;
 import com.simoncomputing.app.winventory.dao.SoftwareDao;
+import com.simoncomputing.app.winventory.domain.ItemType;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.util.BoException;
 import com.simoncomputing.app.winventory.dao.*;
@@ -71,30 +70,30 @@ public class SoftwareBo {
         return result;
     }
 
-    public int delete( Long key ) throws BoException {
-        SqlSession session = null;
-        int result = 0;
-        String where = "KEY='" + key + "' ";
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put( "where", where );
-
-        try {
-            session = SessionFactory.getSession();
-            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
-            result = mapper.delete( map );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
+//    public int delete( Long key ) throws BoException {
+//        SqlSession session = null;
+//        int result = 0;
+//        String where = "KEY='" + key + "' ";
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put( "where", where );
+//
+//        try {
+//            session = SessionFactory.getSession();
+//            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+//            result = mapper.delete( map );
+//            session.commit();
+//
+//        } catch ( Exception e ) {
+//            session.rollback();
+//            throw new BoException( e );
+//
+//        } finally { 
+//            if ( session != null )
+//                session.close();
+//        }
+//
+//        return result;
+//    }
 
     public Software read( Long key ) throws BoException {
         SqlSession session = null;
@@ -217,6 +216,28 @@ public class SoftwareBo {
             session = SessionFactory.getSession();
             SoftwareDao mapper = session.getMapper( SoftwareDao.class );
             list = mapper.getListByExpirationDate( key );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return list;
+    }
+
+    public List<Software> getListByIsActive( Boolean key ) throws BoException {
+        SqlSession session = null;
+        List<Software> list;
+
+        try {
+            session = SessionFactory.getSession();
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            list = mapper.getListByIsActive( key );
             session.commit();
 
         } catch ( Exception e ) {
@@ -483,7 +504,7 @@ public class SoftwareBo {
 
         if (dates.get(0).equals("") && dates.get(1).equals("") && dates.get(2).equals("")
                 && dates.get(3).equals("")) {
-            return list;
+            return results;
         }
 
         List<Software> purchased = new ArrayList<Software>();
@@ -564,5 +585,37 @@ public class SoftwareBo {
             if ( session != null )
                 session.close();
         }
+    }
+    
+    /**
+     * USE THIS INSTEAD OF THE BATGEN DELETE
+     * It also deletes associated events of the object.s
+     */
+    public int delete( Long key ) throws BoException {
+        SqlSession session = null;
+        int result = 0;
+        String where = "KEY='" + key + "' ";
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put( "where", where );
+
+        //first delete all events associated with this object
+        EventBo.getInstance().deleteEventsOf(ItemType.SOFTWARE, key);
+        
+        try {
+            session = SessionFactory.getSession();
+            SoftwareDao mapper = session.getMapper( SoftwareDao.class );
+            result = mapper.delete( map );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return result;
     }
 }

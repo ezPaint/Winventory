@@ -31,6 +31,7 @@ public class SessionFactory {
     }
 
     public static void initialize(){
+        ENVIRONMENT = "JNDI";
         setup();
     }
 
@@ -38,4 +39,5 @@ public class SessionFactory {
         ENVIRONMENT = "TESTING";
         setup();
     }
+    //PROTECTED CODE
 }

@@ -12,7 +12,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
-<title>Winventory</title>
+<title>Winventory | Location</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/normalize.css' />
@@ -70,7 +70,6 @@ function printBarcode() {
 		<div class="row">
 			<jsp:include page="locationBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
 
 				<div class="main">
 					<div class="boom">
@@ -78,6 +77,10 @@ function printBarcode() {
 					</div>
 
 					<div class="padme">
+					
+					<jsp:include page="/WEB-INF/includes/error.jsp" />
+					<jsp:include page="/WEB-INF/includes/success.jsp" />
+					<jsp:include page="/WEB-INF/flows/locations/deleteConfirm-location.jsp" />
 					
 					<c:if test="${not empty errors}">
                     	<div class="alert alert-danger" role="alert">
@@ -167,19 +170,12 @@ function printBarcode() {
 									</div>
 								</li>
 							</ul>
-						</div>
-
-						<form class="form-horizontal pull-right" action="view-location" method="post">
-							<%-- <c:if test="${userInfo.hasPermission.deleteLocation}"> --%>
-							<input type="hidden" id="key" name="key"
-								value="<%=location.getKey()%>">
-							<button type="submit" class="btn btn-danger">Delete</button>
+							<%-- <c:if test="${userInfo.hasPermission.updateLocation}"> --%>
+							<a class="btn btn-warning btn-center" style="margin: auto;"
+								href="edit-location?key=<%=location.getKey()%>" role="button">Edit</a> 
 							<%-- </c:if> --%>
-						<%-- <c:if test="${userInfo.hasPermission.updateLocation}"> --%>
-						<a class="btn btn-default"
-							href="edit-location?key=<%=location.getKey()%>" role="button">Edit</a> 
-						<%-- </c:if> --%>
-						</form>
+						</div>
+						
 						
 						<div class="container-fluid"></div>
 												
@@ -187,7 +183,9 @@ function printBarcode() {
 						    }
 						%>
 						
+						<c:if test="${error == null}">
 						<jsp:include page="/WEB-INF/includes/events.jsp" />
+						</c:if>
 
 					</div>
 				</div>

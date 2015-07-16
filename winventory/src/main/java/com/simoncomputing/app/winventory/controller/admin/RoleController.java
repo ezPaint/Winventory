@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,6 +25,9 @@ import com.simoncomputing.app.winventory.domain.Role;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.util.BoException;
 
+/**
+ * Servlet implementation class RoleController
+ */
 @WebServlet("/admin/role")
 public class RoleController extends BaseController {
 
@@ -31,26 +35,37 @@ public class RoleController extends BaseController {
     private static final String roleJsp = "/WEB-INF/flows/admin/role.jsp";
     private static Logger logger = Logger.getLogger(RoleController.class);
 
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         // require role to be admin
         if (getUserInfo(request).getRoleId() != 1) {
             this.denyPermission(request, response);
+            return;
         } else {
             ArrayList<Role> roles = null;
             ArrayList<RefPermission> refPermissions = null;
 
             try {
+                // Populate table with all roles currently in the database
                 roles = (ArrayList<Role>) RoleBo.getInstance().getAll();
             } catch (BoException e) {
+                logError(logger, e);
                 logger.error("Bo exception for Roles Table");
                 request.setAttribute("fail", "An Error Has Occured: 1010193");
             }
             request.setAttribute("roles", roles);
 
             try {
+                // Populate permissions options with all permissions currently
+                // in database
                 refPermissions = (ArrayList<RefPermission>) RefPermissionBo.getInstance().getAll();
             } catch (BoException e) {
+                logError(logger, e);
                 logger.error("Bo exception for RefPermissions Table");
                 request.setAttribute("fail", "An Error Has Occured: 1010193");
             }
@@ -60,6 +75,10 @@ public class RoleController extends BaseController {
         }
     }
 
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -73,8 +92,8 @@ public class RoleController extends BaseController {
             tryCreate(request);
         }
 
+        // Reload the page
         this.doGet(request, response);
-
     }
 
     /**
@@ -102,7 +121,7 @@ public class RoleController extends BaseController {
 
             // if the title is already being used, don't create new role
             if (takenTitle) {
-                logger.info("This title is already being used.");
+                logger.error("This title is already being used.");
                 request.setAttribute("fail", "Could not create role: " + newRole.getTitle()
                         + " because this title is already being used.");
                 return;
@@ -142,6 +161,7 @@ public class RoleController extends BaseController {
             }
 
         } catch (BoException e) {
+            logError(logger, e);
             logger.error("Could not create role: " + newRole.getTitle(), e);
             request.setAttribute("fail", "Could not create role: " + newRole.getTitle());
         }
@@ -160,11 +180,16 @@ public class RoleController extends BaseController {
         boolean titleTaken = false;
 
         try {
+            // Get all of the current roles in the database
             List<Role> names = RoleBo.getInstance().getAll();
 
+            // Check if any of the current role titles match the desired role
+            // title
             for (Role r : names) {
                 String name = r.getTitle();
 
+                // If the desired title is already being used, titleTaken is
+                // true, break out of loop
                 if (name.equals(title)) {
                     titleTaken = true;
                     break;
@@ -216,6 +241,7 @@ public class RoleController extends BaseController {
                     request.setAttribute("fail", "Cannot Delete Role: "
                             + RoleBo.getInstance().read(key).getTitle() + " (In Use)");
                 } catch (BoException e1) {
+                    logError(logger, e1);
                     logger.error("No role associated with key: " + key, e1);
                 }
             } else {
@@ -237,11 +263,13 @@ public class RoleController extends BaseController {
                 request.setAttribute("pass", "Successfully deleted role: " + title);
             }
         } catch (BoException e) {
+            logError(logger, e);
             logger.error("User tried to delete Role that is in Use", e);
             try {
                 request.setAttribute("fail", "Cannot Delete Role: "
                         + RoleBo.getInstance().read(key).getTitle() + " (In Use)");
             } catch (BoException e1) {
+                logError(logger, e1);
                 logger.error("No role associated with key: " + key, e1);
             }
         }
@@ -288,6 +316,7 @@ public class RoleController extends BaseController {
             }
 
         } catch (BoException e) {
+            logError(logger, e);
             logger.error("Error occurred", e);
         }
 

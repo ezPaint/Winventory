@@ -31,16 +31,16 @@ public class TestHardwareToSoftwareDao {
         try {
 
             HardwareToSoftware hardwareToSoftware = TestHardwareToSoftwareDao.createHardwareToSoftware();
-            String where = "KEY='" + hardwareToSoftware.getKey() + "' ";
+            String where = "HARDWARE_ID='" + hardwareToSoftware.getHardwareId() + "' and " + "SOFTWARE_ID='" + hardwareToSoftware.getSoftwareId() + "' ";
             Map<String, Object> map = new HashMap<String, Object>();
             map.put( "where", where );
 
             int count = hardwareToSoftwareDao.create( hardwareToSoftware );
             assertEquals( 1, count );
-            assertNotNull( hardwareToSoftware.getKey() );
+            assertNotNull( hardwareToSoftware.getHardwareId() );
 
             HardwareToSoftware readRecord = hardwareToSoftwareDao.read( map );
-            assertNotNull( readRecord.getKey() );
+            assertNotNull( readRecord.getHardwareId() );
 
             compareRecords( hardwareToSoftware, readRecord );
 
@@ -57,7 +57,7 @@ public class TestHardwareToSoftwareDao {
             assertEquals( 1, count );
 
             readRecord = hardwareToSoftwareDao.read( map );
-            assertNotNull( readRecord.getKey() );
+            assertNotNull( readRecord.getHardwareId() );
 
             compareRecords( hardwareToSoftware, readRecord );
 
@@ -78,23 +78,19 @@ public class TestHardwareToSoftwareDao {
     public static HardwareToSoftware createHardwareToSoftware() {
         HardwareToSoftware hardwareToSoftware = new HardwareToSoftware();
 
-        hardwareToSoftware.setHardwareId( randomNumber() );
-        hardwareToSoftware.setSoftwareId( randomNumber() );
+        hardwareToSoftware.setHardwareId( (long) 0 );
+        hardwareToSoftware.setSoftwareId( (long) 0 );
 
         return hardwareToSoftware;
     }
 
     public static void compareRecords( HardwareToSoftware hardwareToSoftware, HardwareToSoftware readRecord ) {
 
-        assertEquals( hardwareToSoftware.getHardwareId(), readRecord.getHardwareId() );
-        assertEquals( hardwareToSoftware.getSoftwareId(), readRecord.getSoftwareId() );
 
     }
 
     public static void modifyRecord( HardwareToSoftware hardwareToSoftware ) {
 
-        hardwareToSoftware.setHardwareId( randomNumber() );
-        hardwareToSoftware.setSoftwareId( randomNumber() );
 
     }
 

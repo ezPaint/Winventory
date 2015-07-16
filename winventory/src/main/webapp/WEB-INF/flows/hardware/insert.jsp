@@ -12,6 +12,26 @@
 <meta charset="UTF-8">
 <title>Winventory | Add Hardware</title>
 
+
+<!-- Include Required Prerequisites for Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="${contextPath}/resources/js/moment.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/1/daterangepicker-bs3.css" />
+<script type="text/javascript">
+$(function() {
+    $('input[name="date"]').daterangepicker({
+        format: 'YYYY-MM-DD',
+        minDate: '1970-01-01',
+        singleDatePicker: true,
+        showDropdowns: true
+    }); 
+
+});
+</script>
+
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
 <link type="text/css" rel="stylesheet"
@@ -20,8 +40,6 @@
 	href='${contextPath}/resources/css/bootstrap.css' />
 
 <script src='${contextPath}/resources/js/actions.js'
-	type="text/javascript"></script>
-<script src='${contextPath}/resources/js/jquery-1.11.3.min.js'
 	type="text/javascript"></script>
 <script src='${contextPath}/resources/js/bootstrap.min.js'
 	type="text/javascript"></script>
@@ -107,7 +125,7 @@
 									Purchased </label>
 								<div class="col-sm-9">
 									<input name="date" type="date" id="date" type="date"
-										class="form-control" placeholder="" required>
+										class="form-control" placeholder="YYYY-MM-DD" required>
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

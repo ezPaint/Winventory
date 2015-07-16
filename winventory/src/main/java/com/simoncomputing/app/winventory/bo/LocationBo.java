@@ -116,6 +116,28 @@ public class LocationBo {
         return result;
     }
 
+    public List<Location> getListByIsActive( Boolean key ) throws BoException {
+        SqlSession session = null;
+        List<Location> list;
+
+        try {
+            session = SessionFactory.getSession();
+            LocationDao mapper = session.getMapper( LocationDao.class );
+            list = mapper.getListByIsActive( key );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return list;
+    }
+
     public List<Location> getListByAddressId( Integer key ) throws BoException {
         SqlSession session = null;
         List<Location> list;

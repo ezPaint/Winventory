@@ -14,4 +14,4 @@ STRING(2000)     description
 DOUBLE(10,2)    cost
 DATE            purchasedDate?
 DATE            expirationDate?
-BOOLEAN		isActive
+BOOLEAN		isActive*?

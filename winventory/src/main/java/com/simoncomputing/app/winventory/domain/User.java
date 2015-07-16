@@ -23,7 +23,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 /**
 * The User Table.
 */
-public class User  implements Item{
+public class User implements Item {
 
     private Long      key;
     private String    username;
@@ -183,6 +183,11 @@ public class User  implements Item{
                 this.setRoleId( r.getKey().intValue() );
             }
         }
+        
+        //active is true if the parameter isActive contains a value
+        //if the parameter is null, the user is inactive
+        boolean active = (request.getParameter("isActive") != null);
+        this.setIsActive(active);
         
         // Done, return the empty errors ArrayList
         return errors;

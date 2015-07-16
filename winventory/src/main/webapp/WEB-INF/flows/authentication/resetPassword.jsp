@@ -8,7 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Password Reset</title>
     <meta charset="UTF-8">
-    
+
+	<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/style.css' />
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/normalize.css' />
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/bootstrap.css' />

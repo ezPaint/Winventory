@@ -9,7 +9,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Admin</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>

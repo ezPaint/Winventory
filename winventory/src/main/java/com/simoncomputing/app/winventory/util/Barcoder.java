@@ -248,17 +248,21 @@ public final class Barcoder {
      */
     
     private static String parseTableIdentifier(String str){
+    	// if the string is not long enough or nonnumeric, return nothing since the barcode 
+    	// is invalid 
     	if (str.length() < 3 || !isNumeric(str.substring(0, 3))){
     		logger.debug("Attempted to parse table identifier from " + str);
     		return "";
     	}
+    	// if the input is 12, add a leading 0 because sometimes the barcode reader throws out 
+    	// one leading zero 
     	if(str.length()==12){
     		str="0"+str;
     	}
-    	String ret = str.substring(0,3);
-    	ret = removePaddingZeroes(ret);
+    	String ret = str.substring(0,3); // grab the first 3
+    	ret = removePaddingZeroes(ret);	// remove any leading 0s 
     	logger.trace("Parsed table identifier for " + str + " is " + ret);
-    	return ret;
+    	return ret; // return what we wanted. 
     }
     
     /**
@@ -305,16 +309,22 @@ public final class Barcoder {
      */
     
     private static Long parsePk(String str){
+    	// check if valid length pk 
     	if (str.length() < 12 || str.length() > 13 || !isNumeric(str)){
     		logger.debug("Attempted to parse pk from " + str);
     		return (long) -1;
     	}
+    	// if it only has 12 pad on another 0 due to the way the barcode sometimes ignores the 
+    	// first leading zero when it reads 
     	if (str.length()==12){
     		str = "0"+str;
     	}
+    	//get the last 9 digits that represent the pk
     	String ret = str.substring(3,str.length()-1);
+    	// get rid of any leading 0s 
     	ret = removePaddingZeroes(ret);
     	logger.trace("Parsed pk for " + str + " is " + ret);
+    	// return the long representation of that pk
     	return Long.parseLong(ret);
     }
     
@@ -324,33 +334,46 @@ public final class Barcoder {
      */
     
     public static String barcodeErrorMessage(String barcode){
+    	
+    	// check if length is wrong, primary reason for invalid code 
     	if (!(barcode.length()==12 || barcode.length()==13)){
     		return "Barcode is wrong length; must be 12 or 13 characters.";
     	}
+    	
+    	// grabs first three characters and removes any leading zeroes
     	String tabId = parseTableIdentifier(barcode);
     	logger.trace("tabId parsed when checking errors is" + tabId);
+    	
+    	// if the first three digits do not fit any valid format, return that error 
     	if (tabId.equals("")){
     		return "Barcode does not contain a valid table identifier.";
     	}
+    	
+    	// grab the pk from the trailing digits in the barcode 
     	Long pk = parsePk(barcode);
     	try{
+    		// switch on what number the table identifier represents. 
 	    	switch(tabId){
 	    	case "1":
-	    		if (ub.read(pk)==null)
+	    		if (ub.read(pk)==null) // check if the pk matches any user pk
 	    			return "Barcode references an invalid User.";
 	    		break;
 	    	case "2":
-	    		if (hb.read(pk)==null)
+	    		if (hb.read(pk)==null) // check if the pk matches any hardware pk
 	    			return "Barcode references an invalid Hardware.";
 	    		break;
+	    	case "3":
+	    		// this method is not meant to handle software barcodes 
+    			return "Barcode references a Software object. "
+    					+ "<br>Please Visit the Software Page for further actions.";
 	    	case "4":
-	    		if (lb.read(pk)==null)
+	    		if (lb.read(pk)==null)  // check if the pk matches any location pk
 	    			return "Barcode references an invalid Location.";
 	    		break;
-	    	default:
+	    	default: // if it doesn't match any, we have an invalid tableID
 	    		return "Barcode does not reference a valid table.";
 	    	}
-    	} catch (BoException be){
+    	} catch (BoException be){ // if we get an exception it is still an invalid barcode 
     		return "Barcode references an invalid object.";
     	}
     	return null;

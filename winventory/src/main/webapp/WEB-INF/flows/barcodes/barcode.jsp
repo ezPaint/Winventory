@@ -7,8 +7,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
-
+<title>Winventory | Barcode</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
 <link type="text/css" rel="stylesheet"
@@ -52,9 +53,7 @@
 									'glyphicon glyphicon-repeat')
 							if (parentNode.hasClass('alert alert-danger')) {
 								parentNode.removeClass('alert alert-danger');
-								input = $("#" + pk).attr({
-									value : null
-								});
+								$("#" + pk).remove();
 							} else {
 								parentNode.addClass('alert alert-danger');
 								$('<input>').attr({
@@ -77,9 +76,7 @@
 				'glyphicon glyphicon-repeat')
 		if (parentNode.hasClass('alert alert-danger')) {
 			parentNode.removeClass('alert alert-danger');
-			input = $("#" + pk).attr({
-				value : null
-			});
+			$("#" + pk).remove();
 		} else {
 			parentNode.addClass('alert alert-danger');
 			$('<input>').attr({
@@ -120,9 +117,9 @@
 								<c:when test="${not empty user or not empty location}">
 									<c:set var="placeholder" value="Scan Hardware Barcode to Add"/>
 								</c:when>
-								<c:when test="${empty user and empty location}">
-									<c:set var="placeholder" value="Scan User/Location Barcode to Enter Username to Begin"/>
-								</c:when>
+								<c:otherwise>
+									<c:set var="placeholder" value="Scan User/Location Barcode or Enter Username to Begin"/>
+								</c:otherwise>
 							</c:choose>
 							<br><input style="width: 50%; margin-left: 25%" id="barcode" name="barcode"
 									class="form-control center"
@@ -178,14 +175,14 @@
 										<tbody>
 											<c:forEach var="i" items="${hardware}">
 												<tr id="hardwareId${i.key}">
-													<td><c:out value="${i.key}" /></td>
+													<td><a href="${contextPath}/hardware/view?key=<c:out value="${i.key}" />" class="btn btn-primary"><c:out value="${i.key}" /></a></td>
 													<td><c:out value="${i.type}" /></td>
 													<td><c:out value="${i.cost}" /></td>
 													<td><c:out value="${i.condition}" /></td>
 													<td><c:out value="${i.getShortDescription()}" /></td>
 													<c:choose>
 														<c:when test="${not empty i.getUser().username}">
-															<td><c:out value="${i.getUser().username}" /></td>
+															<td><a href="${contextPath}/users/view?key=<c:out value="${i.getUserId()}" />"><c:out value="${i.getUser().username}" /></a></td>
 														</c:when>
 														<c:otherwise>
 															<td>No Owner</td>
@@ -194,8 +191,7 @@
 													<c:choose>
 														<c:when
 															test="${not empty i.getLocation().description}">
-															<td><c:out
-																	value="${i.getLocation().description}" /></td>
+															<td><a href="${contextPath}/location/view-location?key=<c:out value="${i.getLocationId()}" />"><c:out value="${i.getLocation().description}" /></a></td>
 														</c:when>
 														<c:otherwise>
 															<td>No Registered Location</td>

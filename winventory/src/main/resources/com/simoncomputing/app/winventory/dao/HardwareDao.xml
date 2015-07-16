@@ -45,6 +45,10 @@
         select * from HARDWARE
         where USER_ID = #{userId}
     </select>
+    <select id="getListByIsActive" parameterType="boolean" resultMap="HardwareMapper">
+        select * from HARDWARE
+        where IS_ACTIVE = #{isActive}
+    </select>
 
 
     <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Hardware">

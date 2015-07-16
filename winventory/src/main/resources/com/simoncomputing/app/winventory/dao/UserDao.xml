@@ -37,6 +37,10 @@
         )
     </insert>
 
+    <select id="getListByIsActive" parameterType="boolean" resultMap="UserMapper">
+        select * from USER
+        where IS_ACTIVE = #{isActive}
+    </select>
     <select id="getListByRoleId" parameterType="integer" resultMap="UserMapper">
         select * from USER
         where ROLE_ID = #{roleId}

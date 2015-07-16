@@ -11,11 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RefConditionBo;
 import com.simoncomputing.app.winventory.bo.RoleBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
+import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.RefCondition;
 import com.simoncomputing.app.winventory.domain.Role;
@@ -150,6 +152,10 @@ public class UserEditController extends BaseController {
         // try to update the user
         try {
             UserBo.getInstance().update(user);
+            
+         // Record event
+            EventBo.getInstance().createSystemEvent(user.getUsername() + " was updated. ",
+                getUserInfo(request), EventType.SYSTEM, null, null, null, user);
         } catch (BoException e) {
             logger.error("BoException in UserEditController. This is unexpected behavior. "
                     + "Username of the user which should have been edited:" + user.getUsername());

@@ -7,8 +7,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Inventory</title>
+<meta charset="UTF-8">
+<title>Winventory | Applications</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/style.css'>
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/normalize.css' />

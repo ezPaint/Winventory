@@ -10,10 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import com.simoncomputing.app.winventory.bo.AddressBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Address;
-import com.simoncomputing.app.winventory.util.BoException;
 
 /**
  * Servlet to handle the add address functionality, or insert address page.
@@ -73,6 +71,9 @@ public class AddressInsertController extends BaseController {
             request.setAttribute("city", address.getCity());
             request.setAttribute("state", address.getState());
             request.setAttribute("zipcode", address.getZipcode());
+            request.setAttribute("isActive", address.getIsActive());
+            
+            logger.error("An error occurred trying to insert a new address.");
             
             // forward to jsp and return from method
             request.getRequestDispatcher("/WEB-INF/flows/locations/insert-address.jsp").forward(request, response);
@@ -80,7 +81,7 @@ public class AddressInsertController extends BaseController {
         }
     	
         // redirect back to results if the insert was successful
-    	response.sendRedirect(request.getContextPath() + "/location/results-address");
+    	response.sendRedirect(request.getContextPath() + "/location/results-address?success=true");
        
     }
 

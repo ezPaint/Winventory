@@ -1,10 +1,17 @@
 package com.simoncomputing.app.winventory.domain;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.simoncomputing.app.winventory.bo.HardwareToSoftwareBo;
+import com.simoncomputing.app.winventory.util.BoException;
+
+
 
 /**
 * The Software Table.
 */
-public class Software  implements Item{
+public class Software {
 
     private Long      key;
     private String    name;
@@ -15,6 +22,7 @@ public class Software  implements Item{
     private Double    cost;
     private Date      purchasedDate;
     private Date      expirationDate;
+    private Boolean   isActive;
 
     public Long      getKey() { return key; }
     public void      setKey( Long value ) { key = value; }
@@ -34,6 +42,8 @@ public class Software  implements Item{
     public void      setPurchasedDate( Date value ) { purchasedDate = value; }
     public Date      getExpirationDate() { return expirationDate; }
     public void      setExpirationDate( Date value ) { expirationDate = value; }
+    public Boolean   getIsActive() { return isActive; }
+    public void      setIsActive( boolean value ) { isActive = value ? true : false; }
     // PROTECTED CODE -->
     
     /**
@@ -68,4 +78,36 @@ public class Software  implements Item{
         return (this.getPurchasedDate().equals(s.getPurchasedDate())
             && this.getExpirationDate().equals(s.getExpirationDate()));
     }
+    
+    
+    /**
+     * Shows the user which hardware items are associated with this software item.
+     * @return
+     * @throws BoException
+     */
+    public String associatedHardware() throws BoException{
+        List<Hardware> hw = HardwareToSoftwareBo.getInstance().getHardwareBySoftwareId(key);
+        ArrayList<Long> keys = new ArrayList<Long>();
+        for (Hardware h : hw){
+            Long id = h.getKey();
+            keys.add(id);
+        }
+        String s = "";
+        for (int i = 0; i < keys.size(); i++) {
+            if (i < keys.size() - 1){
+                s += keys.get(i) + ", ";
+            } else {
+                s += keys.get(i);
+            }
+        }
+        return s;
+    }
+    
+	@Override
+	public String toString() {
+		return "Software [key=" + key + ", name=" + name + ", serialNo=" + serialNo + ", version="
+				+ version + ", licenseKey=" + licenseKey + ", description=" + description
+				+ ", cost=" + cost + ", purchasedDate=" + purchasedDate + ", expirationDate="
+				+ expirationDate + ", isActive=" + isActive + "]";
+	}
 }

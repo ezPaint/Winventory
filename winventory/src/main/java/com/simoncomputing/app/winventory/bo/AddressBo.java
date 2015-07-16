@@ -116,6 +116,28 @@ public class AddressBo {
         return result;
     }
 
+    public List<Address> getListByIsActive( Boolean key ) throws BoException {
+        SqlSession session = null;
+        List<Address> list;
+
+        try {
+            session = SessionFactory.getSession();
+            AddressDao mapper = session.getMapper( AddressDao.class );
+            list = mapper.getListByIsActive( key );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return list;
+    }
+
     // PROTECTED CODE -->
     
     /**

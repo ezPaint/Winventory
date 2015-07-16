@@ -10,7 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
-<title>Winventory</title>
+<title>Winventory | Location</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/normalize.css' />
@@ -52,12 +52,13 @@
 		<div class="row">
 			<jsp:include page="locationBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">${page_header}</h2>
 					</div>
 					<div class="padme">
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
 						<div id='loader'>
 							<div class='diamond'></div>
 							<div class='diamond'></div>
@@ -71,7 +72,7 @@
 										<th>Key</th>
 										<th>Description</th>
 										<th>Is Active</th>
-										<th>Address ID</th>
+										<th>Address Name</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -92,8 +93,8 @@
 												<%=results.get(i).getKey()%></a></td>
 										<td><%=results.get(i).getDescription()%></td>
 										<td><%=results.get(i).getIsActive()%></td>
-										<td><a href="view-address?key=<%=results.get(i).getAddressId()%>" class="btn btn-primary">
-												<%=results.get(i).getAddressId()%></a></td>
+										<td><a href="view-address?key=<%=results.get(i).getAddressId()%>">
+												<%=results.get(i).getAddress().getName()%></a></td>
 									</tr>
 									<%
 									    }

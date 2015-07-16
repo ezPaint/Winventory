@@ -5,17 +5,17 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
 <%@ page
-							import="com.simoncomputing.app.winventory.domain.User"%>
+							import="com.simoncomputing.app.winventory.domain.Location"%>
 <% 
 
 String delete = (String) request.getAttribute("delete");
 
 if (delete != null) {	
-						    User user = (User) request.getAttribute("user");
+						    Location location = (Location) request.getAttribute("location");
 
-						    if (user != null) {
+						    if (location != null) {
 						%>
-<c:if test="${userInfo.hasPermission.deleteUser}">
+<c:if test="${userInfo.hasPermission.deleteLocation}">
 <div class="alert alert-warning alert-dismissible" role="alert" >
 	<div class="row no-margin">
 		<div class="col-md-12">
@@ -41,17 +41,13 @@ if (delete != null) {
 		
 		<div class="col-md-2" >
 		
-		<form method="post" action="${contextPath}/users/edit" class="" style="margin:auto;">				
+		<form method="post" action="${contextPath}/location/edit-location" class="" style="margin:auto;">				
 							<input type="hidden" id="button" name="button" value="Update">
-							<input type="hidden" id="key" name="key" value="<%=user.getKey()%>">
-							<input name="username" type="hidden" id="username" value="<%=user.getUsername()%>">
-							<input name="firstName" type="hidden" id="firstName" value="<%=user.getFirstName()%>">
-							<input name="lastName" type="hidden" id="lastName" value="<%=user.getLastName()%>">
-							<input name="email" type="hidden" id="email" value="<%=user.getEmail()%>">
-							<input name="cellPhone" type="hidden" id="cellPhone" value="<%=user.getCellPhone()%>">
-							<input name="workPhone" type="hidden" id="workPhone" value="<%=user.getWorkPhone()%>">
-							<input name="roleId" type="hidden" id="roleId" value="<%=user.getRoleId()%>">
-		               <%-- <input name="isActive" type="hidden" id="isActive" value="<%=!user.getIsActive()%>"> --%>														
+							<input type="hidden" id="key" name="key" value="<%=location.getKey()%>">
+							<input name="description" type="hidden" id="description" value="<%=location.getDescription()%>">
+							<input name="addressId" type="hidden" id="addressId" value="<%=location.getAddressId()%>">
+                            <%-- <input name="isActive" type="hidden" id="isActive" value="<%=location.getIsActive()%>"> --%>
+							
 							<button type="submit" class="btn btn-primary " >Deactivate</button>
 							
 		</form>
@@ -60,10 +56,10 @@ if (delete != null) {
 		
 		<div class="col-md-2">
 		
-			<form method="post" action="${contextPath}/users/delete" class="pull-left">
+			<form method="post" action="${contextPath}/location/delete-location" class="pull-left">
 							
 							<input type="hidden" id="key" name="key"
-								value="<%=user.getKey()%>">
+								value="<%=location.getKey()%>">
 							
 							<button type="submit" class="btn btn-danger " >Yes, I'm sure</button>
 							

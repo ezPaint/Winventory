@@ -16,6 +16,7 @@ public interface LocationDao {
 
     public Location read( Map<String, Object> map ) throws DaoException;
 
+    public List<Location> getListByIsActive( Boolean key ) throws DaoException;
     public List<Location> getListByAddressId( Integer key ) throws DaoException;
 
     // PROTECTED CODE -->

@@ -9,7 +9,8 @@
 
 <head>
 
-<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <meta charset="UTF-8">
 <title>Winventory | Hardware</title>
@@ -54,7 +55,7 @@
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-				
+
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">${page_header}</h2>
@@ -62,7 +63,7 @@
 					<div class="padme">
 						<jsp:include page="/WEB-INF/includes/error.jsp" />
 						<jsp:include page="/WEB-INF/includes/success.jsp" />
-				
+
 						<div id='loader'>
 							<div class='diamond'></div>
 							<div class='diamond'></div>
@@ -75,10 +76,10 @@
 									<tr>
 										<th>Key</th>
 										<th>Type</th>
-										<th>Cost</th>
-										<th>Condition</th>
-										<th>Purchase Date</th>
 										<th>Description</th>
+										<th>Condition</th>
+										<th>Cost</th>
+										<th>Purchase Date</th>
 										<th>Serial No.</th>
 										<th>Active</th>
 									</tr>
@@ -97,13 +98,13 @@
 									        for (int i = 0; i < results.size(); i++) {
 									%>
 									<tr>
-										<td><a href="view?key=<%=results.get(i).getKey()%>" class="btn btn-primary">
-										<%=results.get(i).getKey()%></a></td>
+										<td><a href="view?key=<%=results.get(i).getKey()%>"
+											class="btn btn-primary"> <%=results.get(i).getKey()%></a></td>
 										<td><%=results.get(i).getType()%></td>
-										<td><%= String.format("%.2f", results.get(i).getCost()) %></td>
-										<td><%=results.get(i).getCondition()%></td>
-										<td><%=results.get(i).getPurchaseDate()%></td>
 										<td><%=results.get(i).getDescription()%></td>
+										<td><%=results.get(i).getCondition()%></td>
+										<td><%=String.format("%.2f", results.get(i).getCost())%></td>
+										<td><%=results.get(i).getPurchaseDate()%></td>
 										<td><%=results.get(i).getSerialNo()%></td>
 										<td><%=results.get(i).getIsActive()%></td>
 									</tr>

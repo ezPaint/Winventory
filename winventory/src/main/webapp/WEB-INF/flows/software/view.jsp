@@ -7,7 +7,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Software</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
@@ -62,19 +64,19 @@
 					<div class="boom">
 
 
-					
+
 
 						<h2 class="center">Application Info</h2>
 					</div>
 					<div class="padme">
 						<div class="container-fluid">
 							<div class="row no-margin">
-							
+
 								<!-- include confirmation/error messages -->
 								<jsp:include page="/WEB-INF/includes/error.jsp" />
 								<jsp:include page="/WEB-INF/includes/success.jsp" />
 								<jsp:include page="/WEB-INF/flows/software/deleteConfirm.jsp" />
-							
+
 								<!-- Get the information of the software object selected by the user to view. -->
 								<%@ page
 									import="com.simoncomputing.app.winventory.domain.Software"%>
@@ -195,30 +197,38 @@
 										</li>
 										<li class="list-group-item row">
 											<div class="col-md-3">
+												<b>Is Active?</b>
+											</div>
+											<div class="col-md-9">
+												<p><%="" + software.getIsActive()%></p>
+											</div>
+										</li>
+										<li class="list-group-item row">
+											<div class="col-md-3">
 												<b>Barcode</b>
 											</div>
 											<div class="col-md-9">
-												<p><c:out value="${barcode}"></c:out></p>
+												<p>
+													<c:out value="${barcode}"></c:out>
+												</p>
 											</div>
 										</li>
 									</ul>
-								</div>
-							</div>
-							
-							<div class="row">
-							<div class="col-md-12">
-								<form method="get" action="${contextPath}/software/view" class="form-horizontal pull-right">
-										<c:set var="isSelf" value="${userInfo.key == param.key }"/>
-										
+									<form method="get" action="${contextPath}/software/view"
+										class="form-horizontal">
+										<c:set var="isSelf" value="${userInfo.key == param.key }" />
 										<c:if test="${userInfo.hasPermission.updateSoftware}">
-											<a class="btn btn-default"
-												href="edit?key=<%=software.getKey()%>" role="button">Edit</a> 
-								    	</c:if>
-								    	
+											<a class="btn btn-warning btn-center" style="margin: auto;"
+												href="edit?key=<%=software.getKey()%>" role="button">Edit</a>
+										</c:if>
 									</form>
 								</div>
 							</div>
-							
+
+							<div class="row">
+								<div class="col-md-12"></div>
+							</div>
+
 							<%
 								} else {
 							%>
@@ -231,6 +241,52 @@
 							<%@ page
 								import="com.simoncomputing.app.winventory.domain.Software"%>
 							<%@ page import="com.simoncomputing.app.winventory.util.Barcoder"%>
+
+
+
+
+
+
+							<div class="table-responsive">
+								<br> <br>
+								<h3>
+									Hardware using
+									<%=software.getName()%></h3>
+
+								<br>
+								<table class="table table-striped" id="resultsTable"
+									style="display: full;">
+									<thead>
+										<tr>
+											<th>Key</th>
+											<th>Type</th>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<%@ page
+											import="com.simoncomputing.app.winventory.domain.Hardware"%>
+										<%@ page import="java.util.ArrayList"%>
+										<c:if test="${hardware != null && hardware.size() > 0}">
+											<c:forEach var="i" begin="0" end="${hardware.size() - 1}">
+												<tr>
+													<td><a
+														href="${contextPath}/hardware/view?key=${hardware.get(i).getKey()}"
+														class="btn btn-primary"> ${hardware.get(i).getKey()}</a></td>
+													<td>${hardware.get(i).getType()}</td>
+													<td>${hardware.get(i).getDescription()}</td>
+												</tr>
+											</c:forEach>
+										</c:if>
+									</tbody>
+								</table>
+							</div>
+
+
+
+
+
 							<jsp:include page="/WEB-INF/includes/events.jsp" />
 
 						</div>
@@ -238,7 +294,7 @@
 				</div>
 			</div>
 		</div>
-		</div>
+	</div>
 	<br>
 	<br>
 	<br>

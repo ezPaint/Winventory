@@ -30,6 +30,7 @@ public class ResultsController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     
+        if(userHasPermission(request, "readSoftware")){
         // Retrieve all software objects from the database
         ArrayList<Software> results = null;
         try {
@@ -44,8 +45,12 @@ public class ResultsController extends BaseController {
         }
         
         request.setAttribute("success", request.getParameter("success"));
-        request.setAttribute("deleted", request.getParameter("deleted")); //software was deleted
+        request.setAttribute("error", request.getParameter("error")); 
         forward(request, response, "/WEB-INF/flows/software/results.jsp");
+        } else {
+            denyPermission(request, response);
+            return;
+        }
     }
     
     /**

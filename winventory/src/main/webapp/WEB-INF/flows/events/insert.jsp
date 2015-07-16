@@ -9,7 +9,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Event</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
@@ -74,7 +76,7 @@
 								<label for="hardware" class="col-sm-2 control-label"> Associated Hardware </label>
 								<div class="col-sm-9">
 									<input name="hardware" type="text" id="hardware"
-										class="form-control" placeholder="Comma separated list of keys, for example 1, 2, 3">
+										class="form-control" placeholder="Integer key">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -85,7 +87,7 @@
 								<label for="software" class="col-sm-2 control-label"> Associated Software </label>
 								<div class="col-sm-9">
 									<input name="software" type="text" id="software"
-										class="form-control" placeholder="Comma separated list of keys, for example 1, 2, 3">
+										class="form-control" placeholder="Integer key">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>
@@ -93,10 +95,21 @@
 							</div>
 							
 							<div class="form-group">
-								<label for="software" class="col-sm-2 control-label"> Associated Locations </label>
+								<label for="location" class="col-sm-2 control-label"> Associated Locations </label>
 								<div class="col-sm-9">
 									<input name="location" type="text" id="location"
-										class="form-control" placeholder="Comma separated list of keys, for example 1, 2, 3">
+										class="form-control" placeholder="Integer key">
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="user" class="col-sm-2 control-label"> Associated User </label>
+								<div class="col-sm-9">
+									<input name="user" type="text" id="user"
+										class="form-control" placeholder="Integer key">
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

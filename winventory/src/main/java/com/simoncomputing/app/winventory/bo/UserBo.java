@@ -117,6 +117,28 @@ public class UserBo {
         return result;
     }
 
+    public List<User> getListByIsActive( Boolean key ) throws BoException {
+        SqlSession session = null;
+        List<User> list;
+
+        try {
+            session = SessionFactory.getSession();
+            UserDao mapper = session.getMapper( UserDao.class );
+            list = mapper.getListByIsActive( key );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return list;
+    }
+
     public List<User> getListByRoleId( Integer key ) throws BoException {
         SqlSession session = null;
         List<User> list;

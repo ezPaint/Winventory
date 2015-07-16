@@ -27,6 +27,7 @@ public interface SoftwareDao {
     public List<Software> getListByLicenseKey( String key ) throws DaoException;
     public List<Software> getListByPurchasedDate( Date key ) throws DaoException;
     public List<Software> getListByExpirationDate( Date key ) throws DaoException;
+    public List<Software> getListByIsActive( Boolean key ) throws DaoException;
 
     // PROTECTED CODE -->
     /**

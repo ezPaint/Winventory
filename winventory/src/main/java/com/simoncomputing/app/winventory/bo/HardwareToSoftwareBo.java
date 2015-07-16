@@ -1,14 +1,15 @@
 package com.simoncomputing.app.winventory.bo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.ibatis.session.*;
-
 import com.simoncomputing.app.winventory.dao.*;
+import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.HardwareToSoftware;
+import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.util.BoException;
 
 public class HardwareToSoftwareBo {
@@ -22,14 +23,14 @@ public class HardwareToSoftwareBo {
     private HardwareToSoftwareBo() {
     } 
 
-    public int create( HardwareToSoftware value ) throws BoException {
+    public int create( Long hardwareId, Long softwareId ) throws BoException {
         SqlSession session = null;
         int result = 0;
 
         try {
             session = SessionFactory.getSession();
             HardwareToSoftwareDao mapper = session.getMapper( HardwareToSoftwareDao.class );
-            result = mapper.create( value );
+            result = mapper.create( hardwareId, softwareId );
             session.commit();
 
         } catch ( Exception e ) {
@@ -66,10 +67,10 @@ public class HardwareToSoftwareBo {
         return result;
     }
 
-    public int delete( Long key ) throws BoException {
+    public int delete( Long hardwareId, Long softwareId ) throws BoException {
         SqlSession session = null;
         int result = 0;
-        String where = "KEY='" + key + "' ";
+        String where = "HARDWARE_ID='" + hardwareId + "' and " + "SOFTWARE_ID='" + softwareId + "' ";
         Map<String, Object> map = new HashMap<String, Object>();
         map.put( "where", where );
 
@@ -91,10 +92,10 @@ public class HardwareToSoftwareBo {
         return result;
     }
 
-    public HardwareToSoftware read( Long key ) throws BoException {
+    public HardwareToSoftware read( Long hardwareId, Long softwareId ) throws BoException {
         SqlSession session = null;
         HardwareToSoftware result;
-        String where = "KEY='" + key + "' ";
+        String where = "HARDWARE_ID='" + hardwareId + "' and " + "SOFTWARE_ID='" + softwareId + "' ";
         Map<String, Object> map = new HashMap<String, Object>();
         map.put( "where", where );
 
@@ -116,7 +117,7 @@ public class HardwareToSoftwareBo {
         return result;
     }
 
-    public List<HardwareToSoftware> getListByHardwareId( Integer key ) throws BoException {
+    public List<HardwareToSoftware> getListByHardwareId( Long key ) throws BoException {
         SqlSession session = null;
         List<HardwareToSoftware> list;
 
@@ -138,7 +139,7 @@ public class HardwareToSoftwareBo {
         return list;
     }
 
-    public List<HardwareToSoftware> getListBySoftwareId( Integer key ) throws BoException {
+    public List<HardwareToSoftware> getListBySoftwareId( Long key ) throws BoException {
         SqlSession session = null;
         List<HardwareToSoftware> list;
 
@@ -162,4 +163,48 @@ public class HardwareToSoftwareBo {
 
     // PROTECTED CODE -->
 
+    public List<Hardware> getHardwareBySoftwareId( Long key ) throws BoException {
+        SqlSession session = null;
+        List<Hardware> list;
+
+        try {
+            session = SessionFactory.getSession();
+            HardwareToSoftwareDao mapper = session.getMapper( HardwareToSoftwareDao.class );
+            list = mapper.getHardwareBySoftwareId( key );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return list;
+    }
+    
+    public List<Software> getSoftwareByHardwareId( Long key ) throws BoException {
+        SqlSession session = null;
+        List<Software> list;
+
+        try {
+            session = SessionFactory.getSession();
+            HardwareToSoftwareDao mapper = session.getMapper( HardwareToSoftwareDao.class );
+            list = mapper.getSoftwareByHardwareId( key );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return list;
+    }
+    
 }

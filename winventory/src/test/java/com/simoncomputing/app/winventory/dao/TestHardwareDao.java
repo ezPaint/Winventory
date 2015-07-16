@@ -53,6 +53,10 @@ public class TestHardwareDao {
             assertEquals( 1, list2.size() );
             compareRecords( hardware, list2.get( 0 ) );
 
+            List<Hardware> list3= hardwareDao.getListByIsActive( hardware.getIsActive() ) ; 
+            assertEquals( 1, list3.size() );
+            compareRecords( hardware, list3.get( 0 ) );
+
             modifyRecord( hardware );
             count = hardwareDao.update( hardware );
             assertEquals( 1, count );

@@ -45,6 +45,9 @@ public class TestSoftwareBo {
         List<Software> list5= softwareBo.getListByExpirationDate( software.getExpirationDate() ) ; 
         assertEquals( 1 , list5.size() );
 
+        List<Software> list6= softwareBo.getListByIsActive( software.getIsActive() ) ; 
+        assertEquals( 1 , list6.size() );
+
         TestSoftwareDao.modifyRecord( software );
         count = softwareBo.update( software );
         assertEquals( 1, count );

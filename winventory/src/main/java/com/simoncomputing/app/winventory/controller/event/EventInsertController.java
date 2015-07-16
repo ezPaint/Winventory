@@ -31,7 +31,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 import com.simoncomputing.app.winventory.controller.BaseController;
 
 /**
- * Servlet to handle the add user functionality, or insert user page.
+ * Servlet to handle the add event functionality, or insert event page.
  * 
  */
 
@@ -45,16 +45,25 @@ public class EventInsertController extends BaseController {
     protected void doGet( HttpServletRequest request, HttpServletResponse response ) 
         throws ServletException, IOException {
         
-        // the preset role ids to display in dropdown
-
-        // forward to jsp
-        request.getRequestDispatcher("/WEB-INF/flows/events/insert.jsp").forward(request, response);  
+        // check if user has permission to create events
+        if(userHasPermission(request, "createEvent")){
+            request.getRequestDispatcher("/WEB-INF/flows/events/insert.jsp").forward(request, response); 
+        } else {
+            denyPermission(request, response);
+            return;
+        }
     }
 
 
     protected void doPost( HttpServletRequest request, HttpServletResponse response ) 
         throws ServletException, IOException {
         
+        
+        // check if user has permission to create events
+        if(!userHasPermission(request, "createEvent")){
+            denyPermission(request, response);
+            return;
+        }
         
         // the new user to be added
         Event event = new Event();

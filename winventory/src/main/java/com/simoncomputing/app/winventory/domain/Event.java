@@ -29,7 +29,7 @@ import com.simoncomputing.app.winventory.util.BoException;
 * The associated objects with this event are stored in EventTo<class name>
 * where <class name> is one type of objects that may be associated with this event (ie, Hardware).
 */
-public class Event {
+public class Event implements Item {
 
     private Long      key;
     private Date      dateCreated;
@@ -60,7 +60,7 @@ public class Event {
     public Long      getLocationId() { return locationId; }
     public void      setLocationId( Long value ) { locationId = value; }
     // PROTECTED CODE -->
-
+    
     public User getUser() {
         User u = null;
         try {
@@ -72,16 +72,6 @@ public class Event {
         return u;
     }
     
-    /**
-     * TODO make all items with barcodes implement barcodable
-     * 
-     * @return A list of all items with barcodes associated with this event.
-     */
-    public List<Barcoder> allAssociations() {
-        ArrayList<Barcoder> items = new ArrayList<Barcoder>();
-        throw new UnsupportedOperationException("EventBo.allAssociations() is net let implemented");
-    }
-
     @Override
     public String toString() {
         return String.format("%s, %s, %s, %s\n%s", key, dateCreated, description, category);
@@ -109,86 +99,88 @@ public class Event {
 
         // ensure all given keys actually point to a real object
         String hardwareString = request.getParameter("hardware");
-        ArrayList<Hardware> hardwareToLink = new ArrayList<Hardware>();
-
-        if (hardwareString.length() > 0) {
-            String[] hardware = hardwareString.split(",");
-            for (String str : hardware) {
-                try {
-                    long key = Long.parseLong(str.trim());
-                    try {
-                        Hardware hw = HardwareBo.getInstance().read(key);
-                        if (hw != null) {
-                            hardwareToLink.add(hw);
-                        } else {
-                            errors.add("Hardware with ID " + key + " does not exist");
-                        }
-                    } catch (BoException e) {
-                        errors.add("BoException thrown when reading Hardware key " + key
-                                + ". Does that key exist in the database?");
-                    }
-
-                } catch (NumberFormatException e) {
-                    errors.add("All keys must be integers");
-                }
-            }
-        }
-
         String softwareString = request.getParameter("software");
-        ArrayList<Software> softwareToLink = new ArrayList<Software>();
-        if (softwareString.length() > 0) {
-            String[] software = softwareString.split(",");
-            for (String str : software) {
-                try {
-                    long key = Long.parseLong(str.trim());
-                    try {
-                        Software sw = SoftwareBo.getInstance().read(key);
-                        if (sw != null) {
-                            softwareToLink.add(sw);
-                        } else {
-                            errors.add("Software with ID " + key + " does not exist");
-                        }
-                    } catch (BoException e) {
-                        errors.add("BoException thrown when reading software key " + key
-                                + ". Does that key exist in the database?");
-                    }
-
-                } catch (NumberFormatException e) {
-                    errors.add("All keys must be integers");
-                }
-            }
+        String locString = request.getParameter("location");
+        String userString = request.getParameter("user");
+        long hkey = 0, skey = 0, lkey = 0, ukey = 0;
+        
+        if (!hardwareString.isEmpty())
+        {
+        
+        	if (hardwareString.length() > 10)
+        	{
+        		Object obj = Barcoder.getObject(hardwareString);
+        		if (obj == null)
+        		{
+        			errors.add("Hardware " + hardwareString + " not found in database");
+        		}
+        		else 
+        		{
+        			hkey = ((Hardware)obj).getKey();
+        		}
+        	}
+        	else
+        	{
+        		try {
+    	        	hkey = Long.parseLong(hardwareString);
+    	        } catch(NumberFormatException nfe) {
+    	        	errors.add("Hardware " + hardwareString + " not found in database");
+    	        }
+        	}
         }
-
-        String locationString = request.getParameter("location");
-        ArrayList<Location> locationsToLink = new ArrayList<Location>();
-        if (locationString.length() > 0) {
-            String[] location = locationString.split(",");
-            for (String str : location) {
-                try {
-                    long key = Long.parseLong(str.trim());
-                    try {
-                        Location loc = LocationBo.getInstance().read(key);
-                        if (loc != null) {
-                            locationsToLink.add(loc);
-                        } else {
-                            errors.add("Location with ID " + key + " does not exist");
-                        }
-                    } catch (BoException e) {
-                        errors.add("BoException thrown when reading location key " + key
-                                + ". Does that key exist in the database?");
-                    }
-
-                } catch (NumberFormatException e) {
-                    errors.add("All keys must be integers");
-                }
-            }
+        
+        if (!softwareString.isEmpty())
+        {
+        
+        	if (softwareString.length() > 10)//Attempt at trying to read both barcodes and keys here, but doesn't work yet.
+        	{
+        		Object obj = Barcoder.getObject(softwareString);
+        		if (obj == null)
+        		{
+        			errors.add("Software " + softwareString + " not found in database");
+        		}
+        		else 
+        		{
+        			hkey = ((Software)obj).getKey();
+        		}
+        	}
+        	else
+        	{
+        		try {
+    	        	hkey = Long.parseLong(softwareString);
+    	        } catch(NumberFormatException nfe) {
+    	        	errors.add("Hardware " + softwareString + " not found in database");
+    	        }
+        	}
         }
-
-        // end form validation, return if errors exist
-        if (errors.size() != 0) {
-            return errors;
+        
+        if (!locString.isEmpty())
+        {
+	        
+	        
+	        try {
+	        	lkey = Long.parseLong(locString);
+	        } catch(NumberFormatException nfe) {
+	        	errors.add("Location key must be an integer");
+	        }
         }
-
+        
+      
+        if (!userString.isEmpty())
+        {
+	        
+	        
+	        try {
+	        	ukey = Long.parseLong(userString);
+	        } catch(NumberFormatException nfe) {
+	        	errors.add("User key must be an integer");
+	        }
+	        
+	        // end form validation, return if errors exist
+	        if (errors.size() != 0) {
+	            return errors;
+	        }
+        }
         // if no errors, set the values and link the keys
 
         this.setDescription(request.getParameter("description"));
@@ -209,44 +201,23 @@ public class Event {
                                                                 // through the
                                                                 // insert view
 
+        this.setHardwareId(hkey);
+        this.setSoftwareId(skey);
+        this.setLocationId(lkey);
+        this.setUserId(ukey);
+        
         //Create the entry into the event table in db
         try {
             EventBo.getInstance().create(this);
         } catch (BoException e1) {
-            logger.error("A BoException was thrown creating creating an event");
+            logger.info("A BoException was thrown creating creating an event.");
+            logger.info("Perhaps a key was wrong?");
+            logger.info(String.format("HwId: %d, swId: %d, locId: %d, userId: %d", 
+            		this.getHardwareId(), this.getSoftwareId(), 
+            		this.getLocationId(), this.getUserId()));
+            errors.add("One or more keys is invalid. Are you sure all the associated items exist?");
         }
-
-        // Add the links to the database
-        // This has to be done after the event is added. Otherwise, the current
-        // value
-        // of this.getKey() won't be accurate because the db sequence won't have
-        // assigned a value
-        for (Hardware hw : hardwareToLink) {
-            try {
-                EventBo.getInstance().link(this, hw);
-            } catch (BoException e) {
-                logger.error("A BoException was thrown linking Event " + this.getKey()
-                        + " to Hardware " + hw.getKey());
-            }
-        }
-
-        for (Software sw : softwareToLink) {
-            try {
-                EventBo.getInstance().link(this, sw);
-            } catch (BoException e) {
-                logger.error("A BoException was thrown linking Event " + this.getKey()
-                        + " to Hardware " + sw.getKey());
-            }
-        }
-
-        for (Location loc : locationsToLink) {
-            try {
-                EventBo.getInstance().link(this, loc);
-            } catch (BoException e) {
-                logger.error("A BoException was thrown linking Event " + this.getKey()
-                        + " to Hardware " + loc.getKey());
-            }
-        }
+        
 
         return errors;
     }

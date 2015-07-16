@@ -3,6 +3,7 @@ package com.simoncomputing.app.winventory.controller.user;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,9 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import com.simoncomputing.app.winventory.bo.EventBo;
 import com.simoncomputing.app.winventory.bo.HardwareBo;
 import com.simoncomputing.app.winventory.bo.RoleBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
+import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.formbean.UserInfoBean;
@@ -92,7 +95,7 @@ public class UserViewController extends BaseController {
         if (results != null) {
             request.setAttribute("results", results);
         }
-        
+                
         // check for success message (for redirects from edit/add/delete pages)
         if (request.getParameter("success") != null) {
             request.setAttribute("success", request.getParameter("success"));
@@ -107,6 +110,20 @@ public class UserViewController extends BaseController {
         if (request.getParameter("error") != null) {
             request.setAttribute("error", request.getParameter("error"));
         }
+        
+        EventBo eb = EventBo.getInstance();
+        List<Event> events = null;
+        try {
+        	if (user.getKey() != null)
+        	{
+        		events = eb.getListByUserId(user.getKey());
+        	}
+        } catch (BoException e) {
+            request.setAttribute("error", e.getMessage());
+            logger.error(e.getMessage());
+        }
+        
+        request.setAttribute("events", events);
         
         // forward to the users/view jsp
         request.getRequestDispatcher("/WEB-INF/flows/users/view.jsp").forward(request, response);

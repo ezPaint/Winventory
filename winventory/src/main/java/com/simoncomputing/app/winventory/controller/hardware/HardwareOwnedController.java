@@ -31,6 +31,11 @@ public class HardwareOwnedController extends BaseController {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
+        
+        if(!userHasPermission(request, "readHardware")){
+            denyPermission(request, response);
+            return;
+        }
 
         // Attempt to get all hardware in use from database using a BO
         ArrayList<Hardware> results = null;

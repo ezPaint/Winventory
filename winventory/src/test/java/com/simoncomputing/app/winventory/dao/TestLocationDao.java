@@ -44,9 +44,13 @@ public class TestLocationDao {
 
             compareRecords( location, readRecord );
 
-            List<Location> list1= locationDao.getListByAddressId( location.getAddressId() ) ; 
+            List<Location> list1= locationDao.getListByIsActive( location.getIsActive() ) ; 
             assertEquals( 1, list1.size() );
             compareRecords( location, list1.get( 0 ) );
+
+            List<Location> list2= locationDao.getListByAddressId( location.getAddressId() ) ; 
+            assertEquals( 1, list2.size() );
+            compareRecords( location, list2.get( 0 ) );
 
             modifyRecord( location );
             count = locationDao.update( location );

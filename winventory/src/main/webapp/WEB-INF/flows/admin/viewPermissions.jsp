@@ -9,7 +9,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Admin</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/normalize.css' />
@@ -67,8 +69,8 @@
 								<tbody>
 									<c:forEach var="i" items="${permissions}">
 										<tr>
-											<th style="padding-top: 10px"><c:out value="${i.code}" /></th>
-											<th style="padding-top: 10px"><c:out value="${i.description}" /></th>
+											<td style="padding-top: 10px"><c:out value="${i.code}" /></th>
+											<td style="padding-top: 10px"><c:out value="${i.description}" /></th>
 										</tr>
 									</c:forEach>
 								</tbody>

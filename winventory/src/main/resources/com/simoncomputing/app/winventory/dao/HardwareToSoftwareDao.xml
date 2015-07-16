@@ -3,55 +3,107 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.simoncomputing.app.winventory.dao.HardwareToSoftwareDao">
 
-    <resultMap id="HardwareToSoftwareMapper" type="com.simoncomputing.app.winventory.domain.HardwareToSoftware">
-        <result column ="KEY"                 property = "key" />
-        <result column ="HARDWARE_ID"         property = "hardwareId" />
-        <result column ="SOFTWARE_ID"         property = "softwareId" />
-    </resultMap>
+	<resultMap id="HardwareToSoftwareMapper"
+		type="com.simoncomputing.app.winventory.domain.HardwareToSoftware">
+		<result column="HARDWARE_ID" property="hardwareId" />
+		<result column="SOFTWARE_ID" property="softwareId" />
+	</resultMap>
 
-    <select id="read" parameterType="map" resultMap="HardwareToSoftwareMapper">
-        select * from HARDWARE_TO_SOFTWARE
-        where ${where}
-    </select>
+	<resultMap id="HardwareMapper"
+		type="com.simoncomputing.app.winventory.domain.Hardware">
+		<result column="KEY" property="key" />
+		<result column="TYPE" property="type" />
+		<result column="DESCRIPTION" property="description" />
+		<result column="COST" property="cost" />
+		<result column="SERIAL_NO" property="serialNo" />
+		<result column="CONDITION" property="condition" />
+		<result column="LOCATION_ID" property="locationId" />
+		<result column="USER_ID" property="userId" />
+		<result column="PURCHASE_DATE" property="purchaseDate" />
+		<result column="IS_ACTIVE" property="isActive" />
+	</resultMap>
 
-    <insert id="create" parameterType="com.simoncomputing.app.winventory.domain.HardwareToSoftware">
-        <selectKey resultType="_long" keyProperty="key" order="BEFORE">
-            select HARDWARE_TO_SOFTWARE_SEQ.nextval from dual
-        </selectKey>
+	<resultMap id="SoftwareMapper"
+		type="com.simoncomputing.app.winventory.domain.Software">
+		<result column="KEY" property="key" />
+		<result column="NAME" property="name" />
+		<result column="SERIAL_NO" property="serialNo" />
+		<result column="VERSION" property="version" />
+		<result column="LICENSE_KEY" property="licenseKey" />
+		<result column="DESCRIPTION" property="description" />
+		<result column="COST" property="cost" />
+		<result column="PURCHASED_DATE" property="purchasedDate" />
+		<result column="EXPIRATION_DATE" property="expirationDate" />
+		<result column="IS_ACTIVE" property="isActive" />
+	</resultMap>
+
+	<select id="read" parameterType="map" resultMap="HardwareToSoftwareMapper">
+		select * from
+		HARDWARE_TO_SOFTWARE
+		where ${where}
+	</select>
+
+	<insert id="create" parameterType="com.simoncomputing.app.winventory.domain.HardwareToSoftware">
         insert into HARDWARE_TO_SOFTWARE
         (
-            KEY , HARDWARE_ID , SOFTWARE_ID
+            HARDWARE_ID , SOFTWARE_ID
         )
         values
         (
-            #{key} , #{hardwareId} , #{softwareId}
+            ${hardwareId} , ${softwareId}
         )
     </insert>
 
-    <select id="getListByHardwareId" parameterType="integer" resultMap="HardwareToSoftwareMapper">
-        select * from HARDWARE_TO_SOFTWARE
-        where HARDWARE_ID = #{hardwareId}
-    </select>
-    <select id="getListBySoftwareId" parameterType="integer" resultMap="HardwareToSoftwareMapper">
-        select * from HARDWARE_TO_SOFTWARE
-        where SOFTWARE_ID = #{softwareId}
-    </select>
+	<select id="getListByHardwareId" parameterType="long"
+		resultMap="HardwareToSoftwareMapper">
+		select * from HARDWARE_TO_SOFTWARE
+		where HARDWARE_ID =
+		#{hardwareId}
+	</select>
+	<select id="getListBySoftwareId" parameterType="long"
+		resultMap="HardwareToSoftwareMapper">
+		select * from HARDWARE_TO_SOFTWARE
+		where SOFTWARE_ID =
+		#{softwareId}
+	</select>
 
 
-    <update id="update" parameterType="com.simoncomputing.app.winventory.domain.HardwareToSoftware">
-        update HARDWARE_TO_SOFTWARE set
-            KEY                                 = #{key} ,
-            HARDWARE_ID                         = #{hardwareId} ,
-            SOFTWARE_ID                         = #{softwareId}
-        where KEY = #{key}
-    </update>
+	<update id="update"
+		parameterType="com.simoncomputing.app.winventory.domain.HardwareToSoftware">
+		update HARDWARE_TO_SOFTWARE set
+		HARDWARE_ID =
+		#{hardwareId} ,
+		SOFTWARE_ID = #{softwareId}
+		where HARDWARE_ID =
+		#{hardwareId}
+	</update>
 
-    <delete id="delete" parameterType="map">
-        delete from HARDWARE_TO_SOFTWARE
-        where ${where}
-    </delete>
+	<delete id="delete" parameterType="map">
+		delete from
+		HARDWARE_TO_SOFTWARE
+		where ${where}
+	</delete>
 
 
-    <!-- PROTECTED CODE -->
+	<!-- PROTECTED CODE -->
+
+	<!-- getHardwareBySoftwareId -->
+	<select id='getHardwareBySoftwareId' resultMap='HardwareMapper'>
+		SELECT * FROM
+		Hardware h
+		INNER JOIN HARDWARE_TO_SOFTWARE map ON h.key =
+		map.hardware_id
+		WHERE
+		map.software_id = #{param1}
+	</select>
+
+	<select id='getSoftwareByHardwareId' resultMap='SoftwareMapper'>
+		SELECT * FROM
+		Software s
+		INNER JOIN HARDWARE_TO_SOFTWARE map ON s.key =
+		map.software_id
+		WHERE
+		map.hardware_id = #{param1}
+	</select>
 
 </mapper>

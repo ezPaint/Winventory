@@ -10,7 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
-<title>Winventory</title>
+<title>Winventory | Location</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
@@ -39,13 +39,16 @@
 		<div class="row">
 			<jsp:include page="locationBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
+
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">Edit Location Info</h2>
 					</div>
 					<br>
 					<div class="padme">
+					
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
 
 						<%@ page
 							import="com.simoncomputing.app.winventory.domain.Location"%>
@@ -134,6 +137,23 @@
 							<input type="hidden" id="key" name="key"
 								value="<%=location.getKey()%>">
 						</form>
+						
+						<br>
+                         <br>
+                         <br>
+                         <br>
+                         <hr>
+                         <br>
+                         
+                          	<form action="${contextPath}/location/view-location" role="form" method="get" class="form-group">
+
+								<c:if test="${userInfo.hasPermission.deleteLocation }">
+                                    <input type="hidden" id="key" name="key" value="<%=location.getKey()%>">
+                                        <input type="hidden" id="delete" name="delete" value="true">
+                                    <button type="Submit" name="button" value="Delete" class="btn btn-danger btn-lg btn-center">Delete Forever</button>
+                                    
+								</c:if>
+						 	</form>
 
 						<%
 						    }

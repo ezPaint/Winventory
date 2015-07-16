@@ -22,6 +22,7 @@ public interface HardwareDao {
 
     public List<Hardware> getListByLocationId( Long key ) throws DaoException;
     public List<Hardware> getListByUserId( Long key ) throws DaoException;
+    public List<Hardware> getListByIsActive( Boolean key ) throws DaoException;
 
     // PROTECTED CODE -->
 

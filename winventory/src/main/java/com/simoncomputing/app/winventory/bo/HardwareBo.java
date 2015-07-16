@@ -1,6 +1,5 @@
 package com.simoncomputing.app.winventory.bo;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -148,6 +147,28 @@ public class HardwareBo {
             session = SessionFactory.getSession();
             HardwareDao mapper = session.getMapper( HardwareDao.class );
             list = mapper.getListByUserId( key );
+            session.commit();
+
+        } catch ( Exception e ) {
+            session.rollback();
+            throw new BoException( e );
+
+        } finally { 
+            if ( session != null )
+                session.close();
+        }
+
+        return list;
+    }
+
+    public List<Hardware> getListByIsActive( Boolean key ) throws BoException {
+        SqlSession session = null;
+        List<Hardware> list;
+
+        try {
+            session = SessionFactory.getSession();
+            HardwareDao mapper = session.getMapper( HardwareDao.class );
+            list = mapper.getListByIsActive( key );
             session.commit();
 
         } catch ( Exception e ) {

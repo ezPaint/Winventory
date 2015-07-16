@@ -12,7 +12,6 @@ public enum EventType {
 			return "ADMIN";
 		case MANUAL:
 			return "MANUAL";
-		
 		case SYSTEM:
 		    return "SYSTEM";  //added by controllers
 		}

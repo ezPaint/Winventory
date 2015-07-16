@@ -13,7 +13,7 @@ STRING(40)		condition		//GOOD, FAIR, NEW, etc. Links to RefCondition
 LONG(10)		locationId	LOCATION_ID?
 LONG(10)  	userId		USER_ID?
 DATE 			purchaseDate
-BOOLEAN		isActive
+BOOLEAN		isActive*?
 
 [ForeignKeys]
 locationId constrainsTo Location.key

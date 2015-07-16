@@ -37,6 +37,7 @@ public class InsertController extends BaseController {
             forward(request, response, "/WEB-INF/flows/software/insert.jsp");
         } else {
             denyPermission(request, response);
+            return;
         }
 
     }
@@ -48,6 +49,7 @@ public class InsertController extends BaseController {
         this.name = name;
         String version = (String) request.getParameter("version");
         String licenseKey = (String) request.getParameter("licenseKey");
+        boolean isActive = request.getParameter("isActive") != null;
 
         // empty string if user doesn't enter anything
         String description = (String) request.getParameter("description");
@@ -74,6 +76,8 @@ public class InsertController extends BaseController {
         } catch (Exception e) {
             logError(log, e);
         }
+        
+        
 
         // Create Software object
         Software software = new Software();
@@ -85,6 +89,7 @@ public class InsertController extends BaseController {
         software.setPurchasedDate(datePurchased);
         software.setExpirationDate(expirationDate);
         software.setDescription(description);
+        software.setIsActive(isActive);
 
         // Add Software Object to database
         SoftwareBo softwareBo = SoftwareBo.getInstance();
@@ -110,7 +115,8 @@ public class InsertController extends BaseController {
             request.setAttribute("results", results);
         }
 
-        sendRedirect(request, response, "/winventory/software?success=" + this.name);
+        request.setAttribute("success", true);
+        forward(request, response, "/WEB-INF/flows/software/results.jsp");
 
     }
 }

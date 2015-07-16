@@ -12,9 +12,12 @@ import org.h2.engine.Session;
 import org.apache.log4j.Logger;
 
 import com.simoncomputing.app.winventory.authentication.PasswordHasher;
+import com.simoncomputing.app.winventory.bo.GoogleClientBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
+import com.simoncomputing.app.winventory.domain.GoogleClient;
 import com.simoncomputing.app.winventory.domain.User;
 import com.simoncomputing.app.winventory.formbean.UserInfoBean;
+import com.simoncomputing.app.winventory.util.BoException;
 
 /**
  * Servlet implementation class LoginServlet
@@ -43,7 +46,16 @@ public class LoginController extends BaseController {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+        GoogleClient gc;
+		try {
+			gc = GoogleClientBo.getInstance().read(1L);
+	    	if (gc.getClientId().length() > 10) {
+	    		request.setAttribute("GC", true);
+	    	}
+		} catch (BoException e) {
+			logger.error("DataBase Error: Google Client");
+		}
+    	
         // forward to login.jsp
         request.getRequestDispatcher(loginJsp).forward(request, response);
         return;

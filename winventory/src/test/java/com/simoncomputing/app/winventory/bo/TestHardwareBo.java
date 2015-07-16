@@ -36,6 +36,9 @@ public class TestHardwareBo {
         List<Hardware> list2= hardwareBo.getListByUserId( hardware.getUserId() ) ; 
         assertEquals( 1 , list2.size() );
 
+        List<Hardware> list3= hardwareBo.getListByIsActive( hardware.getIsActive() ) ; 
+        assertEquals( 1 , list3.size() );
+
         TestHardwareDao.modifyRecord( hardware );
         count = hardwareBo.update( hardware );
         assertEquals( 1, count );

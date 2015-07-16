@@ -8,7 +8,8 @@
 <html lang="en">
 
 <head>
-<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 <meta charset="UTF-8">
 <title>Winventory | Edit Hardware</title>
 
@@ -51,267 +52,300 @@
 						</c:forEach>
 					</div>
 				</c:if>
-				<c:if test="${not empty error}">
-					<jsp:include page="/WEB-INF/includes/error.jsp" />
-					<jsp:include page="/WEB-INF/includes/success.jsp" />
-				</c:if>
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">Edit Hardware Info</h2>
 					</div>
 					<br>
 					<div class="padme">
+						<c:if test="${not empty error}">
+							<jsp:include page="/WEB-INF/includes/error.jsp" />
+						</c:if>
+						<c:if test="${empty error}">
+							<jsp:include page="/WEB-INF/includes/success.jsp" />
 
-						<%@ page
-							import="com.simoncomputing.app.winventory.domain.Hardware"%>
-						<%@ page import="java.util.ArrayList"%>
-
-						<%
-						    Hardware hardware = (Hardware) request.getAttribute("hardware");
-																																																					if (hardware != null) {
-						%>
-
-						<form class="form-horizontal"
-							action="edit?key=<%=hardware.getKey()%>" data-toggle="validator"
-							role="form" method="post">
-							<div class="form-group">
-								<label for="type" class="col-sm-2 control-label">Type </label>
-								<div class="col-sm-9 search-field">
-									<input name="type" type="text" id="type"
-										pattern="^[^\'\&quot]*$"
-										class="form-control search-hardware-type"
-										value="<%=hardware.getType()%>" required>
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="description" class="col-sm-2 control-label">Description
-								</label>
-								<div class="col-sm-9">
-									<input name="description" type="text" id="description"
-										pattern="^[^\'\&quot]*$" class="form-control"
-										value="<%=hardware.getDescription()%>" required>
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="cost" class="col-sm-2 control-label">Cost </label>
-								<div class="col-sm-9">
-									<input name="cost" type="text" id="cost" type="number"
-										pattern="^[0-9]+(\.[0-9][0-9]?)*$" class="form-control"
-										value="<%=hardware.getCost()%>" required>
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="date" class="col-sm-2 control-label">Date
-									Purchased </label>
-								<div class="col-sm-9">
-									<input name="date" type="date" id="date" type="date"
-										class="form-control" value="">
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="condition" class="col-sm-2 control-label">Condition
-								</label>
-								<div class="col-sm-9">
-
-									<select name="condition" class="form-control" required>
-
-										<%@ page
-											import="com.simoncomputing.app.winventory.domain.RefCondition"%>
-										<%@ page import="java.util.ArrayList"%>
-
-										<%
-										    ArrayList<RefCondition> conditions = (ArrayList<RefCondition>) request.getAttribute("conditions");
-																																																																																																					for (int i = 0; i < conditions.size(); i++) {
-										%>
-
-										<option title="<%=conditions.get(i).getDescription()%>"
-											value="<%=conditions.get(i).getCode()%>"><%=conditions.get(i).getCode()%></option>
-
-										<%
-										    }
-										%>
-
-									</select>
-
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="serialNo" class="col-sm-2 control-label">Serial
-									No </label>
-								<div class="col-sm-9">
-									<input name="serialNo" type="text" id="serialNo"
-										pattern="^[^\'\&quot]*$" class="form-control"
-										value="<%=hardware.getSerialNo()%>" required>
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
+							<%@ page
+								import="com.simoncomputing.app.winventory.domain.Hardware"%>
+							<%@ page import="java.util.ArrayList"%>
 
 							<%
-							    if (hardware.getUserId() != null) {
+							    Hardware hardware = (Hardware) request.getAttribute("hardware");
+																																																																																																												if (hardware != null) {
 							%>
-							<div class="form-group">
-								<div class="col-sm-9 col-sm-offset-2">
-									<div class="radio">
-										<label> <input type="radio" name="insertWith"
-											value="user" checked> Assign to user
-										</label>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="date" class="col-sm-2 control-label">Username
-								</label>
-								<div class="col-sm-9 search-field">
-									<input name="username" type="text"
-										class="form-control username-typeahead"
-										value="<%=request.getAttribute("username")%>">
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-9 col-sm-offset-2">
-									<div class="radio">
-										<label> <input type="radio" name="insertWith"
-											value="location"> Place in storage
-										</label>
-									</div>
-								</div>
-							</div>
-							<div class="form-group">
-								<label for="date" class="col-sm-2 control-label">
-									Location ID </label>
-								<div class="col-sm-9">
-									<input name="locID" type="number" class="form-control"
-										placeholder="12">
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
 
-							<%
-							    } else {
-							%>
-							<div class="form-group">
-								<div class="col-sm-9 col-sm-offset-2">
-									<div class="radio">
-										<label> <input type="radio" name="insertWith"
-											value="user" checked> Assign to user
-										</label>
+							<form class="form-horizontal"
+								action="edit?key=<%=hardware.getKey()%>" data-toggle="validator"
+								role="form" method="post">
+								<div class="form-group">
+									<label for="type" class="col-sm-2 control-label">Type </label>
+									<div class="col-sm-9 search-field">
+										<input name="type" type="text" id="type"
+											pattern="^[^\'\&quot]*$"
+											class="form-control search-hardware-type"
+											value="<%=hardware.getType()%>" required>
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
 									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label for="date" class="col-sm-2 control-label">Username
-								</label>
-								<div class="col-sm-9">
-									<input name="username" type="text" class="form-control"
-										placeholder="joe.shmo">
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<div class="form-group">
-								<div class="col-sm-9 col-sm-offset-2">
-									<div class="radio">
-										<label> <input type="radio" name="insertWith"
-											value="location" checked> Place in storage
-										</label>
+								<div class="form-group">
+									<label for="description" class="col-sm-2 control-label">Description
+									</label>
+									<div class="col-sm-9">
+										<input name="description" type="text" id="description"
+											pattern="^[^\'\&quot]*$" class="form-control"
+											value="<%=hardware.getDescription()%>" required>
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
 									</div>
 								</div>
-							</div>
-							<div class="form-group">
-								<label for="date" class="col-sm-2 control-label">
-									Location ID </label>
-								<div class="col-sm-9">
-									<input name="locID" type="number" class="form-control"
-										value="<%=request.getAttribute("locationID")%>">
+								<div class="form-group">
+									<label for="cost" class="col-sm-2 control-label">Cost </label>
+									<div class="col-sm-9">
+										<input name="cost" type="text" id="cost" type="number"
+											pattern="^[0-9]+(\.[0-9][0-9]?)*$" class="form-control"
+											value="<%=hardware.getCost()%>" required>
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
 								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
+								<div class="form-group">
+									<label for="date" class="col-sm-2 control-label">Date
+										Purchased </label>
+									<div class="col-sm-9">
+										<input name="date" type="date" id="date" type="date"
+											class="form-control" value="">
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
 								</div>
-							</div>
+								<div class="form-group">
+									<label for="condition" class="col-sm-2 control-label">Condition
+									</label>
+									<div class="col-sm-9">
+
+										<select name="condition" class="form-control" required>
+
+											<%@ page
+												import="com.simoncomputing.app.winventory.domain.RefCondition"%>
+											<%@ page import="java.util.ArrayList"%>
+
+											<%
+											    ArrayList<RefCondition> conditions = (ArrayList<RefCondition>) request.getAttribute("conditions");
+																																																																																																																																																																																																for (int i = 0; i < conditions.size(); i++) {
+											%>
+
+											<option title="<%=conditions.get(i).getDescription()%>"
+												value="<%=conditions.get(i).getCode()%>"><%=conditions.get(i).getCode()%></option>
+
+											<%
+											    }
+											%>
+
+										</select>
+
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="serialNo" class="col-sm-2 control-label">Serial
+										No </label>
+									<div class="col-sm-9">
+										<input name="serialNo" type="text" id="serialNo"
+											pattern="^[^\'\&quot]*$" class="form-control"
+											value="<%=hardware.getSerialNo()%>" required>
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label for="date" class="col-sm-2 control-label">Software
+										Installed </label>
+									<div class="col-sm-9 search-field">
+										<input name="software" type="text" class="form-control"
+											placeholder="Comma seperated 1, 4, 7 etc." value="${commas}">
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+
+								<%
+								    if (hardware.getUserId() != null) {
+								%>
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-2">
+										<div class="radio">
+											<label> <input type="radio" name="insertWith"
+												value="user" checked> Assign to user
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="date" class="col-sm-2 control-label">Username
+									</label>
+									<div class="col-sm-9 search-field">
+										<input name="username" type="text"
+											class="form-control username-typeahead"
+											value="<%=request.getAttribute("username")%>">
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-2">
+										<div class="radio">
+											<label> <input type="radio" name="insertWith"
+												value="location"> Place in storage
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="date" class="col-sm-2 control-label">
+										Location ID </label>
+									<div class="col-sm-9">
+										<input name="locID" type="number" class="form-control"
+											placeholder="12">
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+
+								<%
+								    } else {
+								%>
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-2">
+										<div class="radio">
+											<label> <input type="radio" name="insertWith"
+												value="user" checked> Assign to user
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="date" class="col-sm-2 control-label">Username
+									</label>
+									<div class="col-sm-9">
+										<input name="username" type="text" class="form-control"
+											placeholder="joe.shmo">
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-2">
+										<div class="radio">
+											<label> <input type="radio" name="insertWith"
+												value="location" checked> Place in storage
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="date" class="col-sm-2 control-label">
+										Location ID </label>
+									<div class="col-sm-9">
+										<input name="locID" type="number" class="form-control"
+											value="<%=request.getAttribute("locationID")%>">
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+
+								<%
+								    }
+								%>
+
+								<c:if test="${hardware.getIsActive()}">
+
+									<div class="form-group">
+										<div class="col-sm-10 col-sm-offset-2">
+											<div class="checkbox">
+												<label> <input value="true" name="isActive"
+													type="checkbox" checked> Is Active
+												</label>
+											</div>
+										</div>
+										<div class="col-sm-10 col-sm-offset-2">
+											<div class="help-block with-errors"></div>
+										</div>
+									</div>
+								</c:if>
+
+								<c:if test="${not hardware.getIsActive()}">
+
+									<div class="form-group">
+										<div class="col-sm-10 col-sm-offset-2">
+											<div class="checkbox">
+												<label> <input value="true" name="isActive"
+													type="checkbox"> Is Active
+												</label>
+											</div>
+										</div>
+										<div class="col-sm-10 col-sm-offset-2">
+											<div class="help-block with-errors"></div>
+										</div>
+									</div>
+								</c:if>
+
+								<div class="form-group">
+									<div class="col-sm-10 col-sm-offset-2">
+										<button type="submit" class="btn btn-primary">Submit</button>
+										<button type="reset" class="btn btn-default"
+											onClick="reloadConditions(); return false;">Reset</button>
+										<a
+											href="${contextPath}/hardware/view?key=<%=hardware.getKey()%>"
+											class="btn btn-default">Cancel</a>
+									</div>
+									<div class="col-sm-10 col-sm-offset-2">
+										<div class="help-block with-errors"></div>
+									</div>
+								</div>
+								<input type="hidden" id="key" name="key"
+									value="<%=hardware.getKey()%>">
+							</form>
 
 							<%
 							    }
 							%>
-
-							<c:if test="${hardware.getIsActive()}">
-
-								<div class="form-group">
-									<div class="col-sm-10 col-sm-offset-2">
-										<div class="checkbox">
-											<label> <input value="true" name="isActive"
-												type="checkbox" checked> Is Active
-											</label>
-										</div>
-									</div>
-									<div class="col-sm-10 col-sm-offset-2">
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-							</c:if>
-
-							<c:if test="${not hardware.getIsActive()}">
-
-								<div class="form-group">
-									<div class="col-sm-10 col-sm-offset-2">
-										<div class="checkbox">
-											<label> <input value="true" name="isActive"
-												type="checkbox"> Is Active
-											</label>
-										</div>
-									</div>
-									<div class="col-sm-10 col-sm-offset-2">
-										<div class="help-block with-errors"></div>
-									</div>
-								</div>
-							</c:if>
-
-							<div class="form-group">
-								<div class="col-sm-10 col-sm-offset-2">
-									<button type="submit" class="btn btn-primary">Submit</button>
-									<button type="reset" class="btn btn-default"
-										onClick="reloadConditions(); return false;">Reset</button>
-									<a
-										href="${contextPath}/hardware/view?key=<%=hardware.getKey()%>"
-										class="btn btn-default">Cancel</a>
-								</div>
-								<div class="col-sm-10 col-sm-offset-2">
-									<div class="help-block with-errors"></div>
-								</div>
-							</div>
-							<input type="hidden" id="key" name="key"
-								value="<%=hardware.getKey()%>">
-						</form>
-
-						<%
-						    }
-						%>
-
-						<br>
-						<div></div>
+						
 					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<br> <br>
+							<hr>
+							<br>
+							<c:if test="${userInfo.hasPermission.deleteHardware}">
+								<form action="${contextPath}/hardware/view" role="form"
+									method="get" class="form-group">
+
+									<input type="hidden" id="key" name="key"
+										value="<%=hardware.getKey()%>"> <input type="hidden"
+										id="delete" name="delete" value="true">
+									<button type="submit" class="btn btn-danger btn-lg btn-center">Delete
+										Forever</button>
+								</form>
+								<br>
+								<br>
+							</c:if>
+						</div>
+					</div>
+					</c:if>
+
 				</div>
 				<br> <br>
 			</div>

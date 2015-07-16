@@ -8,8 +8,10 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Edit Application</title>
+<meta charset="UTF-8">
+<title>Winventory | Edit Software</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
     
 <!-- Include Required Prerequisites for Date Range Picker -->
 <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/2.1.3/jquery.min.js"></script>
@@ -117,8 +119,7 @@ $(function() {
                         %>
                     
                         <form class="form-horizontal" action="edit"
-                            data-toggle="validator" role="form" method="post" name="myform"
-                            onsubmit="return validateDates();">
+                            data-toggle="validator" role="form" method="post">
                             
                             <!-- Software object's name -->
                             <div class="form-group">
@@ -173,7 +174,7 @@ $(function() {
                             <div class="form-group">
                                 <label for="cost" class="col-sm-2 control-label">Cost</label>
                                 <div class="col-sm-9">
-                                    <input name="cost" type="number" step="any" id="cost"
+                                    <input name="cost" type="text" step="any" id="cost" pattern="^[0-9]+(\.[0-9][0-9]?)*$"
                                         class="form-control" value="<%=software.getCost()%>" required>
                                 </div>
                                 <div class="col-sm-10 col-sm-offset-2">
@@ -210,7 +211,35 @@ $(function() {
                                 <label for="description" class="col-sm-2 control-label">Description</label>
                                 <div class="col-sm-9">
                                     <input name="description" type="text" id="description"
-                                        class="form-control" value="<%=software.getDescription()%>" required>
+                                        class="form-control" value="<%=software.getDescription()%>">
+                                </div>
+                                <div class="col-sm-10 col-sm-offset-2">
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            
+                            <!--  Software is active  -->
+                            <div class="form-group">
+								<label for="isActive" class="col-sm-2 control-label">Is Active
+									</label>
+								<div class="col-sm-9">
+									<input name="isActive" type="checkbox" id="isActive"
+										class="" style="margin-top: 12px;" value="true" checked> Check the box if this item is active.
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							
+							<!-- Associated Hardware -->
+                            <div class="form-group">
+                                <label for="associate" class="col-sm-2 control-label">Associated Hardware</label>
+                                <div class="col-sm-9">
+                                    <input name="associate" type="text" id="associate"
+                                        class="form-control" value="<%=software.associatedHardware()%>" placeholder="Enter key values separated by commas (ex 1, 2, 4)">
+                                    Enter in the key(s) of the hardware that this software is installed on. <br>
+                                    Separate multiple hardware items using commas. (Ex. 1, 2, 6)
+                                
                                 </div>
                                 <div class="col-sm-10 col-sm-offset-2">
                                     <div class="help-block with-errors"></div>

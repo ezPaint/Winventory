@@ -32,13 +32,18 @@ public class AddressResultsController extends BaseController {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
 
+        if(!userHasPermission(request, "readAddress")){
+            denyPermission(request, response);
+            return;
+        }
+        
         // Attempt to get all Addresses from database using a BO
         ArrayList<Address> results = null;
         try {
             results = new ArrayList<Address>(AddressBo.getInstance().getAll());
         } catch (BoException e) {
-            request.setAttribute("error", e.getMessage());
-            log.error(e.getMessage());
+            request.setAttribute("error", "Unable to retrieve addresses from the database");
+            log.error("Unable to retrieve addresses from the database. " + e.getMessage());
         }
 
         // Set the results as an attribute for the page
@@ -48,6 +53,9 @@ public class AddressResultsController extends BaseController {
 
         // Sets the page header to "All Addresses"
         request.setAttribute("page_header", "All Addresses");
+        
+        request.setAttribute("success", request.getParameter("success"));
+        request.setAttribute("error", request.getParameter("error"));
 
         // Forward the request to the "location/results-address" page
         request.getRequestDispatcher("/WEB-INF/flows/locations/results-address.jsp").forward(

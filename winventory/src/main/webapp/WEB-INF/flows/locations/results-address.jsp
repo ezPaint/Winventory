@@ -10,7 +10,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
-<title>Winventory</title>
+<title>Winventory | Location</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/normalize.css' />
@@ -52,12 +52,13 @@
 		<div class="row">
 			<jsp:include page="locationBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">${page_header}</h2>
 					</div>
 					<div class="padme">
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
 						<div id='loader'>
 							<div class='diamond'></div>
 							<div class='diamond'></div>
@@ -75,6 +76,7 @@
 										<th>City</th>
 										<th>State</th>
 										<th>Zip Code</th>
+										<th>Is Active</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -91,7 +93,7 @@
 									        for (int i = 0; i < results.size(); i++) {
 									%>
 									<tr>
-										<td><a href="view-address?key=<%=results.get(i).getKey()%>">
+										<td><a href="view-address?key=<%=results.get(i).getKey()%>" class="btn btn-primary">
 												<%=results.get(i).getKey()%></a></td>
 										<td><%=results.get(i).getName()%></td>
 										<td><%=results.get(i).getStreet1()%></td>
@@ -99,6 +101,7 @@
 										<td><%=results.get(i).getCity()%></td>
 										<td><%=results.get(i).getState()%></td>
 										<td><%=results.get(i).getZipcode()%></td>
+										<td><%=results.get(i).getIsActive()%></td>
 									</tr>
 									<%
 									    }

@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
-<title>Winventory</title>
+<title>Winventory | Location</title>
     <meta charset="UTF-8">
     
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/style.css' />
@@ -36,6 +36,10 @@
 					</div>
 					
 					<div class="padme">
+						
+						<jsp:include page="/WEB-INF/includes/error.jsp" />
+						<jsp:include page="/WEB-INF/includes/success.jsp" />
+						
 						<br>
 						<c:if test="${not empty errors}">
                     	<div class="alert alert-danger" role="alert">
@@ -193,6 +197,18 @@
 										value="<%=request.getAttribute("zipcode")%>" 
 										<%}%>
 										required>
+								</div>
+								<div class="col-sm-10 col-sm-offset-2">
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label for="isActive" class="col-sm-2 control-label">Active Address
+									</label>
+								<div class="col-sm-9">
+									<input name="isActive" type="checkbox" id="isActive"
+										class="" style="margin-top: 12px;" value="true" checked> Yes, the addess is currently active.
 								</div>
 								<div class="col-sm-10 col-sm-offset-2">
 									<div class="help-block with-errors"></div>

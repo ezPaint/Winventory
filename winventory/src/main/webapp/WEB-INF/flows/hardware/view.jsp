@@ -10,7 +10,8 @@
 <html lang="en">
 
 <head>
-<link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png"> 
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <meta charset="UTF-8">
 <title>Winventory | View Hardware</title>
@@ -72,9 +73,6 @@
 		<div class="row">
 			<jsp:include page="hwBase.jsp" />
 			<div class="col-md-8">
-
-
-
 				<div class="main">
 					<div class="boom">
 						<h2 class="center">Hardware Info</h2>
@@ -215,23 +213,53 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-12">
-								<form class="form-horizontal pull-right"
-									action="${contextPath}/hardware/view" method="get">
-									<c:if test="${userInfo.hasPermission.updateHardware}">
-										<a class="btn btn-default"
-											href="edit?key=<%=hardware.getKey()%>" role="button">Edit</a>
-									</c:if>
-
-									<c:if test="${userInfo.hasPermission.deleteHardware}">
-										<input type="hidden" id="key" name="key"
-											value="<%=hardware.getKey()%>">
-										<input type="hidden" id="delete" name="delete" value="true">
-										<button type="submit" class="btn btn-danger">Delete</button>
-									</c:if>
-								</form>
+							<div class="col-md-8 col-md-offset-4">
+								<c:if test="${userInfo.hasPermission.updateHardware}">
+									<a class="btn btn-warning btn-center"
+										href="edit?key=<%=hardware.getKey()%>" role="button">Edit</a>
+								</c:if>
 							</div>
 						</div>
+
+						<c:if test="${not empty software}">
+							<div class="table-responsive">
+								<br> <br>
+								<h3>Software Installed</h3>
+
+								<br>
+								<table class="table table-striped" id="resultsTable"
+									style="display: table;">
+									<thead>
+										<tr>
+											<th>Key</th>
+											<th>Name</th>
+											<th>Version</th>
+											<th>Description</th>
+											<th>License Key</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<%@ page
+											import="com.simoncomputing.app.winventory.domain.Software"%>
+										<%@ page import="java.util.ArrayList"%>
+
+										<c:forEach var="i" begin="0" end="${software.size() - 1}">
+											<tr>
+												<td><a
+													href="${contextPath}/software/view?key=${software.get(i).getKey()}"
+													class="btn btn-primary"> ${software.get(i).getKey()}</a></td>
+												<td>${software.get(i).getName()}</td>
+												<td>${software.get(i).getVersion()}</td>
+												<td>${software.get(i).getDescription()}</td>
+												<td>${software.get(i).getLicenseKey()}</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+						</c:if>
+
 						<jsp:include page="/WEB-INF/includes/events.jsp" />
 						<%
 						    }

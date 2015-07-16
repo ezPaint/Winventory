@@ -5,8 +5,8 @@
 CLASS		HardwareToSoftware
 
 [Fields]
-INTEGER(10)	hardwareId*?
-INTEGER(10)	softwareId*?
+LONG(10)	hardwareId?!
+LONG(10)	softwareId?!
 
 [ForeignKeys]
 hardwareId constrainsTo Hardware.key

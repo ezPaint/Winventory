@@ -30,8 +30,11 @@ public class TestUserBo {
 
         TestUserDao.compareRecords( user, readRecord );
 
-        List<User> list1= userBo.getListByRoleId( user.getRoleId() ) ; 
+        List<User> list1= userBo.getListByIsActive( user.getIsActive() ) ; 
         assertEquals( 1 , list1.size() );
+
+        List<User> list2= userBo.getListByRoleId( user.getRoleId() ) ; 
+        assertEquals( 1 , list2.size() );
 
         TestUserDao.modifyRecord( user );
         count = userBo.update( user );

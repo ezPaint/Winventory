@@ -9,7 +9,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Admin</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
@@ -48,8 +50,11 @@
 							</div>
 						</c:if>
 						<br>
-						
-						
+						<c:if test="${clientInfo.clientId != 'off'}">
+							<div class="alert alert-info" role="alert">
+								<p> To disable Google login change Id "off". </p>
+							</div>
+						</c:if>
 						<form class="form-horizontal" action="setGoogleClient" role="form" method="post">
 							<div class="form-group">
 								<label for="id" class="col-sm-2 control-label">Client ID</label>

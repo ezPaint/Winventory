@@ -7,7 +7,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Event</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/style.css'>
@@ -52,7 +54,7 @@
 									<div class="media-body">
 										<ul class="list-group" style="word-wrap: break-word;">
 
-											<!-- Displays the software's key -->
+											<!-- Displays the event's key -->
 											<li class="list-group-item row">
 												<div class="col-md-3">
 													<b>Key</b>
@@ -62,7 +64,7 @@
 												</div>
 											</li>
 
-											<!-- Displays the software's name -->
+											<!-- Displays the event's description -->
 											<li class="list-group-item row">
 												<div class="col-md-3">
 													<b>Description:</b>
@@ -72,7 +74,7 @@
 												</div>
 											</li>
 
-											<!--  Displays the software's serial number -->
+											<!--  Displays the date the event was created -->
 											<li class="list-group-item row">
 												<div class="col-md-3">
 													<b>Date Created</b>
@@ -82,7 +84,7 @@
 												</div>
 											</li>
 
-											<!-- Displays the software's license key -->
+											<!-- Displays the event's category -->
 											<li class="list-group-item row">
 												<div class="col-md-3">
 													<b>Category</b>
@@ -111,82 +113,58 @@
 											    }
 											%>
 
-											<c:if test="${hardware != null && hardware.size() > 0}">
+											<c:if test="${hardware.getKey() != null}">
 												<li class="list-group-item row">
 													<div class="col-md-3">
 														<b>Associated Hardware</b>
 													</div>
 													<div class="col-md-3">
-
-
-														<b> <c:forEach var="i" begin="0"
-																end="${hardware.size() - 1}">
-
-
-																<a
-																	href="${contextPath}/hardware/view?key=
-											${hardware.get(i).getKey()}">
-																	${hardware.get(i).getKey()}</a>
-																<c:if test="${i != hardware.size() - 1}">
-											,
-											</c:if>
-
-															</c:forEach>
-														</b>
+														<a
+															href="${contextPath}/hardware/view?key=
+											${hardware.getKey()}">
+															${hardware.getShortDescription()}</a>
 													</div>
-
-
-
 												</li>
 											</c:if>
 
-
-											<c:if test="${software != null && software.size() > 0}">
+											<c:if test="${software.getKey() != null}">
 												<li class="list-group-item row">
-
 													<div class="col-md-3">
 														<b>Associated Software</b>
 													</div>
 													<div class="col-md-3">
-
-
-														<b> <c:forEach var="i" begin="0"
-																end="${software.size() - 1}">
-																<a
-																	href="${contextPath}/software/view?key=
-											${software.get(i).getKey()}">
-																	${software.get(i).getKey()}</a>
-																<c:if test="${i != software.size() - 1}">
-											,
-											</c:if>
-
-															</c:forEach>
-														</b>
+														<a
+															href="${contextPath}/software/view?key=
+											${software.getKey()}">
+															${software.getName()}</a>
 													</div>
 												</li>
 											</c:if>
 
-											<c:if test="${locations != null && locations.size() > 0}">
+											<c:if test="${location.getKey() != null}">
 												<li class="list-group-item row">
-
 													<div class="col-md-3">
-														<b>Associated Locations</b>
+														<b>Associated Location</b>
 													</div>
 													<div class="col-md-3">
-
-
-														<b> <c:forEach var="i" begin="0"
-																end="${locations.size() - 1}">
-																<a
-																	href="${contextPath}/location/view-location?key=
-											${locations.get(i).getKey()}">
-																	${locations.get(i).getKey()}</a>
-																<c:if test="${i != locations.size() - 1}">
-											,
+														<a
+															href="${contextPath}/location/view-location?key=
+											${location.getKey()}">
+															${location.getDescription()}</a>
+													</div>
+												</li>
 											</c:if>
 
-															</c:forEach>
-														</b>
+											<c:if test="${user.getKey() != null}">
+												<li class="list-group-item row">
+													<div class="col-md-3">
+														<b>Associated User</b>
+													</div>
+													<div class="col-md-3">
+														<a
+															href="${contextPath}/users/view?key=
+											${user.getKey()}">
+															${user.getUsername()} </a>
 													</div>
 												</li>
 											</c:if>

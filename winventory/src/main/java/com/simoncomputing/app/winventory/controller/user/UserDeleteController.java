@@ -17,6 +17,7 @@ import com.simoncomputing.app.winventory.bo.LocationBo;
 import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.domain.Event;
+import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.User;
@@ -92,6 +93,10 @@ public class UserDeleteController extends BaseController {
         // Attempt to delete the User from the database using a BO
         try {
             bo.delete(key);
+            EventBo.getInstance().createSystemEvent("Delete Software " + key 
+                    + ": Deleting software with key of " + key + ": " 
+                    + user.toString(), 
+                getUserInfo(request), EventType.SYSTEM, null, null, null, null);
             logger.info("Deleted user " + user.getUsername() + ".");
         } catch (BoException e) {
             String error = "User " + user.getUsername() + " could not be deleted at this time.";

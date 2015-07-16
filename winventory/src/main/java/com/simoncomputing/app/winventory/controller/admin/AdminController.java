@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +16,9 @@ import com.simoncomputing.app.winventory.bo.UserBo;
 import com.simoncomputing.app.winventory.controller.BaseController;
 import com.simoncomputing.app.winventory.util.BoException;
 
+/**
+ * Servlet implementation class AdminController.
+ */
 @WebServlet("/admin")
 public class AdminController extends BaseController {
 
@@ -22,6 +26,10 @@ public class AdminController extends BaseController {
     private static final String adminJsp = "/WEB-INF/flows/admin/index.jsp";
     private static Logger logger = Logger.getLogger(AdminController.class);
 
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -30,21 +38,34 @@ public class AdminController extends BaseController {
             try {
                 getCurrentInfo(request);
             } catch (BoException e) {
-                logger.error("Business Object exception");
+                logError(logger, e);
             }
             // if role is admin, forward to admin jsp
             request.getRequestDispatcher(adminJsp).forward(request, response);
         } else {
             // permission denied
             this.denyPermission(request, response);
+            return;
         }
     }
 
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+     *      response)
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
     }
 
+    /**
+     * Private helper method to populate the dashboard with information about
+     * the current state of the database
+     * 
+     * @param request
+     *            the HttpServletRequest
+     * @throws BoException
+     */
     private void getCurrentInfo(HttpServletRequest request) throws BoException {
         double totHw = (HardwareBo.getInstance().getAll().size());
         int hwTot = (int) totHw;
@@ -53,15 +74,16 @@ public class AdminController extends BaseController {
         if (totHw != 0) {
             double hwInUse = (HardwareBo.getInstance().getInUse().size());
             double hwUse = (hwInUse / totHw) * 100;
-            String usage = hwUse + "%";
+            String usage = String.format("%.0f", hwUse);
+            usage += "%";
             request.setAttribute("usage", usage);
 
             double hwInStorage = totHw - hwInUse;
             double hwStore = (hwInStorage / totHw) * 100;
-            String storage = hwStore + "%";
+            String storage = String.format("%.0f", hwStore);
+            storage += "%";
             request.setAttribute("storage", storage);
-        }
-        else{
+        } else {
             request.setAttribute("usage", "0%");
             request.setAttribute("storage", "0%");
         }

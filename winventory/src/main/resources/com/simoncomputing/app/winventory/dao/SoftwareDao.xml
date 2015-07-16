@@ -13,6 +13,7 @@
         <result column ="COST"                property = "cost" />
         <result column ="PURCHASED_DATE"      property = "purchasedDate" />
         <result column ="EXPIRATION_DATE"     property = "expirationDate" />
+        <result column ="IS_ACTIVE"           property = "isActive" />
     </resultMap>
 
     <select id="read" parameterType="map" resultMap="SoftwareMapper">
@@ -27,12 +28,12 @@
         insert into SOFTWARE
         (
             KEY , NAME , SERIAL_NO , VERSION , LICENSE_KEY , 
-            DESCRIPTION , COST , PURCHASED_DATE , EXPIRATION_DATE
+            DESCRIPTION , COST , PURCHASED_DATE , EXPIRATION_DATE , IS_ACTIVE
         )
         values
         (
             #{key} , #{name} , #{serialNo} , #{version} , #{licenseKey} , 
-            #{description} , #{cost} , #{purchasedDate} , #{expirationDate}
+            #{description} , #{cost} , #{purchasedDate} , #{expirationDate} , #{isActive}
         )
     </insert>
 
@@ -56,6 +57,10 @@
         select * from SOFTWARE
         where EXPIRATION_DATE = #{expirationDate}
     </select>
+    <select id="getListByIsActive" parameterType="boolean" resultMap="SoftwareMapper">
+        select * from SOFTWARE
+        where IS_ACTIVE = #{isActive}
+    </select>
 
 
     <update id="update" parameterType="com.simoncomputing.app.winventory.domain.Software">
@@ -68,7 +73,8 @@
             DESCRIPTION                         = #{description} ,
             COST                                = #{cost} ,
             PURCHASED_DATE                      = #{purchasedDate} ,
-            EXPIRATION_DATE                     = #{expirationDate}
+            EXPIRATION_DATE                     = #{expirationDate} ,
+            IS_ACTIVE                           = #{isActive}
         where KEY = #{key}
     </update>
 

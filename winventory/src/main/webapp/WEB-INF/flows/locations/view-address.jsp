@@ -12,7 +12,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="shortcut icon" href="${contextPath}/resources/images/favicon.png">
-<title>Winventory</title>
+<title>Winventory | Location</title>
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/normalize.css' />
@@ -45,7 +45,6 @@
 		<div class="row">
 			<jsp:include page="locationBase.jsp" />
 			<div class="col-md-8">
-				<jsp:include page="/WEB-INF/includes/error.jsp" />
 
 				<div class="main">
 					<div class="boom">
@@ -53,6 +52,10 @@
 					</div>
 
 					<div class="padme">
+					
+					<jsp:include page="/WEB-INF/includes/error.jsp" />
+					<jsp:include page="/WEB-INF/includes/success.jsp" />
+					<jsp:include page="/WEB-INF/flows/locations/deleteConfirm-address.jsp" />
 					
 					<c:if test="${not empty errors}">
                     	<div class="alert alert-danger" role="alert">
@@ -132,32 +135,20 @@
 										<p><%=address.getZipcode()%></p>
 									</div>
 								</li>
+								<li class="list-group-item row">
+									<div class="col-md-4">
+										<b>Is Active</b>
+									</div>
+									<div class="col-md-8">
+										<p><%=address.getIsActive()%></p>
+									</div>
+								</li>
 							</ul>
-						</div>
-
-						<form class="form-horizontal pull-right" action="view-address" method="post">
-							<%-- <c:if test="${userInfo.hasPermission.deleteAddress}"> --%>
-							<input type="hidden" id="key" name="key"
-								value="<%=address.getKey()%>">
-							<input type="hidden" id="name" name="name"
-								value="<%=address.getName()%>">
-							<input type="hidden" id="street1" name="street1"
-								value="<%=address.getStreet1()%>">
-							<input type="hidden" id="street2" name="street2"
-								value="<%=address.getStreet2()%>">
-							<input type="hidden" id="city" name="city"
-								value="<%=address.getCity()%>">
-							<input type="hidden" id="state" name="state"
-								value="<%=address.getState()%>">
-							<input type="hidden" id="zipcode" name="zipcode"
-								value="<%=address.getZipcode()%>">
-							<button type="submit" class="btn btn-danger">Delete</button>
+							<%-- <c:if test="${userInfo.hasPermission.updateAddress}"> --%>
+							<a class="btn btn-warning btn-center" style="margin: auto;"
+								href="edit-address?key=<%=address.getKey()%>" role="button">Edit</a> 
 							<%-- </c:if> --%>
-						<%-- <c:if test="${userInfo.hasPermission.updateAddress}"> --%>
-						<a class="btn btn-default"
-							href="edit-address?key=<%=address.getKey()%>" role="button">Edit</a> 
-						<%-- </c:if> --%>
-						</form>
+						</div>						
 						
 						<div class="container-fluid"></div>
 												
@@ -165,7 +156,7 @@
 						    }
 						%>
 						
-						<jsp:include page="/WEB-INF/includes/events.jsp" />
+						<br>
 
 					</div>
 				</div>

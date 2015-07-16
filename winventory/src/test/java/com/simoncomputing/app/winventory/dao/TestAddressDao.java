@@ -3,6 +3,7 @@ package com.simoncomputing.app.winventory.dao;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import org.junit.*;
@@ -42,6 +43,10 @@ public class TestAddressDao {
             assertNotNull( readRecord.getKey() );
 
             compareRecords( address, readRecord );
+
+            List<Address> list1= addressDao.getListByIsActive( address.getIsActive() ) ; 
+            assertEquals( 1, list1.size() );
+            compareRecords( address, list1.get( 0 ) );
 
             modifyRecord( address );
             count = addressDao.update( address );

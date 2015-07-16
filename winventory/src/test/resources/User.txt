@@ -12,7 +12,7 @@ STRING(40)	lastName
 STRING(40)	email*
 STRING(40)	cellPhone
 STRING(40)	workPhone
-BOOLEAN		isActive
+BOOLEAN		isActive*?
 INTEGER(10) roleId*?
 
 [ForeignKeys]

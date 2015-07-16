@@ -12,6 +12,10 @@ body {
 	margin-right: auto;
 }
 
+.delete-confirm > .btn {
+	width: 50px !important;
+}
+
 
 
 .extra-box {
@@ -54,6 +58,14 @@ body {
 
 .list-pad {
 	margin-right: 10px;
+}
+
+.list-group {
+	list-style-type: none !important;
+}
+
+.list-group-button {
+	border-style: none !important;
 }
 
 .main {

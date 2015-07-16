@@ -9,7 +9,9 @@
 
 <head>
 <meta charset="UTF-8">
-<title>Inventory</title>
+<title>Winventory | Admin</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
 <link type="text/css" rel="stylesheet"
 	href='${contextPath}/resources/css/normalize.css' />
@@ -55,15 +57,15 @@
 								<!-- TODO: figure out how to calculate values for progress bars -->
 								<!-- Current progress bar values are random and hard-coded in -->
 								<div class="panel-body">
-									Hardware in Use
+									Hardware in Use: ${usage}
 									<div class="progress">
 										<div class="progress-bar" role="progressbar" aria-valuemin="0"
-											aria-valuemax="100" style="width: ${usage};">${usage}</div>
+											aria-valuemax="100" style="width: ${usage};"></div>
 									</div>
-									Hardware in Storage
+									Hardware in Storage: ${storage}
 									<div class="progress">
 										<div class="progress-bar" role="progressbar" aria-valuemin="0"
-											aria-valuemax="100" style="width: ${storage};">${storage}</div>
+											aria-valuemax="100" style="width: ${storage};"></div>
 									</div>
 								</div>
 							</div>

@@ -6,9 +6,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-    <title>Inventory</title>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<title>Winventory | Permission Denied</title>
+<link rel="shortcut icon"
+	href="${contextPath}/resources/images/favicon.png">
 
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/style.css' />
     <link type="text/css" rel="stylesheet" href='${contextPath}/resources/css/normalize.css' />
@@ -62,16 +63,19 @@
                             </div>
                         </form>
                     </div>
-                    
-                    <div class="col-md-12 or-line">
-						<div class="col-xs-5"> <hr> </div>
-						<div class="col-xs-2"><h4>or</h4></div>
-						<div class="col-xs-5"> <hr> </div>
-					</div>
-					<br><br><br><br>
-					<form action="googleLogin" method="get">
-                    	<input class="btn btn-lg btn-block btn-google" type="submit" value="Login with Google+">
-                    </form>
+                    <c:if test="${not empty GC}">
+	                    <div class="col-md-12 or-line">
+							<div class="col-xs-5"> <hr> </div>
+							<div class="col-xs-2"><h4>or</h4></div>
+							<div class="col-xs-5"> <hr> </div>
+						</div>
+						<br><br><br><br>
+						<form action="${contextPath }/login/googleLogin" method="get" class="form-login">
+							<div class="form-horizontal">
+	                    	<input class="btn btn-lg btn-google btn-block " type="submit" value="Login with Google+">
+	                    	</div>
+	                    </form>
+                    </c:if>
                 </div>
             </div>
         </div>

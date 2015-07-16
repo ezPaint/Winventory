@@ -30,8 +30,11 @@ public class TestLocationBo {
 
         TestLocationDao.compareRecords( location, readRecord );
 
-        List<Location> list1= locationBo.getListByAddressId( location.getAddressId() ) ; 
+        List<Location> list1= locationBo.getListByIsActive( location.getIsActive() ) ; 
         assertEquals( 1 , list1.size() );
+
+        List<Location> list2= locationBo.getListByAddressId( location.getAddressId() ) ; 
+        assertEquals( 1 , list2.size() );
 
         TestLocationDao.modifyRecord( location );
         count = locationBo.update( location );

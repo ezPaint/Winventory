@@ -31,14 +31,19 @@ public class LocationResultsController extends BaseController {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
+        
+        if(!userHasPermission(request, "readLocation")){
+            denyPermission(request, response);
+            return;
+        }
 
         // Attempt to get all Locations from database using a BO
         ArrayList<Location> results = null;
         try {
             results = new ArrayList<Location>(LocationBo.getInstance().getAll());
         } catch (BoException e) {
-            request.setAttribute("error", e.getMessage());
-            log.error(e.getMessage());
+            request.setAttribute("error", "Unable to retrieve locations from the database");
+            log.error("Unable to retrieve locations from the database. " + e.getMessage());
         }
 
         // Set the results as an attribute for the page
@@ -48,6 +53,9 @@ public class LocationResultsController extends BaseController {
 
         // Sets the page header to "All Locations"
         request.setAttribute("page_header", "All Locations");
+        
+        request.setAttribute("success", request.getParameter("success"));
+        request.setAttribute("error", request.getParameter("error"));
 
         // Forward the request to the "location/results-location" page
         request.getRequestDispatcher("/WEB-INF/flows/locations/results-location.jsp").forward(

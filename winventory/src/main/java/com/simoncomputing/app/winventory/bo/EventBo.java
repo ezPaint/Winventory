@@ -16,6 +16,7 @@ import com.simoncomputing.app.winventory.domain.Event;
 import com.simoncomputing.app.winventory.domain.EventType;
 import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.domain.Item;
+import com.simoncomputing.app.winventory.domain.ItemType;
 import com.simoncomputing.app.winventory.domain.Location;
 import com.simoncomputing.app.winventory.domain.Software;
 import com.simoncomputing.app.winventory.domain.User;
@@ -238,275 +239,41 @@ public class EventBo {
 
     // PROTECTED CODE -->
 
-    public int link(Event event, Hardware hardware) throws BoException {
-        SqlSession session = null;
-        int result = 0;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToHardwareDao mapper = session.getMapper( EventToHardwareDao.class );
-            result = mapper.link( event.getKey(), hardware.getKey() );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
     
-    public int link(Event event, Location location) throws BoException {
-        SqlSession session = null;
-        int result = 0;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToLocationDao mapper = session.getMapper( EventToLocationDao.class );
-            result = mapper.link( event.getKey(), location.getKey() );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
-    
-    public int link(Event event, Software software) throws BoException {
-        SqlSession session = null;
-        int result = 0;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
-            result = mapper.link( event.getKey(), software.getKey() );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
-    
-    
-    public int unlink(Event event, Software software) throws BoException {
-        SqlSession session = null;
-        int result = 0;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
-            result = mapper.unlink( event.getKey(), software.getKey() );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
-    
-    public int unlink(Event event, Hardware hardware) throws BoException {
-        SqlSession session = null;
-        int result = 0;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToHardwareDao mapper = session.getMapper( EventToHardwareDao.class );
-            result = mapper.unlink( event.getKey(), hardware.getKey() );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
-    
-    public int unlink(Event event, Location location) throws BoException {
-        SqlSession session = null;
-        int result = 0;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToLocationDao mapper = session.getMapper( EventToLocationDao.class );
-            result = mapper.unlink( event.getKey(), location.getKey() );
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
-    
-    public List<Event> getEventsOf(Hardware hw) throws BoException
+    public Location getLocationOf(Event event) throws BoException
     {
-        SqlSession session = null;
-        List<Event>  result = null;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToHardwareDao mapper = session.getMapper( EventToHardwareDao.class );
-            result = mapper.getEventsByHardwareId(hw.getKey());
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
+    	if (event == null)
+    	{
+    		return null;
+    	}
+        return LocationBo.getInstance().read(event.getLocationId());
     }
     
-    public List<Event> getEventsOf(Software hw) throws BoException
+    public Hardware getHardwareOf(Event event) throws BoException
     {
-        SqlSession session = null;
-        List<Event>  result = null;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
-            result = mapper.getEventsBySoftwareId(hw.getKey());
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
+    	if (event == null)
+    	{
+    		return null;
+    	}
+        return HardwareBo.getInstance().read(event.getHardwareId());
     }
     
-    public List<Event> getEventsOf(Location loc) throws BoException
+    public Software getSoftwareOf(Event event) throws BoException
     {
-        SqlSession session = null;
-        List<Event>  result = null;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToLocationDao mapper = session.getMapper( EventToLocationDao.class );
-            result = mapper.getEventsByLocationId(loc.getKey());
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
+    	if (event == null)
+    	{
+    		return null;
+    	}
+        return SoftwareBo.getInstance().read(event.getSoftwareId());
     }
     
-    public List<Hardware> getHardwareOf(Event event) throws BoException
+    public User getUserOf(Event event) throws BoException
     {
-        SqlSession session = null;
-        List<Hardware>  result = null;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToHardwareDao mapper = session.getMapper( EventToHardwareDao.class );
-            result = mapper.getHardwareByEventId(event.getKey());
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
-    
-    public List<Software> getSoftwareOf(Event event) throws BoException
-    {
-        SqlSession session = null;
-        List<Software>  result = null;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToSoftwareDao mapper = session.getMapper( EventToSoftwareDao.class );
-            result = mapper.getSoftwareByEventId(event.getKey());
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
-    }
-    
-    public List<Location> getLocationOf(Event event) throws BoException
-    {
-        SqlSession session = null;
-        List<Location>  result = null;
-
-        try {
-            session = SessionFactory.getSession();
-            EventToLocationDao mapper = session.getMapper( EventToLocationDao.class );
-            result = mapper.getLocationByEventId(event.getKey());
-            session.commit();
-
-        } catch ( Exception e ) {
-            session.rollback();
-            throw new BoException( e );
-
-        } finally { 
-            if ( session != null )
-                session.close();
-        }
-
-        return result;
+    	if (event == null)
+    	{
+    		return null;
+    	}
+        return UserBo.getInstance().read(event.getUserId());
     }
     
     /**
@@ -549,7 +316,7 @@ public class EventBo {
     }
     
     public List<Event> getListByDateRange(Date start, Date end) throws BoException
-    {
+    { 
     	SqlSession session = null;
         List<Event> list;
 
@@ -568,6 +335,29 @@ public class EventBo {
         }
 
         return list;
+    }
+    
+    public void deleteEventsOf(ItemType type, long id) throws BoException
+    {
+    	switch (type)
+    	{
+    	case SOFTWARE:
+    		SqlSession session = null;
+
+            try {
+                session = SessionFactory.getSession();
+                EventDao mapper = session.getMapper( EventDao.class );
+                mapper.deleteAllWithSoftwareId(id);
+                session.commit();
+
+            } catch ( Exception e ) {
+                session.rollback();
+                throw new BoException( e );
+            } finally { 
+                if ( session != null )
+                    session.close();
+            }
+    	}
     }
  
 }

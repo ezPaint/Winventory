@@ -16,6 +16,7 @@ public interface UserDao {
 
     public User read( Map<String, Object> map ) throws DaoException;
 
+    public List<User> getListByIsActive( Boolean key ) throws DaoException;
     public List<User> getListByRoleId( Integer key ) throws DaoException;
 
     // PROTECTED CODE -->

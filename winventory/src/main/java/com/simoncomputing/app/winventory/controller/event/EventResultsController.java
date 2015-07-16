@@ -20,7 +20,7 @@ import com.simoncomputing.app.winventory.domain.Hardware;
 import com.simoncomputing.app.winventory.util.BoException;
 
 /**
- * Controller for the Results ("All Hardware") page
+ * Controller for the Results ("All Events") page
  */
 @WebServlet("/event/results")
 public class EventResultsController extends BaseController {
@@ -30,12 +30,15 @@ public class EventResultsController extends BaseController {
     private Logger log = Logger.getLogger(EventResultsController.class);
 
     /**
-     * Runs when the "hardware/results" page is accessed by a general link or
+     * Runs when the "event/results" page is accessed by a general link or
      * through the url
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
                     throws ServletException, IOException {
-        
+        if(!userHasPermission(request, "readEvent")){
+            denyPermission(request, response);
+            return;
+        }
         
         // Attempt to get all hardware from database using a BO
         ArrayList<Event> results = null;

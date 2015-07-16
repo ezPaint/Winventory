@@ -29,6 +29,10 @@
         )
     </insert>
 
+    <select id="getListByIsActive" parameterType="boolean" resultMap="LocationMapper">
+        select * from LOCATION
+        where IS_ACTIVE = #{isActive}
+    </select>
     <select id="getListByAddressId" parameterType="integer" resultMap="LocationMapper">
         select * from LOCATION
         where ADDRESS_ID = #{addressId}
